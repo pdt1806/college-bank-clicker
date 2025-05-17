@@ -1,10 +1,10 @@
-import { Box, Center, Image, NumberFormatter, Title } from "@mantine/core";
+import { Box, Center, Image, NumberFormatter, Text, Title } from "@mantine/core";
 import { useContext } from "react";
 import { GameContext } from "../../GameProvider";
 import classes from "./index.module.css";
 
 const MainGame = () => {
-  const { students, increment, decrementTime } = useContext(GameContext);
+  const { students, increment, perSecond } = useContext(GameContext);
 
   return (
     <Box h="100vh" w="100%" bg="blue.0">
@@ -16,8 +16,9 @@ const MainGame = () => {
       >
         <Title order={2}>Students suffering</Title>
         <Title order={1}>
-          <NumberFormatter value={students} thousandSeparator />
+          <NumberFormatter value={students} thousandSeparator decimalScale={0} />
         </Title>
+        <Text size="md">per second: {perSecond}</Text>
       </Box>
       <Center h="100%" w="100%">
         <Image src="/images/osaka.jpg" onClick={() => increment()} className={classes.image} />

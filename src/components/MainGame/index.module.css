@@ -1,6 +1,6 @@
 .image {
   width: 400px;
-  transition: transform 0.1s ease-in-out;
+  transition: transform 0.1s;
 
   &:hover {
     cursor: pointer;

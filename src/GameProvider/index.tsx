@@ -3,20 +3,25 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 export const GameContext = createContext<GameContextType>({} as GameContextType);
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
-  const [students, setStudents] = useState(0);
-  const [incrementAmount, setIncrementAmount] = useState(1);
-  const [time, setTime] = useState(1000);
+  const [students, setStudents] = useState(0.0);
+  const [perSecond, setPerSecond] = useState(0.0);
   const [upgrades, setUpgrades] = useState<Upgrade[]>([]);
 
   const increment = (amount: number = 1) => setStudents((prev) => prev + amount);
-  const decrementTime = (amount: number = 1) => setTime((prev) => prev - amount);
 
   useEffect(() => {
+    let last = performance.now();
+
     const interval = setInterval(() => {
-      increment(incrementAmount);
-    }, time);
+      const now = performance.now();
+      const deltaSeconds = (now - last) / 1000;
+      last = now;
+
+      setStudents((prev) => prev + perSecond * deltaSeconds);
+    }, 25);
+
     return () => clearInterval(interval);
-  }, [time]);
+  }, [perSecond]);
 
   return (
     <GameContext.Provider
@@ -26,11 +31,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         increment,
         upgrades,
         setUpgrades,
-        time,
-        setTime,
-        decrementTime,
-        incrementAmount,
-        setIncrementAmount,
+        perSecond,
+        setPerSecond,
       }}
     >
       {children}
