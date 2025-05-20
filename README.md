@@ -1,1 +1,1 @@
-# Project CB
+# College Bank Simulator

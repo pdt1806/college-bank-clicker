@@ -1,7 +1,11 @@
-type Upgrade = {
+type UpgradeType = {
   id: string;
   name: string;
+  icon: string;
   cost: number;
+  costList?: number[];
+  perSecondIncrease: number;
+  description: string;
 };
 
 interface GameContextType {
@@ -10,6 +14,7 @@ interface GameContextType {
   increment: (amount?: number) => void;
   perSecond: number;
   setPerSecond: React.Dispatch<React.SetStateAction<number>>;
-  upgrades: Upgrade[];
-  setUpgrades: React.Dispatch<React.SetStateAction<Upgrade[]>>;
+  upgrades: UpgradeType[];
+  setUpgrades: React.Dispatch<React.SetStateAction<UpgradeType[]>>;
+  buyUpgrade: (upgrade: UpgradeType) => void;
 }

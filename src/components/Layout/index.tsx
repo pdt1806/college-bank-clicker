@@ -20,11 +20,11 @@ const Layout = () => {
       </AppShell.Header> */}
 
       <AppShell.Main>
-        <MainGame />
+        <MainGame toggleMenu={toggle} />
       </AppShell.Main>
 
-      <AppShell.Aside withBorder>
-        <Sidebar />
+      <AppShell.Aside withBorder={false}>
+        <Sidebar toggleMenu={toggle} />
       </AppShell.Aside>
     </AppShell>
   );

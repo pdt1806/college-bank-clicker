@@ -5,9 +5,17 @@ export const GameContext = createContext<GameContextType>({} as GameContextType)
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [students, setStudents] = useState(0.0);
   const [perSecond, setPerSecond] = useState(0.0);
-  const [upgrades, setUpgrades] = useState<Upgrade[]>([]);
+  const [upgrades, setUpgrades] = useState<UpgradeType[]>([]);
 
   const increment = (amount: number = 1) => setStudents((prev) => prev + amount);
+
+  const buyUpgrade = (upgrade: UpgradeType) => {
+    if (students >= upgrade.cost) {
+      setStudents((prev) => prev - upgrade.cost);
+      setPerSecond((prev) => prev + upgrade.perSecondIncrease);
+      setUpgrades((prev) => [...prev, upgrade]);
+    }
+  };
 
   useEffect(() => {
     let last = performance.now();
@@ -33,6 +41,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         setUpgrades,
         perSecond,
         setPerSecond,
+        buyUpgrade,
       }}
     >
       {children}
