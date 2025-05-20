@@ -2,19 +2,12 @@ import { ActionIcon, ScrollArea, Stack, Title } from "@mantine/core";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { upgradeList } from "../../utils";
 import Upgrade from "../Upgrade";
+import classes from "./index.module.css";
 
 const Sidebar = ({ toggleMenu }: { toggleMenu: () => void }) => {
   return (
-    <ScrollArea
-      style={{
-        background:
-          "url(https://static.vecteezy.com/system/resources/previews/004/584/977/non_2x/beautiful-wood-background-with-text-space-free-vector.jpg)",
-        backgroundSize: "cover",
-        backgroundRepeat: "repeat-y",
-        height: "100vh",
-      }}
-    >
-      <Stack align="stretch" gap="md" px="md" py="xl">
+    <ScrollArea className={classes.sidebar} bg="cbs.1">
+      <Stack align="stretch" gap="md" px="md" py="lg">
         <Title order={3} c="white">
           Upgrades
         </Title>
@@ -24,7 +17,7 @@ const Sidebar = ({ toggleMenu }: { toggleMenu: () => void }) => {
         <ActionIcon
           onClick={toggleMenu}
           color="black"
-          variant="light"
+          variant="default"
           size="xl"
           radius="xl"
           aria-label="Menu"

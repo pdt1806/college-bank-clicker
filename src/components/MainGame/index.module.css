@@ -1,5 +1,7 @@
 .image {
-  width: 400px;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
   transition: transform 0.1s;
 
   &:hover {
@@ -10,4 +12,19 @@
   &:active {
     transform: scale(0.95);
   }
+}
+
+/* .container {
+  background: #fff94a;
+  background: radial-gradient(
+    circle,
+    rgba(255, 249, 74, 1) 0%,
+    rgba(0, 145, 22, 1) 100%
+  );
+} */
+
+.counter {
+  /* position: absolute; */
+  background: #00000050;
+  border-radius: var(--mantine-radius-lg);
 }

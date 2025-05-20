@@ -2,6 +2,7 @@ import { AppShell } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import MainGame from "../MainGame";
 import Sidebar from "../Sidebar";
+import classes from "./index.module.css";
 
 const Layout = () => {
   const [opened, { toggle }] = useDisclosure();
@@ -13,6 +14,7 @@ const Layout = () => {
         breakpoint: "md",
         collapsed: { mobile: !opened },
       }}
+      bg="cbs.0"
     >
       {/* <AppShell.Header>
         <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
@@ -23,7 +25,7 @@ const Layout = () => {
         <MainGame toggleMenu={toggle} />
       </AppShell.Main>
 
-      <AppShell.Aside withBorder={false}>
+      <AppShell.Aside withBorder={false} className={classes.aside}>
         <Sidebar toggleMenu={toggle} />
       </AppShell.Aside>
     </AppShell>

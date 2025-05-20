@@ -1,0 +1,9 @@
+.button {
+  color: var(--mantine-color-cbs-0);
+  &:disabled,
+  &[data-disabled] {
+    /* background-color: var(--mantine-color-cbs-2);
+    color: var(--mantine-color-cbs-1); */
+    opacity: 0.5;
+  }
+}

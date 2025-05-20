@@ -1,0 +1,4 @@
+.aside {
+  transition: all 0.1s, height 0ms;
+  background: transparent;
+}
