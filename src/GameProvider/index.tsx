@@ -1,20 +1,43 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
-export const GameContext = createContext<GameContextType>({} as GameContextType);
+export const GameContext = createContext<GameContextType>(
+  {} as GameContextType
+);
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [money, setMoney] = useState(0.0);
   const [perSecond, setPerSecond] = useState(0.0);
-  const [upgrades, setUpgrades] = useState<UpgradeType[]>([]);
+  const [upgrades, setUpgrades] = useState<Upgrade[]>([]);
+  const [perClick, setPerClick] = useState(1);
 
-  const increment = (amount: number = 1) => setMoney((prev) => prev + amount);
+  const increment = () => setMoney((prev) => prev + perClick);
 
-  const buyUpgrade = (upgrade: UpgradeType) => {
-    if (money >= upgrade.cost) {
-      setMoney((prev) => prev - upgrade.cost);
-      setPerSecond((prev) => prev + upgrade.perSecondIncrease);
+  const buyUpgrade = (upgrade: Upgrade) => {
+    if (money >= currentCost(upgrade)) {
+      setMoney((prev) => prev - currentCost(upgrade));
+      upgrade.perSecond &&
+        setPerSecond((prev) => prev + (upgrade.perSecond ?? 0));
       setUpgrades((prev) => [...prev, upgrade]);
+      upgrade.perClick && setPerClick(upgrade.perClick ?? 1);
     }
+  };
+
+  const countUpgrade = (upgrade: Upgrade) => {
+    return upgrades.filter((u) => u.id === upgrade.id).length;
+  };
+
+  const currentCost = (upgrade: Upgrade) => {
+    if (upgrade.costFactor === 0) {
+      return upgrade.cost;
+    }
+    const count = countUpgrade(upgrade);
+    return Math.floor(upgrade.cost * Math.pow(upgrade.costFactor ?? 1, count));
   };
 
   useEffect(() => {
@@ -42,6 +65,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         perSecond,
         setPerSecond,
         buyUpgrade,
+        countUpgrade,
+        currentCost,
       }}
     >
       {children}

@@ -1,9 +1,17 @@
-import { Box, Button, Flex, Image, NumberFormatter, Text } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Flex,
+  Image,
+  Indicator,
+  NumberFormatter,
+  Text,
+} from "@mantine/core";
 import { useGame } from "../../../GameProvider";
 import classes from "./index.module.css";
 
-const UpgradeButton = ({ upgrade }: { upgrade: UpgradeType }) => {
-  const { money, buyUpgrade } = useGame();
+const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
+  const { money, buyUpgrade, currentCost, countUpgrade } = useGame();
 
   return (
     <Button
@@ -14,23 +22,52 @@ const UpgradeButton = ({ upgrade }: { upgrade: UpgradeType }) => {
       py="md"
       justify="flex-start"
       w="100%"
-      disabled={upgrade.cost > money}
+      disabled={
+        currentCost(upgrade) > money ||
+        (!!upgrade.perClick && countUpgrade(upgrade) > 0)
+      }
       className={classes.button}
       onClick={() => buyUpgrade(upgrade)}
       radius="lg"
     >
-      <Flex gap="md" align="center">
-        <Image src="/images/osaka.jpg" alt="Upgrade" h={90} w={90} />
+      <Flex gap="xl" align="center">
+        <Indicator
+          size={20}
+          color="cbs.4"
+          withBorder
+          position="bottom-end"
+          offset={5}
+          label={countUpgrade(upgrade)}
+        >
+          <Image
+            src={`/images/icons/${upgrade.icon}`}
+            alt="Upgrade"
+            h={70}
+            w={70}
+          />
+        </Indicator>
         <Box style={{ textAlign: "left" }}>
-          <Text fw="bold" size="lg" style={{ whiteSpace: "normal", wordBreak: "break-word", lineHeight: 1.5 }}>
+          <Text
+            fw="bold"
+            size="lg"
+            style={{
+              whiteSpace: "normal",
+              wordBreak: "break-word",
+              lineHeight: 1.5,
+            }}
+          >
             {upgrade.name}
           </Text>
           <Box>
             <Text size="xl" fw="bold">
-              <NumberFormatter prefix="$" value={upgrade.cost} thousandSeparator />
+              <NumberFormatter
+                prefix="$"
+                value={currentCost(upgrade)}
+                thousandSeparator
+              />
             </Text>
             <Text size="sm" c="dimmed">
-              per second +{upgrade.perSecondIncrease}
+              per second +{upgrade.perSecond}
             </Text>
           </Box>
         </Box>

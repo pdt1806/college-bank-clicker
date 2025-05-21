@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="pencil" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>
+      .c {
+        fill: #2f2542;
+      }
+
+      .d {
+        fill: none;
+        stroke: #485c73;
+        stroke-linecap: round;
+        stroke-miterlimit: 10;
+        stroke-width: 50px;
+      }
+    </style>
+  </defs>
+  <path class="c" d="M451.91,334.8l-114.16,135.89c-7.59,9.03-21.49,9.03-29.08,0l-114.16-135.89c-10.38-12.35-1.6-31.2,14.54-31.2h41.99V41.52c0-10.49,8.5-18.99,18.99-18.99h106.36c10.49,0,18.99,8.5,18.99,18.99v262.07h41.98c16.14,0,24.92,18.85,14.54,31.2Z"/>
+  <polyline class="d" points="43.61 276.17 78.85 276.17 119.74 346.79 211.96 121.8 393.17 121.8"/>
+</svg>
