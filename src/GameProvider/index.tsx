@@ -3,15 +3,15 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 export const GameContext = createContext<GameContextType>({} as GameContextType);
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
-  const [students, setStudents] = useState(0.0);
+  const [money, setMoney] = useState(0.0);
   const [perSecond, setPerSecond] = useState(0.0);
   const [upgrades, setUpgrades] = useState<UpgradeType[]>([]);
 
-  const increment = (amount: number = 1) => setStudents((prev) => prev + amount);
+  const increment = (amount: number = 1) => setMoney((prev) => prev + amount);
 
   const buyUpgrade = (upgrade: UpgradeType) => {
-    if (students >= upgrade.cost) {
-      setStudents((prev) => prev - upgrade.cost);
+    if (money >= upgrade.cost) {
+      setMoney((prev) => prev - upgrade.cost);
       setPerSecond((prev) => prev + upgrade.perSecondIncrease);
       setUpgrades((prev) => [...prev, upgrade]);
     }
@@ -25,7 +25,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       const deltaSeconds = (now - last) / 1000;
       last = now;
 
-      setStudents((prev) => prev + perSecond * deltaSeconds);
+      setMoney((prev) => prev + perSecond * deltaSeconds);
     }, 25);
 
     return () => clearInterval(interval);
@@ -34,8 +34,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   return (
     <GameContext.Provider
       value={{
-        students,
-        setStudents,
+        money,
+        setMoney,
         increment,
         upgrades,
         setUpgrades,

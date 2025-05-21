@@ -1,10 +1,9 @@
-import { Box, Button, Flex, Image, Text } from "@mantine/core";
-import { useContext } from "react";
-import { GameContext } from "../../../GameProvider";
+import { Box, Button, Flex, Image, NumberFormatter, Text } from "@mantine/core";
+import { useGame } from "../../../GameProvider";
 import classes from "./index.module.css";
 
 const UpgradeButton = ({ upgrade }: { upgrade: UpgradeType }) => {
-  const { students, buyUpgrade } = useContext(GameContext);
+  const { money, buyUpgrade } = useGame();
 
   return (
     <Button
@@ -15,22 +14,25 @@ const UpgradeButton = ({ upgrade }: { upgrade: UpgradeType }) => {
       py="md"
       justify="flex-start"
       w="100%"
-      disabled={upgrade.cost > students}
+      disabled={upgrade.cost > money}
       className={classes.button}
       onClick={() => buyUpgrade(upgrade)}
       radius="lg"
     >
       <Flex gap="md" align="center">
-        <Image src="/images/osaka.jpg" alt="Upgrade" h={80} w={80} />
+        <Image src="/images/osaka.jpg" alt="Upgrade" h={90} w={90} />
         <Box style={{ textAlign: "left" }}>
-          <Text
-            fw="bold"
-            size="lg"
-            style={{ whiteSpace: "normal", wordBreak: "break-word" }}
-          >
+          <Text fw="bold" size="lg" style={{ whiteSpace: "normal", wordBreak: "break-word", lineHeight: 1.5 }}>
             {upgrade.name}
           </Text>
-          <Text size="sm">{upgrade.cost} students</Text>
+          <Box>
+            <Text size="xl" fw="bold">
+              <NumberFormatter prefix="$" value={upgrade.cost} thousandSeparator />
+            </Text>
+            <Text size="sm" c="dimmed">
+              per second +{upgrade.perSecondIncrease}
+            </Text>
+          </Box>
         </Box>
       </Flex>
     </Button>

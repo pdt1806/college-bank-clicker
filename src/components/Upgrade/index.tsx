@@ -1,9 +1,12 @@
 import { HoverCard } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { forwardRef } from "react";
 import UpgradeButton from "./Button";
 import UpgradeInfo from "./Information";
 
 const Upgrade = ({ upgrade }: { upgrade: UpgradeType }) => {
+  const isMobile = useMediaQuery("(max-width: 62em)");
+
   const ButtonComponent = forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>((props, ref) => (
     <div {...props} ref={ref}>
       <UpgradeButton upgrade={upgrade} />
@@ -11,7 +14,7 @@ const Upgrade = ({ upgrade }: { upgrade: UpgradeType }) => {
   ));
 
   return (
-    <HoverCard width={400} shadow="md" withArrow openDelay={200}>
+    <HoverCard width={400} shadow="md" withArrow openDelay={300} position="left" disabled={isMobile} radius="lg">
       <HoverCard.Target>
         <ButtonComponent />
       </HoverCard.Target>

@@ -9,8 +9,8 @@ type UpgradeType = {
 };
 
 interface GameContextType {
-  students: number;
-  setStudents: React.Dispatch<React.SetStateAction<number>>;
+  money: number;
+  setMoney: React.Dispatch<React.SetStateAction<number>>;
   increment: (amount?: number) => void;
   perSecond: number;
   setPerSecond: React.Dispatch<React.SetStateAction<number>>;

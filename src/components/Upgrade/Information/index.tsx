@@ -1,6 +1,9 @@
-import { Box, Group, Image, Stack, Text } from "@mantine/core";
+import { Box, Group, Image, NumberFormatter, Stack, Text } from "@mantine/core";
+import { useGame } from "../../../GameProvider";
 
 const UpgradeInfo = ({ upgrade }: { upgrade: UpgradeType }) => {
+  const { upgrades } = useGame();
+
   return (
     <Box>
       <Stack>
@@ -9,7 +12,7 @@ const UpgradeInfo = ({ upgrade }: { upgrade: UpgradeType }) => {
           <Box style={{ textAlign: "left" }}>
             <Text size="lg">{upgrade.name}</Text>
             <Text size="sm" c="dimmed">
-              [owned: 0]
+              Owned: {upgrades.filter((u) => u.id === upgrade.id).length}
             </Text>
           </Box>
         </Group>
@@ -17,15 +20,16 @@ const UpgradeInfo = ({ upgrade }: { upgrade: UpgradeType }) => {
           {upgrade.description}
         </Text>
         <Text size="sm" c="dimmed">
-          Every upgrade increases the number of students per second by{" "}
+          Every upgrade increases the amount of money per second by{" "}
           <span>
             <strong>{upgrade.perSecondIncrease}</strong>
           </span>{" "}
           and costs{" "}
           <span>
-            <strong>{upgrade.cost}</strong>
+            <strong>
+              <NumberFormatter prefix="$" value={upgrade.cost} thousandSeparator />
+            </strong>
           </span>{" "}
-          students.
         </Text>
       </Stack>
     </Box>

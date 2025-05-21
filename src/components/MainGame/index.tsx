@@ -1,48 +1,35 @@
-import {
-  ActionIcon,
-  Box,
-  Center,
-  Image,
-  NumberFormatter,
-  Stack,
-  Text,
-  Title,
-} from "@mantine/core";
+import { ActionIcon, Box, Center, Image, NumberFormatter, Text, Title } from "@mantine/core";
 import { IconMenu2 } from "@tabler/icons-react";
-import { useContext } from "react";
-import { GameContext } from "../../GameProvider";
+import { useGame } from "../../GameProvider";
 import classes from "./index.module.css";
 
 const MainGame = ({ toggleMenu }: { toggleMenu: () => void }) => {
-  const { students, increment, perSecond } = useContext(GameContext);
+  const { money, increment, perSecond } = useGame();
 
   return (
     <Box
       h="100vh"
-      w="100%"
       // bg="green.9"
       className={classes.container}
     >
-      <Stack align="center" h="100%" w="100%" gap={0}>
-        <Box mt="xs" ta="center" p="lg" className={classes.counter} c="white">
-          <Title order={2}>Students suffering</Title>
-          <Title order={1}>
-            <NumberFormatter
-              value={students}
-              thousandSeparator
-              decimalScale={0}
-            />
-          </Title>
-          <Text size="md">per second: {perSecond}</Text>
-        </Box>
-        <Center h="70%" w="100%">
-          <Image
-            src="/images/osaka.jpg"
-            onClick={() => increment()}
-            className={classes.image}
-          />
-        </Center>
-      </Stack>
+      <Box
+        ta="center"
+        p="lg"
+        className={classes.counter}
+        c="white"
+        ml="xs"
+        mt="xs"
+        w={{ base: "calc(100% - 2*var(--mantine-spacing-xs))", md: "calc(100% - 380px - 2*var(--mantine-spacing-md))" }}
+      >
+        <Title order={2}>Money taken from students</Title>
+        <Title order={1}>
+          <NumberFormatter prefix="$" value={money} thousandSeparator decimalScale={0} />
+        </Title>
+        <Text size="md">per second: {perSecond.toFixed(1)}</Text>
+      </Box>
+      <Center h="100%" w="100%">
+        <Image src="/images/osaka.jpg" onClick={() => increment()} className={classes.image} />
+      </Center>
       <Text
         size="xs"
         c="white"
@@ -53,8 +40,7 @@ const MainGame = ({ toggleMenu }: { toggleMenu: () => void }) => {
         }}
         maw={{ base: "calc(100% - 80px)", md: "100%" }}
       >
-        Disclaimer: This game is a parody and is not affiliated with College
-        Board.
+        Disclaimer: This game is a parody and is not affiliated with College Board.
       </Text>
       <ActionIcon
         onClick={toggleMenu}
