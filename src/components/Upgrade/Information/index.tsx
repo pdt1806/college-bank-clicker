@@ -10,7 +10,7 @@ import {
 import { useGame } from "../../../GameProvider";
 
 const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
-  const { upgrades, countUpgrade, currentCost } = useGame();
+  const { countUpgrade, currentCost } = useGame();
 
   return (
     <Box>
