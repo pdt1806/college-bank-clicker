@@ -66,9 +66,16 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
                 thousandSeparator
               />
             </Text>
-            <Text size="sm" c="dimmed">
-              per second +{upgrade.perSecond}
-            </Text>
+            {upgrade.perSecond && (
+              <Text size="sm" c="dimmed">
+                per second +{upgrade.perSecond}
+              </Text>
+            )}
+            {upgrade.perClick && (
+              <Text size="sm" c="dimmed">
+                per click ={upgrade.perClick}
+              </Text>
+            )}
           </Box>
         </Box>
       </Flex>

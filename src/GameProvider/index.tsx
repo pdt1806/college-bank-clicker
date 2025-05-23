@@ -13,23 +13,32 @@ export const GameContext = createContext<GameContextType>(
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [money, setMoney] = useState(0.0);
   const [perSecond, setPerSecond] = useState(0.0);
-  const [upgrades, setUpgrades] = useState<Upgrade[]>([]);
+  const [upgrades, setUpgrades] = useState<UpgradeListType>({});
   const [perClick, setPerClick] = useState(1);
 
   const increment = () => setMoney((prev) => prev + perClick);
 
   const buyUpgrade = (upgrade: Upgrade) => {
+    const updateUpgrades = () => {
+      const currentUpgrades = upgrades[upgrade.id] || 0;
+      const newUpgrades = currentUpgrades + 1;
+      setUpgrades((prev) => ({
+        ...prev,
+        [upgrade.id]: newUpgrades,
+      }));
+    };
+
     if (money >= currentCost(upgrade)) {
       setMoney((prev) => prev - currentCost(upgrade));
       upgrade.perSecond &&
         setPerSecond((prev) => prev + (upgrade.perSecond ?? 0));
-      setUpgrades((prev) => [...prev, upgrade]);
       upgrade.perClick && setPerClick(upgrade.perClick ?? 1);
+      updateUpgrades();
     }
   };
 
   const countUpgrade = (upgrade: Upgrade) => {
-    return upgrades.filter((u) => u.id === upgrade.id).length;
+    return upgrades[upgrade.id] ?? 0;
   };
 
   const currentCost = (upgrade: Upgrade) => {
@@ -38,6 +47,17 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     }
     const count = countUpgrade(upgrade);
     return Math.floor(upgrade.cost * Math.pow(upgrade.costFactor ?? 1, count));
+  };
+
+  const saveGame = () => {
+    const gameData = {
+      money,
+      perSecond,
+      perClick,
+      upgrades,
+    };
+    localStorage.setItem("gameData", JSON.stringify(gameData));
+    return gameData;
   };
 
   useEffect(() => {
@@ -53,6 +73,24 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
     return () => clearInterval(interval);
   }, [perSecond]);
+
+  useEffect(() => {
+    const savedGame = localStorage.getItem("gameData");
+    if (savedGame) {
+      const { money, perSecond, perClick, upgrades } = JSON.parse(savedGame);
+      setMoney(money);
+      setPerSecond(perSecond);
+      setUpgrades(upgrades);
+      setPerClick(perClick);
+    }
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      saveGame();
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [money, perSecond, perClick, upgrades]);
 
   return (
     <GameContext.Provider

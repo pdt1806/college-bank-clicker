@@ -29,12 +29,18 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
         <Text size="sm" c="dimmed">
           {upgrade.description}
         </Text>
+        {upgrade.perClick && (
+          <Text size="sm" c="dimmed">
+            Manual upgrade is one time use only.
+          </Text>
+        )}
         <Table c="dimmed">
           <Table.Thead>
             <Table.Tr>
               <Table.Th>Current cost</Table.Th>
-              <Table.Th>Per second</Table.Th>
-              <Table.Th>Cost factor</Table.Th>
+              {upgrade.perSecond && <Table.Th>Per second</Table.Th>}
+              {upgrade.perClick && <Table.Th>Per click</Table.Th>}
+              {upgrade.costFactor && <Table.Th>Cost factor</Table.Th>}
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
@@ -46,8 +52,9 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
                   thousandSeparator
                 />
               </Table.Td>
-              <Table.Td>{upgrade.perSecond}</Table.Td>
-              <Table.Td>{upgrade.costFactor}</Table.Td>
+              {upgrade.perSecond && <Table.Td>{upgrade.perSecond}</Table.Td>}
+              {upgrade.perClick && <Table.Td>{upgrade.perClick}</Table.Td>}
+              {upgrade.costFactor && <Table.Td>{upgrade.costFactor}</Table.Td>}
             </Table.Tr>
           </Table.Tbody>
         </Table>

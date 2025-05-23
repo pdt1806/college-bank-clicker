@@ -1,4 +1,12 @@
-import { ActionIcon, Box, Center, Image, NumberFormatter, Text, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Center,
+  Image,
+  NumberFormatter,
+  Text,
+  Title,
+} from "@mantine/core";
 import { IconMenu2 } from "@tabler/icons-react";
 import { useGame } from "../../GameProvider";
 import classes from "./index.module.css";
@@ -19,16 +27,28 @@ const MainGame = ({ toggleMenu }: { toggleMenu: () => void }) => {
         c="white"
         ml="xs"
         mt="xs"
-        w={{ base: "calc(100% - 2*var(--mantine-spacing-xs))", md: "calc(100% - 380px - 2*var(--mantine-spacing-md))" }}
+        w={{
+          base: "calc(100% - 2*var(--mantine-spacing-xs))",
+          md: "calc(100% - 380px - 2*var(--mantine-spacing-md))",
+        }}
       >
-        <Title order={2}>Money taken from students</Title>
+        <Title order={2}>money taken from students</Title>
         <Title order={1}>
-          <NumberFormatter prefix="$" value={money} thousandSeparator decimalScale={0} />
+          <NumberFormatter
+            prefix="$"
+            value={money}
+            thousandSeparator
+            decimalScale={0}
+          />
         </Title>
         <Text size="md">per second: {perSecond.toFixed(1)}</Text>
       </Box>
       <Center h="100%" w="100%">
-        <Image src="/images/osaka.jpg" onClick={() => increment()} className={classes.image} />
+        <Image
+          src="/images/osaka.jpg"
+          onClick={() => increment()}
+          className={classes.image}
+        />
       </Center>
       <Text
         size="xs"
@@ -40,7 +60,8 @@ const MainGame = ({ toggleMenu }: { toggleMenu: () => void }) => {
         }}
         maw={{ base: "calc(100% - 80px)", md: "100%" }}
       >
-        Disclaimer: This game is a parody and is not affiliated with College Board.
+        Disclaimer: This game is a parody and is not affiliated with College
+        Board.
       </Text>
       <ActionIcon
         onClick={toggleMenu}
