@@ -1,6 +1,11 @@
 .image {
-  width: 350px;
-  height: 350px;
+  width: 40vh;
+  height: 40vh;
+  min-width: 250px;
+  min-height: 250px;
+  max-width: 500px;
+  max-height: 500px;
+
   border-radius: 50%;
   transition: transform 0.1s;
 

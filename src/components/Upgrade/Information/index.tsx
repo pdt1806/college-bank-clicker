@@ -1,12 +1,4 @@
-import {
-  Box,
-  Group,
-  Image,
-  NumberFormatter,
-  Stack,
-  Table,
-  Text,
-} from "@mantine/core";
+import { Box, Group, Image, NumberFormatter, Stack, Table, Text } from "@mantine/core";
 import { useGame } from "../../../GameProvider";
 
 const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
@@ -16,7 +8,12 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
     <Box>
       <Stack>
         <Group>
-          <Image src="/images/osaka.jpg" alt="Upgrade" h={60} w={60} />
+          <Image
+            src={upgrade.icon ? `/images/icons/${upgrade.icon}` : "/images/osaka.jpg"}
+            alt="Upgrade"
+            h={60}
+            w={60}
+          />
           <Box style={{ textAlign: "left" }}>
             <Text size="lg" c="cbs.0">
               {upgrade.name}
@@ -40,21 +37,17 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
               <Table.Th>Current cost</Table.Th>
               {upgrade.perSecond && <Table.Th>Per second</Table.Th>}
               {upgrade.perClick && <Table.Th>Per click</Table.Th>}
-              {upgrade.costFactor && <Table.Th>Cost factor</Table.Th>}
+              {upgrade.costMultiplier && <Table.Th>Cost multiplier</Table.Th>}
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
             <Table.Tr key={upgrade.id}>
               <Table.Td>
-                <NumberFormatter
-                  prefix="$"
-                  value={currentCost(upgrade)}
-                  thousandSeparator
-                />
+                <NumberFormatter prefix="$" value={currentCost(upgrade)} thousandSeparator />
               </Table.Td>
               {upgrade.perSecond && <Table.Td>{upgrade.perSecond}</Table.Td>}
               {upgrade.perClick && <Table.Td>{upgrade.perClick}</Table.Td>}
-              {upgrade.costFactor && <Table.Td>{upgrade.costFactor}</Table.Td>}
+              {upgrade.costMultiplier && <Table.Td>{upgrade.costMultiplier}</Table.Td>}
             </Table.Tr>
           </Table.Tbody>
         </Table>

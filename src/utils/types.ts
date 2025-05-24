@@ -7,7 +7,7 @@ type GeneralUpgrade = {
 };
 
 type AutomaticUpgrade = GeneralUpgrade & {
-  costFactor?: number;
+  costMultiplier?: number;
   perSecond?: number;
 };
 
@@ -19,17 +19,19 @@ type Upgrade = AutomaticUpgrade & ManualUpgrade;
 
 type UpgradeListType = {
   [key: string]: number;
-}
+};
 
 interface GameContextType {
+  // setMoney: React.Dispatch<React.SetStateAction<number>>;
+  // setPerSecond: React.Dispatch<React.SetStateAction<number>>;
+  // upgrades: UpgradeListType;
+  // setUpgrades: React.Dispatch<React.SetStateAction<UpgradeListType>>;
   money: number;
-  setMoney: React.Dispatch<React.SetStateAction<number>>;
   increment: (amount?: number) => void;
   perSecond: number;
-  setPerSecond: React.Dispatch<React.SetStateAction<number>>;
-  upgrades: UpgradeListType;
-  setUpgrades: React.Dispatch<React.SetStateAction<UpgradeListType>>;
   buyUpgrade: (upgrade: AutomaticUpgrade) => void;
   countUpgrade: (upgrade: AutomaticUpgrade) => number;
   currentCost: (upgrade: AutomaticUpgrade) => number;
+  perClick: number;
+  saveGame: () => void;
 }

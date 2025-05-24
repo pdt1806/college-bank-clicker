@@ -1,20 +1,24 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 
-export const GameContext = createContext<GameContextType>(
-  {} as GameContextType
-);
+export const GameContext = createContext<GameContextType>({} as GameContextType);
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [money, setMoney] = useState(0.0);
   const [perSecond, setPerSecond] = useState(0.0);
   const [upgrades, setUpgrades] = useState<UpgradeListType>({});
   const [perClick, setPerClick] = useState(1);
+
+  // --------------------
+  // State Ref for Game Data
+
+  const gameData = useRef({ money, perSecond, perClick, upgrades });
+
+  useEffect(() => {
+    gameData.current = { money, perSecond, perClick, upgrades };
+  }, [money, perSecond, perClick, upgrades]);
+
+  // --------------------
+  // Game Logic
 
   const increment = () => setMoney((prev) => prev + perClick);
 
@@ -30,11 +34,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
     if (money >= currentCost(upgrade)) {
       setMoney((prev) => prev - currentCost(upgrade));
-      upgrade.perSecond &&
-        setPerSecond((prev) => prev + (upgrade.perSecond ?? 0));
+      upgrade.perSecond && setPerSecond((prev) => prev + (upgrade.perSecond ?? 0));
       upgrade.perClick && setPerClick(upgrade.perClick ?? 1);
       updateUpgrades();
     }
+
+    saveGame();
   };
 
   const countUpgrade = (upgrade: Upgrade) => {
@@ -42,23 +47,16 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const currentCost = (upgrade: Upgrade) => {
-    if (upgrade.costFactor === 0) {
-      return upgrade.cost;
-    }
-    const count = countUpgrade(upgrade);
-    return Math.floor(upgrade.cost * Math.pow(upgrade.costFactor ?? 1, count));
+    if (upgrade.costMultiplier === undefined) return upgrade.cost;
+    return Math.floor(upgrade.cost * Math.pow(upgrade.costMultiplier ?? 1, countUpgrade(upgrade)));
   };
 
   const saveGame = () => {
-    const gameData = {
-      money,
-      perSecond,
-      perClick,
-      upgrades,
-    };
-    localStorage.setItem("gameData", JSON.stringify(gameData));
-    return gameData;
+    localStorage.setItem("gameData", JSON.stringify(gameData.current));
   };
+
+  // --------------------
+  // React Effects
 
   useEffect(() => {
     let last = performance.now();
@@ -88,23 +86,24 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       saveGame();
-    }, 10000);
+    }, 3000);
     return () => clearInterval(interval);
-  }, [money, perSecond, perClick, upgrades]);
+  }, []);
+
+  // --------------------
+  // Context Provider
 
   return (
     <GameContext.Provider
       value={{
         money,
-        setMoney,
         increment,
-        upgrades,
-        setUpgrades,
         perSecond,
-        setPerSecond,
         buyUpgrade,
         countUpgrade,
         currentCost,
+        perClick,
+        saveGame,
       }}
     >
       {children}
