@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Image,
-  Indicator,
-  NumberFormatter,
-  Text,
-} from "@mantine/core";
+import { Box, Button, Flex, Image, Indicator, NumberFormatter, Text } from "@mantine/core";
 import { useGame } from "../../../GameProvider";
 import classes from "./index.module.css";
 
@@ -22,25 +14,15 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
       py="md"
       justify="flex-start"
       w="100%"
-      disabled={
-        currentCost(upgrade) > money ||
-        (!!upgrade.perClick && countUpgrade(upgrade) > 0)
-      }
+      disabled={currentCost(upgrade) > money || (!!upgrade.perClick && countUpgrade(upgrade) > 0)}
       className={classes.button}
       onClick={() => buyUpgrade(upgrade)}
       radius="lg"
     >
-      <Flex gap="xl" align="center">
-        <Indicator
-          size={20}
-          color="cbs.4"
-          withBorder
-          position="bottom-end"
-          offset={5}
-          label={countUpgrade(upgrade)}
-        >
+      <Flex gap="lg" align="center">
+        <Indicator size={20} color="cbs.4" withBorder position="bottom-end" offset={5} label={countUpgrade(upgrade)}>
           <Image
-            src={`/images/icons/${upgrade.icon}`}
+            src={upgrade.icon ? `/images/icons/${upgrade.icon}` : "/images/osaka.jpg"}
             alt="Upgrade"
             h={70}
             w={70}
@@ -60,15 +42,18 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
           </Text>
           <Box>
             <Text size="xl" fw="bold">
-              <NumberFormatter
-                prefix="$"
-                value={currentCost(upgrade)}
-                thousandSeparator
-              />
+              <NumberFormatter prefix="$" value={currentCost(upgrade)} thousandSeparator />
             </Text>
-            <Text size="sm" c="dimmed">
-              per second +{upgrade.perSecond}
-            </Text>
+            {upgrade.perSecond && (
+              <Text size="sm" c="dimmed">
+                per second +{upgrade.perSecond}
+              </Text>
+            )}
+            {upgrade.perClick && (
+              <Text size="sm" c="dimmed">
+                per click ={upgrade.perClick}
+              </Text>
+            )}
           </Box>
         </Box>
       </Flex>
