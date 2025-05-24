@@ -15,7 +15,7 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
             w={60}
           />
           <Box style={{ textAlign: "left" }}>
-            <Text size="lg" c="cbs.0">
+            <Text size="lg" c="cbc-purple.9">
               {upgrade.name}
             </Text>
             <Text size="sm" c="dimmed">
@@ -28,7 +28,7 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
         </Text>
         {upgrade.perClick && (
           <Text size="sm" c="dimmed">
-            Manual upgrade is one time use only.
+            Manual upgrade is one time only.
           </Text>
         )}
         <Table c="dimmed">

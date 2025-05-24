@@ -14,7 +14,7 @@ export const automaticUpgradeList: AutomaticUpgrade[] = [
     icon: "",
     cost: 20,
     costMultiplier: 1.2,
-    perSecond: 0.3,
+    perSecond: 0.2,
     description: "Because 500 years of history wasn't enough, here's more to memorize.",
   },
   {
@@ -23,7 +23,7 @@ export const automaticUpgradeList: AutomaticUpgrade[] = [
     icon: "",
     cost: 50,
     costMultiplier: 1.3,
-    perSecond: 0.6,
+    perSecond: 0.5,
     description: "Because who needs to hear the audio clearly during the exam? Not you.",
   },
   {
@@ -38,10 +38,10 @@ export const automaticUpgradeList: AutomaticUpgrade[] = [
   {
     id: "upgrade-physics",
     name: "Lower AP Physics Pass Rate",
-    icon: "cbs-physics.svg",
+    icon: "cbc-physics.svg",
     cost: 200,
     costMultiplier: 1.6,
-    perSecond: 1.5,
+    perSecond: 2.0,
     description: "The class with the lowest overall pass rate of any AP exam is getting worse...",
   },
   {
@@ -50,7 +50,7 @@ export const automaticUpgradeList: AutomaticUpgrade[] = [
     icon: "",
     cost: 500,
     costMultiplier: 1.8,
-    perSecond: 3.0,
+    perSecond: 5.0,
     description: "No more college credit for AP Precalculus. Sorry, students.",
   },
   {
@@ -59,7 +59,7 @@ export const automaticUpgradeList: AutomaticUpgrade[] = [
     icon: "",
     cost: 1000,
     costMultiplier: 2.0,
-    perSecond: 5.0,
+    perSecond: 10.0,
     description: "Why do the work yourself when you can just take someone else's?",
   },
 ];
@@ -68,7 +68,7 @@ export const manualUpgradeList: ManualUpgrade[] = [
   {
     id: "upgrade-pencil",
     name: "2B Pencil Only",
-    icon: "cbs-pencil-01.svg",
+    icon: "cbc-pencil-01.svg",
     cost: 100,
     perClick: 2,
     description: "The only pencil allowed on the exam is a 2B pencil. No other pencils are allowed.",

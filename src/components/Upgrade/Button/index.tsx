@@ -8,8 +8,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
   return (
     <Button
       variant="default"
-      // color="cbs.2"
-      // c="cbs.0"
+      c="cbc-purple.9"
       h="fit-content"
       py="md"
       justify="flex-start"
@@ -20,7 +19,15 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
       radius="lg"
     >
       <Flex gap="lg" align="center">
-        <Indicator size={20} color="cbs.4" withBorder position="bottom-end" offset={5} label={countUpgrade(upgrade)}>
+        <Indicator
+          my="xs"
+          size={25}
+          color="cbc-yellow"
+          withBorder
+          position="bottom-end"
+          offset={5}
+          label={countUpgrade(upgrade)}
+        >
           <Image
             src={upgrade.icon ? `/images/icons/${upgrade.icon}` : "/images/osaka.jpg"}
             alt="Upgrade"

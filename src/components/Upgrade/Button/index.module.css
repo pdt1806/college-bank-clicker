@@ -1,5 +1,4 @@
 .button {
-  color: var(--mantine-color-cbs-0);
   &:disabled,
   &[data-disabled] {
     opacity: 0.5;

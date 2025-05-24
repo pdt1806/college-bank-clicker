@@ -3,8 +3,8 @@
   border-radius: var(--mantine-radius-lg);
   margin: var(--mantine-spacing-xs);
 
-  @media (max-width: $mantine-breakpoint-md) {
-    height: 100vh;
+  @media (max-width: $mantine-breakpoint-lg) {
+    height: 100%;
     border-radius: 0;
     margin: 0;
   }

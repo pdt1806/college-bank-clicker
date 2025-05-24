@@ -1,52 +1,135 @@
-import {
-  createTheme,
-  MantineColorsTuple,
-  MantineProvider,
-} from "@mantine/core";
+import { Center, createTheme, MantineProvider, Text } from "@mantine/core";
 import "@mantine/core/styles.css";
+import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
 import Layout from "./components/Layout";
+import MainGame from "./components/MainGame";
 import { GameProvider } from "./GameProvider";
-
-const brown: MantineColorsTuple = [
-  "#faf4ef",
-  "#f0e6df",
-  "#e2cab9",
-  "#d6ad90",
-  "#cb946c",
-  "#c58456",
-  "#c27b49",
-  "#ab693b",
-  "#995d32",
-  "#3d2412",
-];
-
-const cbs: MantineColorsTuple = [
-  "#2F2542", // 0 - Money-Making-Simulator-1-hex
-  "#485C73", // 1 - Money-Making-Simulator-2-hex
-  "#B5C7CC", // 2 - Money-Making-Simulator-3-hex
-  "#FFFFFF", // 3 - Money-Making-Simulator-4-hex (adjusted)
-  "#D3DB79", // 4 - Money-Making-Simulator-5-hex (adjusted)
-  "#68A367", // 5 - Money-Making-Simulator-6-hex (adjusted)
-  "#347F80", // 6 - Money-Making-Simulator-7-hex (adjusted)
-  "#CC682F", // 7 - filler
-  "#CC682F", // 8 - filler
-  "#CC682F", // 9 - filler
-];
 
 export const theme = createTheme({
   fontFamily: "Host Grotesk, sans-serif",
   headings: { fontFamily: "Host Grotesk, sans-serif" },
   colors: {
-    brown,
-    cbs,
+    "cbc-purple": [
+      "#f4f2f8",
+      "#e4e1e9",
+      "#c8c0d5",
+      "#aa9dc0",
+      "#9080ae",
+      "#806da4",
+      "#7963a0",
+      "#67538c",
+      "#5c497d",
+      "#2f2542",
+    ],
+    "cbc-bluegray": [
+      "#f2f5f7",
+      "#e6e6e7",
+      "#c7ccd1",
+      "#a7b0bb",
+      "#8b98a7",
+      "#79899c",
+      "#6f8198",
+      "#5e6f84",
+      "#526377",
+      "#485c73",
+    ],
+    "cbc-bluegreen": [
+      "#e6fafc",
+      "#dceef0",
+      "#bed9dc",
+      "#90bbc0",
+      "#81b0b5",
+      "#6ea4ab",
+      "#629fa6",
+      "#508b91",
+      "#427c82",
+      "#2c6c73",
+    ],
+    "cbc-white": [
+      "#ffffff",
+      "#e7e7e7",
+      "#cdcdcd",
+      "#b2b2b2",
+      "#9a9a9a",
+      "#8b8b8b",
+      "#848484",
+      "#717171",
+      "#656565",
+      "#575757",
+    ],
+    "cbc-yellow": [
+      "#fafce6",
+      "#f3f5d6",
+      "#e5eaaf",
+      "#d3db79",
+      "#cbd462",
+      "#c3ce4b",
+      "#bfcb3d",
+      "#a8b32e",
+      "#959f25",
+      "#7f8916",
+    ],
+    "cbc-green": [
+      "#edfaec",
+      "#dfeedf",
+      "#c1dac0",
+      "#9fc59f",
+      "#83b382",
+      "#71a870",
+      "#68a367",
+      "#568e55",
+      "#4a7e49",
+      "#3b6d3c",
+    ],
+    "cbc-teal": [
+      "#f0f9f9",
+      "#e4efef",
+      "#c3dfe0",
+      "#9fcfcf",
+      "#83c1c2",
+      "#70b8b9",
+      "#65b4b5",
+      "#539e9f",
+      "#468d8e",
+      "#347f80",
+    ],
   },
 });
+
+const routes: RouteObject[] = [
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <MainGame />,
+      },
+      // {
+      //   path: "*",
+      //   element: <Navigate to="/" replace />,
+      // },
+      {
+        path: "*",
+        element: (
+          <Center h="100%" w="100%">
+            <Text c="white" p="md">
+              to be developed soon (trust me bro) - benny
+            </Text>
+          </Center>
+        ),
+      },
+    ],
+  },
+];
+
+const router = createBrowserRouter(routes);
 
 export default function App() {
   return (
     <GameProvider>
       <MantineProvider theme={theme}>
-        <Layout />
+        <RouterProvider router={router} />
       </MantineProvider>
     </GameProvider>
   );

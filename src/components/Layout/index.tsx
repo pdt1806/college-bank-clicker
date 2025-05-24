@@ -1,33 +1,57 @@
 import { AppShell } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import MainGame from "../MainGame";
-import Sidebar from "../Sidebar";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { Outlet, useLocation } from "react-router-dom";
+import BottomNav from "../BottomNav";
+import Navbar from "../Navbar";
+import UpgradeBar from "../UpgradeBar";
 import classes from "./index.module.css";
 
 const Layout = () => {
-  const [opened, { toggle }] = useDisclosure();
+  const [asideOpened, { toggle: toggleAside, close: closeAside }] = useDisclosure();
+  const [navbarOpened, { toggle: toggleNavbar, close: closeNavbar }] = useDisclosure();
+
+  const location = useLocation();
+
+  const bottomNavCollapse = useMediaQuery("(min-width: 75em)");
 
   return (
     <AppShell
       aside={{
         width: 400,
-        breakpoint: "md",
-        collapsed: { mobile: !opened },
+        breakpoint: "lg",
+        collapsed: { mobile: !asideOpened || location.pathname !== "/", desktop: location.pathname !== "/" },
       }}
-      bg="cbs.0"
+      navbar={{
+        width: 300,
+        breakpoint: "lg",
+        collapsed: { mobile: !navbarOpened },
+      }}
+      footer={{
+        height: 60,
+        collapsed: bottomNavCollapse,
+      }}
+      bg="cbc-purple.9"
     >
-      {/* <AppShell.Header>
-        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-        <div>Logo</div>
-      </AppShell.Header> */}
+      <AppShell.Navbar withBorder={false} className={classes.navbar} w={{ base: "100%", lg: 300 }}>
+        <Navbar navbarOpened toggleNavbar={toggleNavbar} />
+      </AppShell.Navbar>
 
       <AppShell.Main>
-        <MainGame toggleMenu={toggle} />
+        <Outlet />
       </AppShell.Main>
 
       <AppShell.Aside withBorder={false} className={classes.aside}>
-        <Sidebar toggleMenu={toggle} />
+        <UpgradeBar />
       </AppShell.Aside>
+
+      <AppShell.Footer h={60}>
+        <BottomNav
+          toggleAside={toggleAside}
+          toggleNavbar={toggleNavbar}
+          closeAside={closeAside}
+          closeNavbar={closeNavbar}
+        />
+      </AppShell.Footer>
     </AppShell>
   );
 };
