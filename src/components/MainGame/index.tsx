@@ -24,7 +24,7 @@ const MainGame = () => {
       </Box>
       <Center h="100%" w="100%">
         <Image
-          src="/images/money-button.png"
+          src="/assets/money-button.png"
           onClick={() => {
             increment();
             saveGame();

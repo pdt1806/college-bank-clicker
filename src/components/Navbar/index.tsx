@@ -18,7 +18,7 @@ const Navbar = ({ navbarOpened, toggleNavbar }: { navbarOpened: boolean; toggleN
     <ScrollArea.Autosize h="100%" bg="cbc-bluegray.8">
       <Stack gap={0} justify="space-between">
         <Box>
-          <Image src="/images/logos/cbc-logo.svg" alt="Logo" w="100%" py="md" px="xs" />
+          <Image src="/assets/cbc-logo.svg" alt="Logo" w="100%" py="md" px="xs" maw={400} mx="auto" />
           <Box>
             {links.map((link) => (
               <Button
