@@ -8,6 +8,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [upgrades, setUpgrades] = useState<UpgradeListType>({});
   const [perClick, setPerClick] = useState(1);
 
+  const audioObj = {
+    upgrade: new Audio("/assets/audio/upgrade.ogg"),
+  };
+
   // --------------------
   // State Ref for Game Data
 
@@ -33,6 +37,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     };
 
     if (money >= currentCost(upgrade)) {
+      audioObj.upgrade.play().catch(() => {});
       setMoney((prev) => prev - currentCost(upgrade));
       upgrade.perSecond && setPerSecond((prev) => prev + (upgrade.perSecond ?? 0));
       upgrade.perClick && setPerClick(upgrade.perClick ?? 1);

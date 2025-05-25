@@ -16,7 +16,7 @@ const Navbar = ({ navbarOpened, toggleNavbar }: { navbarOpened: boolean; toggleN
   const navigate = useNavigate();
 
   return (
-    <ScrollArea.Autosize h="100%" bg="cbc-bluegray.8" className={classes.navbar}>
+    <ScrollArea.Autosize h="100%" bg="cbc-bluegray.8" className={classes.navbar} pt={`env(safe-area-inset-top)`}>
       <Stack gap={0} justify="space-between">
         <Box>
           <Image src="/assets/cbc-logo.svg" alt="Logo" w="100%" py="md" px="xs" maw={400} mx="auto" />

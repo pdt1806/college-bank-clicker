@@ -40,7 +40,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
         </Indicator>
         <Box style={{ textAlign: "left" }}>
           <Text
-            fw="bold"
+            fw="500"
             size="lg"
             style={{
               whiteSpace: "normal",

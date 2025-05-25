@@ -31,6 +31,7 @@ const Layout = () => {
         collapsed: bottomNavCollapse,
       }}
       bg="cbc-purple.9"
+      pt={`env(safe-area-inset-top)`}
     >
       <AppShell.Navbar withBorder={false} className={classes.sidebars} w={{ base: "100%", lg: 300 }}>
         <Navbar navbarOpened toggleNavbar={toggleNavbar} />

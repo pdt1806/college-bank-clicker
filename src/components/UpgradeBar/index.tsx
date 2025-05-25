@@ -11,7 +11,12 @@ const UpgradeBar = () => {
 
   return (
     <>
-      <ScrollArea.Autosize scrollbarSize={8} bg="cbc-bluegray.8" className={classes.sidebar}>
+      <ScrollArea.Autosize
+        scrollbarSize={8}
+        bg="cbc-bluegray.8"
+        className={classes.sidebar}
+        pt={`env(safe-area-inset-top)`}
+      >
         <Stack gap="md" p="lg">
           <>
             <Group gap="xs">

@@ -10,9 +10,9 @@ const MainGame = () => {
       direction="column"
       justify="center"
       align="center"
-      h={{ base: "calc(100vh - 60px)", lg: "100vh" }}
-      // bg="green.9"
+      h={{ base: "calc(100vh - 60px - env(safe-area-inset-top))", lg: "100vh" }}
       p="sm"
+      className={classes.mainGame}
     >
       <Box ta="center" p="lg" className={classes.counter} c="white" w={{ mobile: "100%", xs: "80%" }}>
         <Title order={2}>money earned from students</Title>

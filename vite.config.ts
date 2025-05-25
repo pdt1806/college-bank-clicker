@@ -15,28 +15,19 @@ export default defineConfig({
         short_name: "CB Clicker",
         description: "A parody clicker game about the College Board AP exams",
         theme_color: "#2f2542",
+        display: "standalone",
         icons: [
           {
             src: "pwa-192x192.png",
             sizes: "192x192",
             type: "image/png",
+            purpose: "maskable any",
           },
           {
             src: "pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
-          },
-          {
-            src: "pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "any",
-          },
-          {
-            src: "pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "maskable",
+            purpose: "maskable any",
           },
         ],
       },
