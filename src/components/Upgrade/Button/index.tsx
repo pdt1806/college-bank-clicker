@@ -29,10 +29,13 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
           label={countUpgrade(upgrade)}
         >
           <Image
-            src={upgrade.icon ? `/images/icons/${upgrade.icon}` : "/images/osaka.jpg"}
+            src={`/assets/upgrades/${upgrade.id}.svg`}
             alt="Upgrade"
             h={70}
             w={70}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = "/assets/osaka.jpg"; // Fallback image
+            }}
           />
         </Indicator>
         <Box style={{ textAlign: "left" }}>

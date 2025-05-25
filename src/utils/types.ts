@@ -1,7 +1,6 @@
 type GeneralUpgrade = {
   id: string;
   name: string;
-  icon: string;
   cost: number;
   description: string;
 };

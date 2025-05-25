@@ -9,10 +9,13 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
       <Stack>
         <Group>
           <Image
-            src={upgrade.icon ? `/images/icons/${upgrade.icon}` : "/images/osaka.jpg"}
+            src={`/assets/upgrades/${upgrade.id}.svg`}
             alt="Upgrade"
             h={60}
             w={60}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = "/assets/osaka.jpg"; // Fallback image
+            }}
           />
           <Box style={{ textAlign: "left" }}>
             <Text size="lg" c="cbc-purple.9">
