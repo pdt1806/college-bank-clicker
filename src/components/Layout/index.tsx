@@ -32,7 +32,7 @@ const Layout = () => {
       }}
       bg="cbc-purple.9"
     >
-      <AppShell.Navbar withBorder={false} className={classes.navbar} w={{ base: "100%", lg: 300 }}>
+      <AppShell.Navbar withBorder={false} className={classes.sidebars} w={{ base: "100%", lg: 300 }}>
         <Navbar navbarOpened toggleNavbar={toggleNavbar} />
       </AppShell.Navbar>
 
@@ -40,7 +40,7 @@ const Layout = () => {
         <Outlet />
       </AppShell.Main>
 
-      <AppShell.Aside withBorder={false} className={classes.aside}>
+      <AppShell.Aside withBorder={false} className={classes.sidebars}>
         <UpgradeBar />
       </AppShell.Aside>
 

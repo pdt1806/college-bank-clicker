@@ -11,6 +11,8 @@
 
   border-radius: 50%;
   transition: transform 0.1s;
+  will-change: transform;
+  touch-action: manipulation;
 
   &:hover {
     cursor: pointer;
@@ -19,6 +21,16 @@
 
   &:active {
     transform: scale(0.95);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .image:hover {
+    transform: none;
+  }
+
+  .image:active {
+    transform: scale(0.9);
   }
 }
 

@@ -14,7 +14,7 @@ const MainGame = () => {
       // bg="green.9"
       p="sm"
     >
-      <Box ta="center" p="lg" className={classes.counter} c="white" w={{ mobile: "100%", sm: "80%" }}>
+      <Box ta="center" p="lg" className={classes.counter} c="white" w={{ mobile: "100%", xs: "80%" }}>
         <Title order={2}>money earned from students</Title>
         <Title order={1}>
           <NumberFormatter prefix="$" value={Math.trunc(money)} thousandSeparator decimalScale={0} />
