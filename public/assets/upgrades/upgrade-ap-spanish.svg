@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="c" data-name="spanish" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>
+      .m {
+        fill: #c7d4db;
+      }
+
+      .n {
+        fill: none;
+        stroke: #485c73;
+        stroke-linecap: round;
+        stroke-miterlimit: 10;
+        stroke-width: 40px;
+      }
+
+      .o {
+        fill: #485c73;
+      }
+    </style>
+  </defs>
+  <g>
+    <path class="m" d="M289.28,495.59l-165.01-167.73v-155.73L289.28,4.41c24.11-12.47,54.35,2.99,54.35,27.79v435.6c0,24.8-30.24,40.26-54.35,27.79Z"/>
+    <path class="o" d="M79.52,156.28h58.69c3.28,0,5.95,2.66,5.95,5.95v175.54c0,3.28-2.66,5.95-5.95,5.95h-58.69c-12.53,0-22.7-10.17-22.7-22.7v-142.02c0-12.53,10.17-22.7,22.7-22.7Z"/>
+  </g>
+  <path class="n" d="M388.18,139.98s55.01,49.25,55.01,110.02-55.01,110.02-55.01,110.02"/>
+</svg>

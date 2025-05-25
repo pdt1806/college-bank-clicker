@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="l" data-name="digital" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>
+      .m {
+        fill: #2f2542;
+      }
+
+      .n {
+        fill: #485c73;
+      }
+    </style>
+  </defs>
+  <rect class="m" x="207.25" y="297.68" width="85.49" height="181.14" rx="16.29" ry="16.29"/>
+  <rect class="n" x="0" y="0" width="500" height="401.51" rx="40.67" ry="40.67"/>
+  <rect class="m" x="31.49" y="31.5" width="437.01" height="304.83" rx="40.67" ry="40.67"/>
+  <rect class="n" x="65.07" y="442.44" width="369.85" height="58.36" rx="13.64" ry="13.64"/>
+</svg>
