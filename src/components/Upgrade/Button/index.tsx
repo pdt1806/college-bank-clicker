@@ -13,7 +13,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
       py="md"
       justify="flex-start"
       w="100%"
-      disabled={currentCost(upgrade) > money || (!!upgrade.perClick && countUpgrade(upgrade) > 0)}
+      disabled={currentCost(upgrade) > money}
       className={classes.button}
       onClick={() => buyUpgrade(upgrade)}
       radius="lg"
@@ -27,6 +27,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
           position="bottom-end"
           offset={5}
           label={countUpgrade(upgrade)}
+          style={{ zIndex: 0 }}
         >
           <Image
             src={`/assets/upgrades/${upgrade.id}.svg`}
@@ -61,7 +62,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
             )}
             {upgrade.perClick && (
               <Text size="sm" c="dimmed">
-                per click ={upgrade.perClick}
+                per click +{upgrade.perClick}
               </Text>
             )}
           </Box>

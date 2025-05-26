@@ -33,13 +33,3 @@
     transform: scale(0.9);
   }
 }
-
-.counter {
-  background: #00000050;
-  border-radius: var(--mantine-radius-lg);
-}
-
-.mainGame {
-  overflow: hidden;
-  touch-action: none;
-}

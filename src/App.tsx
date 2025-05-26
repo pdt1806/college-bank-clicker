@@ -2,8 +2,10 @@ import { Center, createTheme, MantineProvider, Text } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { createMemoryRouter, RouteObject, RouterProvider } from "react-router-dom";
 import Layout from "./components/Layout";
-import MainGame from "./components/MainGame";
 import { GameProvider } from "./GameProvider";
+import About from "./pages/About";
+import MainGame from "./pages/MainGame";
+import Settings from "./pages/Settings";
 import { colors } from "./utils/colors";
 
 export const theme = createTheme({
@@ -20,6 +22,14 @@ const routes: RouteObject[] = [
       {
         path: "/",
         element: <MainGame />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
+      },
+      {
+        path: "about",
+        element: <About />,
       },
       // {
       //   path: "*",

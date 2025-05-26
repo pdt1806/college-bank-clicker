@@ -1,8 +1,9 @@
 import { ActionIcon, Group, HoverCard, ScrollArea, Stack, Text, Title } from "@mantine/core";
 import { IconChevronUp } from "@tabler/icons-react";
 import { useState } from "react";
-import { automaticUpgradeList, manualUpgradeList } from "../../utils";
+import { automaticUpgradeList, manualUpgradeList } from "../../utils/upgrades";
 import Upgrade from "../Upgrade";
+import UpgradeBarBalance from "./Balance";
 import classes from "./index.module.css";
 
 const UpgradeBar = () => {
@@ -17,6 +18,7 @@ const UpgradeBar = () => {
         className={classes.sidebar}
         pt={`env(safe-area-inset-top)`}
       >
+        <UpgradeBarBalance />
         <Stack gap="md" p="lg">
           <>
             <Group gap="xs">

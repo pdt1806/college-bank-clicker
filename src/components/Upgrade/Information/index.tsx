@@ -57,9 +57,8 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
               <Table.Td>
                 <NumberFormatter prefix="$" value={currentCost(upgrade)} thousandSeparator />
               </Table.Td>
-              {upgrade.perSecond && <Table.Td>+{upgrade.perSecond}</Table.Td>}
-              {upgrade.perClick && <Table.Td>={upgrade.perClick}</Table.Td>}
-              {upgrade.costMultiplier && <Table.Td>{upgrade.costMultiplier}</Table.Td>}
+              <Table.Td>+{upgrade.perSecond ?? upgrade.perClick}</Table.Td>
+              <Table.Td>{upgrade.costMultiplier}</Table.Td>
             </Table.Tr>
           </Table.Tbody>
         </Table>

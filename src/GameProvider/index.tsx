@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { audio } from "../utils/audio";
 
 export const GameContext = createContext<GameContextType>({} as GameContextType);
 
@@ -7,10 +8,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [perSecond, setPerSecond] = useState(0.0);
   const [upgrades, setUpgrades] = useState<UpgradeListType>({});
   const [perClick, setPerClick] = useState(1);
-
-  const audioObj = {
-    upgrade: new Audio("/assets/audio/upgrade.ogg"),
-  };
 
   // --------------------
   // State Ref for Game Data
@@ -37,7 +34,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     };
 
     if (money >= currentCost(upgrade)) {
-      audioObj.upgrade.play().catch(() => {});
+      new Audio(audio.upgrade).play().catch((error) => console.error("Audio playback failed:", error));
+
       setMoney((prev) => prev - currentCost(upgrade));
       upgrade.perSecond && setPerSecond((prev) => prev + (upgrade.perSecond ?? 0));
       upgrade.perClick && setPerClick(upgrade.perClick ?? 1);
@@ -59,6 +57,14 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const saveGame = () => {
     localStorage.setItem("gameData", JSON.stringify(gameData.current));
   };
+
+  // const resetData = () => {
+  //   setMoney(0);
+  //   setPerSecond(0);
+  //   setPerClick(1);
+  //   setUpgrades({});
+  //   localStorage.removeItem("gameData");
+  // };
 
   // --------------------
   // React Effects
@@ -109,6 +115,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         currentCost,
         perClick,
         saveGame,
+        // resetData,
       }}
     >
       {children}

@@ -2,11 +2,11 @@ type GeneralUpgrade = {
   id: string;
   name: string;
   cost: number;
+  costMultiplier: number;
   description: string;
 };
 
 type AutomaticUpgrade = GeneralUpgrade & {
-  costMultiplier?: number;
   perSecond?: number;
 };
 
@@ -33,4 +33,5 @@ interface GameContextType {
   currentCost: (upgrade: AutomaticUpgrade) => number;
   perClick: number;
   saveGame: () => void;
+  // resetData: () => void;
 }
