@@ -38,7 +38,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
       setMoney((prev) => prev - currentCost(upgrade));
       upgrade.perSecond && setPerSecond((prev) => prev + (upgrade.perSecond ?? 0));
-      upgrade.perClick && setPerClick(upgrade.perClick ?? 1);
+      upgrade.perClick && setPerClick((prev) => prev + (upgrade.perClick ?? 0));
       updateUpgrades();
     }
 
