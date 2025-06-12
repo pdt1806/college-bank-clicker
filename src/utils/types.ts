@@ -33,5 +33,14 @@ interface GameContextType {
   currentCost: (upgrade: AutomaticUpgrade) => number;
   perClick: number;
   saveGame: () => void;
-  // resetData: () => void;
+  musicVolume: number;
+  setMusicVolume: React.Dispatch<React.SetStateAction<number>>;
+  musicMutedIOS: boolean;
+  setMusicMutedIOS: React.Dispatch<React.SetStateAction<boolean>>;
+  sfxVolume: number;
+  setSfxVolume: React.Dispatch<React.SetStateAction<number>>;
+  sfxMutedIOS: boolean;
+  setSfxMutedIOS: React.Dispatch<React.SetStateAction<boolean>>;
+  saveSettings: () => void;
+  resetGameData: () => void;
 }

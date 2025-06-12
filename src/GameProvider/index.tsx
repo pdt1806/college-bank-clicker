@@ -9,6 +9,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [upgrades, setUpgrades] = useState<UpgradeListType>({});
   const [perClick, setPerClick] = useState(1);
 
+  const [musicVolume, setMusicVolume] = useState(50);
+  const [sfxVolume, setSfxVolume] = useState(50);
+  const [musicMutedIOS, setMusicMutedIOS] = useState(false);
+  const [sfxMutedIOS, setSfxMutedIOS] = useState(false);
+
   // --------------------
   // State Ref for Game Data
 
@@ -19,9 +24,43 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   }, [money, perSecond, perClick, upgrades]);
 
   // --------------------
+  // State Ref for Settings Data
+
+  const settingsData = useRef({ musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS });
+
+  useEffect(() => {
+    settingsData.current = { musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS };
+  }, [musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS]);
+
+  // --------------------
+  // BGM Logic
+
+  const bgm = audio.bgm;
+  bgm.loop = true;
+  bgm.muted = musicMutedIOS;
+  bgm.volume = musicVolume / 100;
+
+  document.body.addEventListener("click", () => {
+    bgm.play().catch((err) => console.error("Playback failed:", err));
+  });
+
+  useEffect(() => {
+    bgm.volume = musicVolume / 100;
+    bgm.muted = musicMutedIOS;
+  }, [musicVolume, musicMutedIOS]);
+
+  // --------------------
   // Game Logic
 
   const increment = () => setMoney((prev) => prev + perClick);
+
+  const playSound = (audio: HTMLAudioElement) => {
+    const sound = new Audio(audio.src);
+    sound.volume = sfxVolume / 100;
+    sound.play().catch((error) => {
+      console.error("Error playing audio:", error);
+    });
+  };
 
   const buyUpgrade = (upgrade: Upgrade) => {
     const updateUpgrades = () => {
@@ -34,8 +73,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     };
 
     if (money >= currentCost(upgrade)) {
-      new Audio(audio.upgrade).play().catch((error) => console.error("Audio playback failed:", error));
-
+      playSound(audio.upgrade);
       setMoney((prev) => prev - currentCost(upgrade));
       upgrade.perSecond && setPerSecond((prev) => prev + (upgrade.perSecond ?? 0));
       upgrade.perClick && setPerClick((prev) => prev + (upgrade.perClick ?? 0));
@@ -58,17 +96,22 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("gameData", JSON.stringify(gameData.current));
   };
 
-  // const resetData = () => {
-  //   setMoney(0);
-  //   setPerSecond(0);
-  //   setPerClick(1);
-  //   setUpgrades({});
-  //   localStorage.removeItem("gameData");
-  // };
+  const saveSettings = () => {
+    localStorage.setItem("settingsData", JSON.stringify(settingsData.current));
+  };
+
+  const resetGameData = () => {
+    setMoney(0);
+    setPerSecond(0);
+    setUpgrades({});
+    setPerClick(1);
+    saveGame();
+  };
 
   // --------------------
   // React Effects
 
+  // Increment money logic
   useEffect(() => {
     let last = performance.now();
 
@@ -83,6 +126,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     return () => clearInterval(interval);
   }, [perSecond]);
 
+  // Init game data
   useEffect(() => {
     const savedGame = localStorage.getItem("gameData");
     if (savedGame) {
@@ -94,12 +138,27 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  // Init settings data
+  useEffect(() => {
+    const savedSettings = localStorage.getItem("settingsData");
+    if (savedSettings) {
+      const { musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS } = JSON.parse(savedSettings);
+      setMusicVolume(musicVolume);
+      setSfxVolume(sfxVolume);
+      setMusicMutedIOS(musicMutedIOS);
+      setSfxMutedIOS(sfxMutedIOS);
+    }
+  }, []);
+
+  // Save game interval
   useEffect(() => {
     const interval = setInterval(() => {
       saveGame();
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(saveSettings, [musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS]);
 
   // --------------------
   // Context Provider
@@ -115,7 +174,16 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         currentCost,
         perClick,
         saveGame,
-        // resetData,
+        musicVolume,
+        setMusicVolume,
+        musicMutedIOS,
+        setMusicMutedIOS,
+        sfxVolume,
+        setSfxVolume,
+        sfxMutedIOS,
+        setSfxMutedIOS,
+        saveSettings,
+        resetGameData,
       }}
     >
       {children}

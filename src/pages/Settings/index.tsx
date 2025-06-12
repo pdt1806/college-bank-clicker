@@ -1,15 +1,16 @@
-import { Box, Container, Text, Title } from "@mantine/core";
+import { Container, Divider, SimpleGrid, Title } from "@mantine/core";
+import AudioSettings from "./AudioSettings";
+import ResetGameData from "./ResetGameData";
 
 const Settings = () => {
   return (
     <Container size="xl" py="xl" c="white">
       <Title>Settings</Title>
-      <Box mt="md">
-        <Text size="lg">Settings page is under development.</Text>
-        <Text size="sm" c="dimmed">
-          Please check back later for more options.
-        </Text>
-      </Box>
+      <Divider my="xl" />
+      <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xl">
+        <AudioSettings />
+        <ResetGameData />
+      </SimpleGrid>
     </Container>
   );
 };

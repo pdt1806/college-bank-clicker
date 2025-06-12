@@ -49,11 +49,11 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes("images")) return "images";
           if (id.includes("node_modules")) {
             if (id.includes("@tabler/icons-react")) return "tabler-icons-vendor";
-            if (id.includes("@mantine/core")) return "mantine-core-vendor";
-            if (id.includes("@mantine/hooks")) return "mantine-hooks-vendor";
+            if (id.includes("@mantine")) return "mantine-vendor";
+            // if (id.includes("@mantine/hooks")) return "mantine-hooks-vendor";
+            // if (id.includes("@mantine/notifications")) return "mantine-notifications-vendor";
             return "vendor";
           }
         },

@@ -37,7 +37,7 @@ const Layout = () => {
         <Navbar navbarOpened toggleNavbar={toggleNavbar} />
       </AppShell.Navbar>
 
-      <AppShell.Main>
+      <AppShell.Main style={{ touchAction: "none" }}>
         <Outlet />
       </AppShell.Main>
 

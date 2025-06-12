@@ -1,7 +1,6 @@
 import { Flex, Text } from "@mantine/core";
 import MainGameBalance from "./Balance";
 import MainGameButton from "./Button";
-import classes from "./index.module.css";
 
 const MainGame = () => {
   return (
@@ -11,7 +10,6 @@ const MainGame = () => {
       align="center"
       h={{ base: "calc(100vh - 60px - env(safe-area-inset-top))", lg: "100vh" }}
       p="sm"
-      className={classes.mainGame}
     >
       <MainGameBalance />
       <MainGameButton />

@@ -1,5 +1,7 @@
 import { Center, createTheme, MantineProvider, Text } from "@mantine/core";
 import "@mantine/core/styles.css";
+import { Notifications } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import { createMemoryRouter, RouteObject, RouterProvider } from "react-router-dom";
 import Layout from "./components/Layout";
 import { GameProvider } from "./GameProvider";
@@ -57,6 +59,7 @@ export default function App() {
   return (
     <GameProvider>
       <MantineProvider theme={theme}>
+        <Notifications />
         <RouterProvider router={router} />
       </MantineProvider>
     </GameProvider>
