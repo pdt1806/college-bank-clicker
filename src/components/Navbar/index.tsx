@@ -1,11 +1,11 @@
 import { Box, Button, Image, ScrollArea, Stack, Text, Title } from "@mantine/core";
-import { IconChartBar, IconClick, IconCompass, IconInfoCircle, IconSettings, IconStar } from "@tabler/icons-react";
+import { IconChartBar, IconClick, IconInfoCircle, IconSettings, IconStar } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import classes from "./index.module.css";
 
 const links = [
   { label: "Game", icon: IconClick, to: "/" },
-  { label: "Guide", icon: IconCompass, to: "/guide" },
+  // { label: "Guide", icon: IconCompass, to: "/guide" },
   { label: "Stats", icon: IconChartBar, to: "/stats" },
   { label: "Achievements", icon: IconStar, to: "/achievements" },
   { label: "Settings", icon: IconSettings, to: "/settings" },

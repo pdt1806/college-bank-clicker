@@ -1,13 +1,11 @@
 import { Button, Group, Modal, Stack, Text, Title } from "@mantine/core";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useGame } from "../../../GameProvider";
 
 const ResetGameData = () => {
   const { resetGameData } = useGame();
   const [opened, { open, close }] = useDisclosure(false);
-
-  const isMobile = useMediaQuery("(max-width: 62em)");
 
   return (
     <>
@@ -25,9 +23,6 @@ const ResetGameData = () => {
                 message: "Now you can relive the whole progress.",
                 color: "teal",
                 autoClose: 3000,
-                style: {
-                  transform: `translateY(${isMobile ? "-60px" : "0"})`,
-                },
               });
               close();
             }}

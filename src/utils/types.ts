@@ -26,6 +26,7 @@ interface GameContextType {
   // upgrades: UpgradeListType;
   // setUpgrades: React.Dispatch<React.SetStateAction<UpgradeListType>>;
   money: number;
+  upgrades: UpgradeListType;
   increment: (amount?: number) => void;
   perSecond: number;
   buyUpgrade: (upgrade: AutomaticUpgrade) => void;
@@ -43,4 +44,24 @@ interface GameContextType {
   setSfxMutedIOS: React.Dispatch<React.SetStateAction<boolean>>;
   saveSettings: () => void;
   resetGameData: () => void;
+  totalClicks: number;
+  totalMoney: number;
+  setTotalClicks: React.Dispatch<React.SetStateAction<number>>;
+  saveStats: () => void;
+  achievements: Achievement[];
 }
+
+type Achievement = {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+  value: number;
+  date?: Date; // Optional, can be used to store the date when the achievement was unlocked
+};
+
+type AchievementsTab = {
+  name: string;
+  icon: React.ComponentType<{ size?: number }>;
+  list: Achievement[];
+};
