@@ -19,7 +19,9 @@ const AudioSettings = () => {
 
   return (
     <Stack w="100%">
-      <Title order={2}>Audio settings</Title>
+      <Title order={2} fw={500}>
+        Audio settings
+      </Title>
       <Table verticalSpacing="sm" withRowBorders={false}>
         <Table.Tbody>
           <Table.Tr>

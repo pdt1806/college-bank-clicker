@@ -4,8 +4,8 @@ import ResetGameData from "./ResetGameData";
 
 const Settings = () => {
   return (
-    <Container size="xl" py="xl" c="white">
-      <Title>Settings</Title>
+    <Container size="xl" py="xs" c="white">
+      <Title pt="lg">Settings</Title>
       <Divider my="xl" />
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xl">
         <AudioSettings />

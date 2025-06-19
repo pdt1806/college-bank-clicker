@@ -1,4 +1,7 @@
+import { notifications } from "@mantine/notifications";
+import { IconStar } from "@tabler/icons-react";
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { clickAchievementList, moneyAchievementList, upgradeAchievementList } from "../utils/achievements";
 import { audio } from "../utils/audio";
 
 export const GameContext = createContext<GameContextType>({} as GameContextType);
@@ -13,6 +16,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [sfxVolume, setSfxVolume] = useState(50);
   const [musicMutedIOS, setMusicMutedIOS] = useState(false);
   const [sfxMutedIOS, setSfxMutedIOS] = useState(false);
+
+  const [totalClicks, setTotalClicks] = useState(0);
+  const [totalMoney, setTotalMoney] = useState(0);
+  const [timeInGame, setTimeInGame] = useState(0);
+
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
 
   // --------------------
   // State Ref for Game Data
@@ -31,6 +40,19 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     settingsData.current = { musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS };
   }, [musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS]);
+
+  // --------------------
+  // State Ref for Total Stats & Achievements
+
+  const totalStats = useRef({ totalClicks, totalMoney, timeInGame });
+  useEffect(() => {
+    totalStats.current = { totalClicks, totalMoney, timeInGame };
+  }, [totalClicks, totalMoney, timeInGame]);
+
+  const achievementsRef = useRef<Achievement[]>(achievements);
+  useEffect(() => {
+    achievementsRef.current = achievements;
+  }, [achievements]);
 
   // --------------------
   // BGM Logic
@@ -52,10 +74,14 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   // --------------------
   // Game Logic
 
-  const increment = () => setMoney((prev) => prev + perClick);
+  const increment = () => {
+    setMoney((prev) => prev + perClick);
+    setTotalMoney((prev) => prev + perClick);
+  };
 
   const playSound = (audio: HTMLAudioElement) => {
     const sound = new Audio(audio.src);
+    sound.muted = sfxMutedIOS;
     sound.volume = sfxVolume / 100;
     sound.play().catch((error) => {
       console.error("Error playing audio:", error);
@@ -81,6 +107,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     }
 
     saveGame();
+    saveStats();
   };
 
   const countUpgrade = (upgrade: Upgrade) => {
@@ -100,12 +127,42 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("settingsData", JSON.stringify(settingsData.current));
   };
 
+  const saveStats = () => {
+    localStorage.setItem("statsData", JSON.stringify(totalStats.current));
+  };
+
   const resetGameData = () => {
     setMoney(0);
     setPerSecond(0);
     setUpgrades({});
     setPerClick(1);
-    saveGame();
+
+    setTotalClicks(0);
+    setTotalMoney(0);
+    setTimeInGame(0);
+
+    setAchievements([]);
+
+    localStorage.removeItem("gameData");
+    localStorage.removeItem("statsData");
+    localStorage.removeItem("achievementsData");
+  };
+
+  const addAchievement = (achievement: Achievement) => {
+    if (!achievementsRef.current.some((a) => a.id === achievement.id)) {
+      achievement.date = new Date();
+      setAchievements((prev) => [...prev, achievement]);
+      localStorage.setItem("achievementsData", JSON.stringify([...achievementsRef.current, achievement]));
+      playSound(audio.achievement);
+      notifications.show({
+        title: "Achievement Unlocked!",
+        message: achievement.name,
+        color: "green",
+        autoClose: 5000,
+        position: "top-right",
+        icon: <IconStar size={24} />,
+      });
+    }
   };
 
   // --------------------
@@ -121,6 +178,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       last = now;
 
       setMoney((prev) => prev + perSecond * deltaSeconds);
+      setTotalMoney((prev) => prev + perSecond * deltaSeconds);
     }, 25);
 
     return () => clearInterval(interval);
@@ -150,15 +208,66 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  // Init achievements
+  useEffect(() => {
+    const savedAchievements = localStorage.getItem("achievementsData");
+    if (savedAchievements) {
+      const achievementsList = JSON.parse(savedAchievements);
+      setAchievements(achievementsList);
+    }
+  }, []);
+
+  // Init total stats
+  useEffect(() => {
+    const savedStats = localStorage.getItem("statsData");
+    if (savedStats) {
+      const { totalClicks, totalMoney, timeInGame } = JSON.parse(savedStats);
+      setTotalClicks(totalClicks);
+      setTotalMoney(totalMoney);
+      setTimeInGame(timeInGame);
+    }
+  }, []);
+
   // Save game interval
   useEffect(() => {
     const interval = setInterval(() => {
       saveGame();
+      saveStats();
     }, 3000);
     return () => clearInterval(interval);
   }, []);
 
+  // Save time in game
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeInGame((prev) => prev + 1000); // Increment time in game by 1000ms
+      saveStats();
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Save settings on change
   useEffect(saveSettings, [musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS]);
+
+  // Check achievements with conditions
+  useEffect(() => {
+    clickAchievementList.forEach((achievement) => {
+      if (totalClicks >= achievement.value) addAchievement(achievement);
+    });
+  }, [totalClicks]);
+
+  useEffect(() => {
+    upgradeAchievementList.forEach((achievement) => {
+      if (Object.values(upgrades).reduce((total, value) => total + value, 0) >= achievement.value)
+        addAchievement(achievement);
+    });
+  }, [upgrades]);
+
+  useEffect(() => {
+    moneyAchievementList.forEach((achievement) => {
+      if (money >= achievement.value) addAchievement(achievement);
+    });
+  }, [money]); // this has to be based on money, not totalMoney
 
   // --------------------
   // Context Provider
@@ -167,6 +276,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     <GameContext.Provider
       value={{
         money,
+        upgrades,
         increment,
         perSecond,
         buyUpgrade,
@@ -184,6 +294,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         setSfxMutedIOS,
         saveSettings,
         resetGameData,
+        totalClicks,
+        totalMoney,
+        setTotalClicks,
+        saveStats,
+        achievements,
+        timeInGame,
       }}
     >
       {children}

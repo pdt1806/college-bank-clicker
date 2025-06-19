@@ -3,7 +3,7 @@ import { useGame } from "../../../GameProvider";
 import classes from "./index.module.css";
 
 const MainGameButton = () => {
-  const { increment, saveGame } = useGame();
+  const { increment, saveGame, setTotalClicks, saveStats } = useGame();
   return (
     <Center h="100%" w="100%">
       <Image
@@ -11,6 +11,8 @@ const MainGameButton = () => {
         onClick={() => {
           increment();
           saveGame();
+          setTotalClicks((prev) => prev + 1);
+          saveStats();
         }}
         className={classes.image}
       />

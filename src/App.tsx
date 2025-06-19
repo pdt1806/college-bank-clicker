@@ -6,8 +6,10 @@ import { createMemoryRouter, RouteObject, RouterProvider } from "react-router-do
 import Layout from "./components/Layout";
 import { GameProvider } from "./GameProvider";
 import About from "./pages/About";
+import Achievements from "./pages/Achievements";
 import MainGame from "./pages/MainGame";
 import Settings from "./pages/Settings";
+import Stats from "./pages/Stats";
 import { colors } from "./utils/colors";
 
 export const theme = createTheme({
@@ -33,10 +35,14 @@ const routes: RouteObject[] = [
         path: "about",
         element: <About />,
       },
-      // {
-      //   path: "*",
-      //   element: <Navigate to="/" replace />,
-      // },
+      {
+        path: "achievements",
+        element: <Achievements />,
+      },
+      {
+        path: "stats",
+        element: <Stats />,
+      },
       {
         path: "*",
         element: (
