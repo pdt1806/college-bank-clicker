@@ -11,7 +11,7 @@
 
     <meta
       name="viewport"
-      content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, viewport-fit=cover"
+      content="minimum-scale=1, initial-scale=1, maximum-scale=1, width=device-width, user-scalable=no, viewport-fit=cover"
     />
     <title>College Bank Clicker</title>
     <meta name="description" content="A parody clicker game about the College Board AP exams" />
@@ -54,9 +54,16 @@
         -webkit-touch-callout: none;
       }
       html,
-      body {
-        height: 100vh;
+      body,
+      root {
+        height: 100lh;
         width: 100vw;
+        overflow: hidden;
+      }
+
+      body {
+        position: fixed;
+        inset: 0;
         overflow: hidden;
       }
     </style>

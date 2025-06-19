@@ -49,6 +49,7 @@ interface GameContextType {
   setTotalClicks: React.Dispatch<React.SetStateAction<number>>;
   saveStats: () => void;
   achievements: Achievement[];
+  timeInGame: number;
 }
 
 type Achievement = {

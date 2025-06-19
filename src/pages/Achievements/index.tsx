@@ -41,7 +41,7 @@ const Achievements = () => {
   };
 
   return (
-    <Container size="xl" py="xs" c="white" h={isMobile ? "calc(100vh - 60px)" : "100vh"}>
+    <Container size="xl" py="xs" c="white" h={isMobile ? "calc(100vh - 60px - env(safe-area-inset-top))" : "100vh"}>
       <Title py="lg">Achievements</Title>
       <Tabs
         variant="outline"
@@ -51,16 +51,23 @@ const Achievements = () => {
         styles={{ panel: { height: "calc(100% - 60px)" } }}
         style={{ height: "calc(100% - 60px)", marginBlock: 0, margin: 0 }}
       >
-        <Tabs.List style={{ flexShrink: 0 }}>
-          {tabs.map((tab) => (
-            <Tabs.Tab key={tab.name} value={tab.name} leftSection={<tab.icon size={24} />}>
-              <Text>{tab.name}</Text>
-            </Tabs.Tab>
-          ))}
-        </Tabs.List>
+        <ScrollArea w="100%">
+          <Tabs.List>
+            {tabs.map((tab) => (
+              <Tabs.Tab key={tab.name} value={tab.name} leftSection={<tab.icon size={24} />}>
+                <Text>{tab.name}</Text>
+              </Tabs.Tab>
+            ))}
+          </Tabs.List>
+        </ScrollArea>
+
         {tabs.map((tab) => (
           <Tabs.Panel id={tab.name} key={tab.name} value={tab.name} py="xs">
             <ScrollArea.Autosize h="100%">
+              <Text mb="md">
+                {achievements.filter((a) => tab.list.some((t) => t.id === a.id)).length} / {tab.list.length}{" "}
+                achievements of this category earned
+              </Text>
               <SimpleGrid cols={{ base: 1, md: 2 }} spacing={"md"}>
                 {generateContent(tab)}
               </SimpleGrid>

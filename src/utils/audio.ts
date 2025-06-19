@@ -1,6 +1,7 @@
 export const audio: Record<string, HTMLAudioElement> = {
   upgrade: new Audio("/assets/audio/upgrade.mp3"),
   bgm: new Audio("/assets/audio/bgm.mp3"),
+  achievement: new Audio("/assets/audio/achievement.mp3"),
 };
 
 for (const key in audio) {

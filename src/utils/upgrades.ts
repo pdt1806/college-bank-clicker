@@ -101,3 +101,5 @@ export const manualUpgradeList: ManualUpgrade[] = [
       "All AP exams are now automatically graded. No more waiting until July for scores. (not really, we just added this for fun)",
   },
 ];
+
+export const allUpgrades: Upgrade[] = [...automaticUpgradeList, ...manualUpgradeList];

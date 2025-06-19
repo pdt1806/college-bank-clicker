@@ -1,15 +1,11 @@
-import { Box, Flex, Image, Text } from "@mantine/core";
-import { useEffect } from "react";
+import { Box, Flex, Text } from "@mantine/core";
+import { IconArrowUp, IconMoneybag, IconMouse } from "@tabler/icons-react";
 
 const AchievementBox = ({ achievement }: { achievement: Achievement }) => {
-  useEffect(() => {
-    console.log("AchievementBox rendered for:", achievement);
-  }, []);
-
   return (
     <Box style={{ borderRadius: "var(--mantine-radius-lg)" }} w="100%" bg="cbc-white.0" p="md">
       <Flex gap="lg" align="center">
-        <Image
+        {/* <Image
           src={`/assets/achievements/${achievement.id}.svg`}
           radius="lg"
           alt="Upgrade"
@@ -18,7 +14,10 @@ const AchievementBox = ({ achievement }: { achievement: Achievement }) => {
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).src = "/assets/osaka.jpg"; // Fallback image
           }}
-        />
+        /> */}
+        {achievement.id.includes("money") && <IconMoneybag size={125} color="var(--mantine-color-cbc-bluegray-9)" />}
+        {achievement.id.includes("click") && <IconMouse size={125} color="var(--mantine-color-cbc-bluegray-9)" />}
+        {achievement.id.includes("upgrade") && <IconArrowUp size={125} color="var(--mantine-color-cbc-bluegray-9)" />}
         <Box style={{ textAlign: "left" }}>
           <Text
             fw="500"
@@ -36,11 +35,11 @@ const AchievementBox = ({ achievement }: { achievement: Achievement }) => {
             <Text size="sm" c="dimmed">
               {achievement.description}
             </Text>
-            {achievement.date ? (
+            {achievement.date && (
               <Text size="sm" c="dimmed" mt="xs">
                 Date achieved: {new Date(achievement.date).toLocaleDateString()}
               </Text>
-            ) : null}
+            )}
           </Box>
         </Box>
       </Flex>

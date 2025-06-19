@@ -32,12 +32,13 @@ const Layout = () => {
       }}
       bg="cbc-purple.9"
       pt={`env(safe-area-inset-top)`}
+      h="100vh"
     >
       <AppShell.Navbar withBorder={false} className={classes.sidebars} w={{ base: "100%", lg: 300 }}>
         <Navbar navbarOpened toggleNavbar={toggleNavbar} />
       </AppShell.Navbar>
 
-      <AppShell.Main style={{ touchAction: "none" }}>
+      <AppShell.Main className={classes.main}>
         <Outlet />
       </AppShell.Main>
 

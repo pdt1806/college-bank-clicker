@@ -132,3 +132,9 @@ export const upgradeAchievementList: Achievement[] = [
     value: 100,
   },
 ];
+
+export const allAchievements: Achievement[] = [
+  ...moneyAchievementList,
+  ...clickAchievementList,
+  ...upgradeAchievementList,
+];

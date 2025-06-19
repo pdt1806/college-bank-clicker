@@ -13,7 +13,10 @@ const ResetGameData = () => {
         <Text>
           Are you sure you want to reset your game? This will permanently erase all progress and cannot be undone.
         </Text>
-        <Group mt="md">
+        <Group mt="md" ml="auto" w="fit-content">
+          <Button onClick={close} variant="transparent" c="black">
+            Cancel
+          </Button>
           <Button
             color="red"
             onClick={() => {
@@ -29,13 +32,12 @@ const ResetGameData = () => {
           >
             Yes, reset!
           </Button>
-          <Button onClick={close} variant="transparent" c="black">
-            Cancel
-          </Button>
         </Group>
       </Modal>
       <Stack>
-        <Title order={2}>Reset game data</Title>
+        <Title order={2} fw={500}>
+          Reset game data
+        </Title>
         <Button size="lg" color="red" onClick={open} radius="xl">
           Reset
         </Button>

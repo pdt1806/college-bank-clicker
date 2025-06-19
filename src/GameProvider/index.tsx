@@ -1,4 +1,5 @@
 import { notifications } from "@mantine/notifications";
+import { IconStar } from "@tabler/icons-react";
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { clickAchievementList, moneyAchievementList, upgradeAchievementList } from "../utils/achievements";
 import { audio } from "../utils/audio";
@@ -18,6 +19,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
   const [totalClicks, setTotalClicks] = useState(0);
   const [totalMoney, setTotalMoney] = useState(0);
+  const [timeInGame, setTimeInGame] = useState(0);
 
   const [achievements, setAchievements] = useState<Achievement[]>([]);
 
@@ -42,10 +44,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   // --------------------
   // State Ref for Total Stats & Achievements
 
-  const totalStats = useRef({ totalClicks, totalMoney });
+  const totalStats = useRef({ totalClicks, totalMoney, timeInGame });
   useEffect(() => {
-    totalStats.current = { totalClicks, totalMoney };
-  }, [totalClicks, totalMoney]);
+    totalStats.current = { totalClicks, totalMoney, timeInGame };
+  }, [totalClicks, totalMoney, timeInGame]);
 
   const achievementsRef = useRef<Achievement[]>(achievements);
   useEffect(() => {
@@ -79,6 +81,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
   const playSound = (audio: HTMLAudioElement) => {
     const sound = new Audio(audio.src);
+    sound.muted = sfxMutedIOS;
     sound.volume = sfxVolume / 100;
     sound.play().catch((error) => {
       console.error("Error playing audio:", error);
@@ -136,6 +139,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
     setTotalClicks(0);
     setTotalMoney(0);
+    setTimeInGame(0);
 
     setAchievements([]);
 
@@ -149,15 +153,14 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       achievement.date = new Date();
       setAchievements((prev) => [...prev, achievement]);
       localStorage.setItem("achievementsData", JSON.stringify([...achievementsRef.current, achievement]));
-      // playSound(audio.achievement);
+      playSound(audio.achievement);
       notifications.show({
         title: "Achievement Unlocked!",
         message: achievement.name,
         color: "green",
         autoClose: 5000,
         position: "top-right",
-
-        // icon: <img src={achievement.icon} alt={achievement.name} style={{ width: 24, height: 24 }} />,
+        icon: <IconStar size={24} />,
       });
     }
   };
@@ -218,9 +221,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const savedStats = localStorage.getItem("statsData");
     if (savedStats) {
-      const { totalClicks, totalMoney } = JSON.parse(savedStats);
+      const { totalClicks, totalMoney, timeInGame } = JSON.parse(savedStats);
       setTotalClicks(totalClicks);
       setTotalMoney(totalMoney);
+      setTimeInGame(timeInGame);
     }
   }, []);
 
@@ -230,6 +234,15 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       saveGame();
       saveStats();
     }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Save time in game
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeInGame((prev) => prev + 1000); // Increment time in game by 1000ms
+      saveStats();
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -286,6 +299,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         setTotalClicks,
         saveStats,
         achievements,
+        timeInGame,
       }}
     >
       {children}
