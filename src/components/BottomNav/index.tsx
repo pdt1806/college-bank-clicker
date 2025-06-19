@@ -32,7 +32,7 @@ const BottomNav = ({
   ];
 
   return (
-    <Box w="100vw" h={60} bg="cbc-bluegray.9" style={{ position: "fixed", bottom: 0 }}>
+    <Box w="100vw" h={60} bg="cbc-bluegray.9" style={{ position: "fixed", bottom: 0, zIndex: 2 }}>
       <Flex align="center" h="100%">
         {links.map((link) => (
           <Button h={60} w="50vw" variant="subtle" color="white" onClick={link.action} radius="0" key={link.label}>

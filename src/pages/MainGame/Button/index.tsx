@@ -8,13 +8,16 @@ const MainGameButton = () => {
     <Center h="100%" w="100%">
       <Image
         src="/assets/money-button.png"
-        onClick={() => {
+        onClick={(e) => {
+          e.preventDefault(); // Prevent default image behavior
           increment();
           saveGame();
           setTotalClicks((prev) => prev + 1);
           saveStats();
         }}
         className={classes.image}
+        alt="Money Button"
+        fallbackSrc="/assets/money-button.png" // Optional: fallback if image fails to load
       />
     </Center>
   );

@@ -9,7 +9,7 @@ const ResetGameData = () => {
 
   return (
     <>
-      <Modal opened={opened} onClose={close} centered withCloseButton={false}>
+      <Modal opened={opened} onClose={close} centered withCloseButton={false} radius="lg">
         <Text>
           Are you sure you want to reset your game? This will permanently erase all progress and cannot be undone.
         </Text>
@@ -18,10 +18,12 @@ const ResetGameData = () => {
             Cancel
           </Button>
           <Button
+            radius="md"
             color="red"
             onClick={() => {
               resetGameData();
               notifications.show({
+                styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
                 title: "Game data reset!",
                 message: "Now you can relive the whole progress.",
                 color: "teal",

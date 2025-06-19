@@ -39,6 +39,9 @@ export default defineConfig({
   preview: {
     allowedHosts: ["localhost", "preview-vite.bennynguyen.dev"],
   },
+  server: {
+    allowedHosts: ["localhost", "dev-vite.bennynguyen.dev"],
+  },
   resolve: {
     alias: {
       // /esm/icons/index.mjs only exports the icons statically, so no separate chunks are created

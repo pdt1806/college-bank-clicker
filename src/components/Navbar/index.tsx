@@ -1,12 +1,11 @@
-import { Box, Button, Image, ScrollArea, Stack, Text, Title } from "@mantine/core";
+import { Box, Button, Image, Stack, Text, Title } from "@mantine/core";
 import { IconChartBar, IconClick, IconInfoCircle, IconSettings, IconStar } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
-import classes from "./index.module.css";
 
 const links = [
   { label: "Game", icon: IconClick, to: "/" },
   // { label: "Guide", icon: IconCompass, to: "/guide" },
-  { label: "Stats", icon: IconChartBar, to: "/stats" },
+  { label: "Statistics", icon: IconChartBar, to: "/statistics" },
   { label: "Achievements", icon: IconStar, to: "/achievements" },
   { label: "Settings", icon: IconSettings, to: "/settings" },
   { label: "About", icon: IconInfoCircle, to: "/about" },
@@ -16,7 +15,7 @@ const Navbar = ({ navbarOpened, toggleNavbar }: { navbarOpened: boolean; toggleN
   const navigate = useNavigate();
 
   return (
-    <ScrollArea.Autosize h="100%" bg="cbc-bluegray.8" className={classes.navbar} pt={`env(safe-area-inset-top)`}>
+    <Box>
       <Stack gap={0} justify="space-between">
         <Box>
           <Image src="/assets/cbc-logo.svg" alt="Logo" w="100%" py="md" px="xs" maw={400} mx="auto" />
@@ -49,7 +48,7 @@ const Navbar = ({ navbarOpened, toggleNavbar }: { navbarOpened: boolean; toggleN
           v{__APP_VERSION__}
         </Text>
       </Stack>
-    </ScrollArea.Autosize>
+    </Box>
   );
 };
 

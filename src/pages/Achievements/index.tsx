@@ -4,6 +4,8 @@ import { IconArrowUp, IconMoneybag, IconMouse } from "@tabler/icons-react";
 import AchievementBox from "../../components/AchievementBox";
 import { useGame } from "../../GameProvider";
 import { clickAchievementList, moneyAchievementList, upgradeAchievementList } from "../../utils/achievements";
+import { UNIFORMED_HEIGHT } from "../../utils/const";
+import classes from "./index.module.css";
 
 const tabs = [
   {
@@ -41,20 +43,21 @@ const Achievements = () => {
   };
 
   return (
-    <Container size="xl" py="xs" c="white" h={isMobile ? "calc(100vh - 60px - env(safe-area-inset-top))" : "100vh"}>
+    <Container size="xl" py="xs" c="white" h={isMobile ? UNIFORMED_HEIGHT : "100vh"}>
       <Title py="lg">Achievements</Title>
       <Tabs
-        variant="outline"
+        variant="default"
+        color="cbc-purple"
         radius="md"
         defaultValue="Money"
         my="lg"
-        styles={{ panel: { height: "calc(100% - 60px)" } }}
-        style={{ height: "calc(100% - 60px)", marginBlock: 0, margin: 0 }}
+        styles={{ panel: { height: `calc(100% - 60px)`, padding: 0 } }}
+        style={{ height: `calc(100% - 60px)`, marginBlock: 0, margin: 0 }}
       >
-        <ScrollArea w="100%">
-          <Tabs.List>
+        <ScrollArea w="100%" scrollbarSize={0}>
+          <Tabs.List style={{ flexWrap: "nowrap" }} className={classes.tabList}>
             {tabs.map((tab) => (
-              <Tabs.Tab key={tab.name} value={tab.name} leftSection={<tab.icon size={24} />}>
+              <Tabs.Tab key={tab.name} value={tab.name} leftSection={<tab.icon size={24} />} className={classes.tab}>
                 <Text>{tab.name}</Text>
               </Tabs.Tab>
             ))}
@@ -62,15 +65,17 @@ const Achievements = () => {
         </ScrollArea>
 
         {tabs.map((tab) => (
-          <Tabs.Panel id={tab.name} key={tab.name} value={tab.name} py="xs">
+          <Tabs.Panel id={tab.name} key={tab.name} value={tab.name}>
             <ScrollArea.Autosize h="100%">
-              <Text mb="md">
-                {achievements.filter((a) => tab.list.some((t) => t.id === a.id)).length} / {tab.list.length}{" "}
-                achievements of this category earned
-              </Text>
-              <SimpleGrid cols={{ base: 1, md: 2 }} spacing={"md"}>
-                {generateContent(tab)}
-              </SimpleGrid>
+              <Box py="sm">
+                <Text mb="md">
+                  {achievements.filter((a) => tab.list.some((t) => t.id === a.id)).length} / {tab.list.length}{" "}
+                  achievements of this category earned
+                </Text>
+                <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4, xl: 6 }} spacing={"md"}>
+                  {generateContent(tab)}
+                </SimpleGrid>
+              </Box>
             </ScrollArea.Autosize>
           </Tabs.Panel>
         ))}

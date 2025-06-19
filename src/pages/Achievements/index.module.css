@@ -1,0 +1,13 @@
+.tab {
+  &:hover {
+    background-color: var(--mantine-color-cbc-purple-8);
+  }
+}
+
+.tabList {
+  width: 100%;
+
+  @media (max-width: 393px) {
+    width: max-content;
+  }
+}

@@ -1,6 +1,7 @@
-import { AppShell } from "@mantine/core";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { AppShell, ScrollArea } from "@mantine/core";
+import { useDisclosure, useMediaQuery, useOs } from "@mantine/hooks";
 import { Outlet, useLocation } from "react-router-dom";
+import { TOP_OFFSET, UNIFORMED_HEIGHT } from "../../utils/const";
 import BottomNav from "../BottomNav";
 import Navbar from "../Navbar";
 import UpgradeBar from "../UpgradeBar";
@@ -12,14 +13,18 @@ const Layout = () => {
 
   const location = useLocation();
 
-  const bottomNavCollapse = useMediaQuery("(min-width: 75em)");
+  const isMobile = useMediaQuery("(max-width: 75em)");
+  const os = useOs();
+
+  const isIOS = os === "ios";
+  const adjustedHeight = isIOS ? "100%" : UNIFORMED_HEIGHT;
 
   return (
     <AppShell
       aside={{
         width: 400,
         breakpoint: "lg",
-        collapsed: { mobile: !asideOpened || location.pathname !== "/", desktop: location.pathname !== "/" },
+        collapsed: { mobile: !asideOpened, desktop: location.pathname !== "/" },
       }}
       navbar={{
         width: 300,
@@ -28,22 +33,36 @@ const Layout = () => {
       }}
       footer={{
         height: 60,
-        collapsed: bottomNavCollapse,
+        collapsed: !isMobile,
       }}
       bg="cbc-purple.9"
-      pt={`env(safe-area-inset-top)`}
+      pt={TOP_OFFSET}
       h="100vh"
     >
-      <AppShell.Navbar withBorder={false} className={classes.sidebars} w={{ base: "100%", lg: 300 }}>
-        <Navbar navbarOpened toggleNavbar={toggleNavbar} />
+      <AppShell.Navbar withBorder={false} className={classes.sidebarWrapper} w={{ base: "100%", lg: 300 }}>
+        <ScrollArea.Autosize
+          h={isMobile ? adjustedHeight : "100%"}
+          bg="cbc-bluegray.8"
+          className={classes.sidebar}
+          pt={TOP_OFFSET}
+        >
+          <Navbar navbarOpened toggleNavbar={toggleNavbar} />
+        </ScrollArea.Autosize>
       </AppShell.Navbar>
 
       <AppShell.Main className={classes.main}>
         <Outlet />
       </AppShell.Main>
 
-      <AppShell.Aside withBorder={false} className={classes.sidebars}>
-        <UpgradeBar />
+      <AppShell.Aside withBorder={false} className={classes.sidebarWrapper}>
+        <ScrollArea.Autosize
+          h={isMobile ? adjustedHeight : "100%"}
+          bg="cbc-bluegray.8"
+          className={classes.sidebar}
+          pt={TOP_OFFSET}
+        >
+          <UpgradeBar />
+        </ScrollArea.Autosize>
       </AppShell.Aside>
 
       <AppShell.Footer h={60}>

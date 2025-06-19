@@ -155,6 +155,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem("achievementsData", JSON.stringify([...achievementsRef.current, achievement]));
       playSound(audio.achievement);
       notifications.show({
+        styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
         title: "Achievement Unlocked!",
         message: achievement.name,
         color: "green",

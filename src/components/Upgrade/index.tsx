@@ -5,7 +5,7 @@ import UpgradeButton from "./Button";
 import UpgradeInfo from "./Information";
 
 const Upgrade = ({ upgrade }: { upgrade: Upgrade }) => {
-  const isMobile = useMediaQuery("(max-width: 62em)");
+  const isMobile = useMediaQuery("(max-width: 75em)");
 
   const ButtonComponent = forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>((props, ref) => (
     <div {...props} ref={ref}>
@@ -18,7 +18,7 @@ const Upgrade = ({ upgrade }: { upgrade: Upgrade }) => {
       <HoverCard.Target>
         <ButtonComponent />
       </HoverCard.Target>
-      <HoverCard.Dropdown>
+      <HoverCard.Dropdown bg="cbc-bluegray.0">
         <UpgradeInfo upgrade={upgrade} />
       </HoverCard.Dropdown>
     </HoverCard>

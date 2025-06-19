@@ -7,7 +7,8 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
 
   return (
     <Button
-      variant="default"
+      color="cbc-bluegray.0"
+      variant="filled"
       c="cbc-purple.9"
       h="fit-content"
       py="md"

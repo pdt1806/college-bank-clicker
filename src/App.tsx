@@ -9,7 +9,7 @@ import About from "./pages/About";
 import Achievements from "./pages/Achievements";
 import MainGame from "./pages/MainGame";
 import Settings from "./pages/Settings";
-import Stats from "./pages/Stats";
+import Statistics from "./pages/Statistics";
 import { colors } from "./utils/colors";
 
 export const theme = createTheme({
@@ -40,8 +40,8 @@ const routes: RouteObject[] = [
         element: <Achievements />,
       },
       {
-        path: "stats",
-        element: <Stats />,
+        path: "statistics",
+        element: <Statistics />,
       },
       {
         path: "*",
