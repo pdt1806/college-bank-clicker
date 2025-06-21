@@ -52,6 +52,7 @@ interface GameContextType {
   saveStats: () => void;
   achievements: AchievementListType;
   timeInGame: number;
+  maxMoney: number;
 }
 
 type Achievement = {
@@ -72,3 +73,10 @@ type AchievementsTab = {
 type AchievementListType = {
   [key: string]: Date;
 };
+
+interface FloatingText {
+  id: number;
+  x: number;
+  y: number;
+  value: string;
+}

@@ -2,7 +2,9 @@ import { Box, Flex, Image, NumberFormatter, Stack, Table, Text } from "@mantine/
 import { useGame } from "../../../GameProvider";
 
 const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
-  const { countUpgrade, currentCost } = useGame();
+  const { countUpgrade, currentCost, upgrades, maxMoney } = useGame();
+
+  const isReached = Object.keys(upgrades).includes(upgrade.id) || maxMoney >= upgrade.cost;
 
   return (
     <Box>
@@ -28,7 +30,7 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
                 lineHeight: 1.5,
               }}
             >
-              {upgrade.name}
+              {isReached ? upgrade.name : "???"}
             </Text>
             <Text size="sm" c="cbc-purple.9">
               Owned: {countUpgrade(upgrade)}
@@ -36,32 +38,34 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
           </Box>
         </Flex>
         <Text size="sm" c="cbc-purple.9">
-          {upgrade.description}
+          {isReached ? upgrade.description : "Reach this upgrade to see what it really is (including its stats)!"}
         </Text>
         {upgrade.perClick && (
           <Text size="sm" c="cbc-purple.9">
             Manual upgrade is one time only.
           </Text>
         )}
-        <Table c="cbc-purple.9">
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>Current cost</Table.Th>
-              {upgrade.perSecond && <Table.Th>Per second</Table.Th>}
-              {upgrade.perClick && <Table.Th>Per click</Table.Th>}
-              {upgrade.costMultiplier && <Table.Th>Cost multiplier</Table.Th>}
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            <Table.Tr key={upgrade.id}>
-              <Table.Td>
-                <NumberFormatter prefix="$" value={currentCost(upgrade)} thousandSeparator />
-              </Table.Td>
-              <Table.Td>+{upgrade.perSecond ?? upgrade.perClick}</Table.Td>
-              <Table.Td>{upgrade.costMultiplier}</Table.Td>
-            </Table.Tr>
-          </Table.Tbody>
-        </Table>
+        {isReached && (
+          <Table c="cbc-purple.9">
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Current cost</Table.Th>
+                {upgrade.perSecond && <Table.Th>Per second</Table.Th>}
+                {upgrade.perClick && <Table.Th>Per click</Table.Th>}
+                {upgrade.costMultiplier && <Table.Th>Cost multiplier</Table.Th>}
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              <Table.Tr key={upgrade.id}>
+                <Table.Td>
+                  <NumberFormatter prefix="$" value={currentCost(upgrade)} thousandSeparator />
+                </Table.Td>
+                <Table.Td>+{upgrade.perSecond ?? upgrade.perClick}</Table.Td>
+                <Table.Td>{upgrade.costMultiplier}</Table.Td>
+              </Table.Tr>
+            </Table.Tbody>
+          </Table>
+        )}
       </Stack>
     </Box>
   );

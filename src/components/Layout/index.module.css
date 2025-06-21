@@ -33,4 +33,18 @@
   background-image: url("/assets/background-pattern.webp");
   background-size: cover;
   background-blend-mode: multiply;
+
+  animation: bgZoom 10s ease-in-out infinite;
+}
+
+@keyframes bgZoom {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

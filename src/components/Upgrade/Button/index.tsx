@@ -3,7 +3,9 @@ import { useGame } from "../../../GameProvider";
 import classes from "./index.module.css";
 
 const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
-  const { money, buyUpgrade, currentCost, countUpgrade } = useGame();
+  const { money, buyUpgrade, currentCost, countUpgrade, upgrades, maxMoney } = useGame();
+
+  const isReached = Object.keys(upgrades).includes(upgrade.id) || maxMoney >= upgrade.cost;
 
   return (
     <Button
@@ -14,7 +16,12 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
       py="md"
       justify="flex-start"
       w="100%"
-      disabled={currentCost(upgrade) > money}
+      disabled={currentCost(upgrade) > money || (!upgrade.perSecond && !!upgrades[upgrade.id])}
+      bg={upgrades[upgrade.id] && upgrade.perClick ? "cbc-yellow.1" : "cbc-bluegray.0"}
+      style={{
+        border: upgrades[upgrade.id] && upgrade.perClick ? "3px solid var(--mantine-color-cbc-yellow-6)" : "none",
+        opacity: money >= currentCost(upgrade) || (upgrades[upgrade.id] && upgrade.perClick) ? 1 : 0.5,
+      }}
       className={classes.button}
       onClick={() => buyUpgrade(upgrade)}
       radius="lg"
@@ -50,18 +57,18 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
               lineHeight: 1.5,
             }}
           >
-            {upgrade.name}
+            {isReached ? upgrade.name : "???"}
           </Text>
           <Box>
             <Text size="xl" fw="bold">
               <NumberFormatter prefix="$" value={currentCost(upgrade)} thousandSeparator />
             </Text>
-            {upgrade.perSecond && (
+            {upgrade.perSecond && isReached && (
               <Text size="sm" c="dimmed">
                 per second +{upgrade.perSecond}
               </Text>
             )}
-            {upgrade.perClick && (
+            {upgrade.perClick && isReached && (
               <Text size="sm" c="dimmed">
                 per click +{upgrade.perClick}
               </Text>

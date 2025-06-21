@@ -6,12 +6,16 @@ import { allAchievements } from "../../utils/achievements";
 import { allUpgrades } from "../../utils/upgrades";
 
 const Statistics = () => {
-  const { totalClicks, totalMoney, upgrades, achievements, timeInGame } = useGame();
+  const { totalClicks, totalMoney, upgrades, achievements, timeInGame, maxMoney } = useGame();
 
   const table = [
     {
       name: "Total money earned",
       value: <NumberFormatter prefix="$" value={Math.trunc(totalMoney)} thousandSeparator decimalScale={0} />,
+    },
+    {
+      name: "Maximum money earned at some point",
+      value: <NumberFormatter prefix="$" value={Math.trunc(maxMoney)} thousandSeparator decimalScale={0} />,
     },
     {
       name: "Total manual clicks",
@@ -31,7 +35,7 @@ const Statistics = () => {
     },
     {
       name: "Total time in game",
-      value: prettyMilliseconds(timeInGame, {
+      value: prettyMilliseconds(timeInGame * 1000, {
         secondsDecimalDigits: 0,
       }),
     },

@@ -1,5 +1,5 @@
 import { ActionIcon, Box, Group, HoverCard, Stack, Text, Title } from "@mantine/core";
-import { IconChevronUp } from "@tabler/icons-react";
+import { IconAutomation, IconChevronUp, IconMouse } from "@tabler/icons-react";
 import { useState } from "react";
 import { automaticUpgradeList, manualUpgradeList } from "../../utils/upgrades";
 import Upgrade from "../Upgrade";
@@ -9,70 +9,62 @@ const UpgradeBar = () => {
   const [displayManualUpgrades, setDisplayManualUpgrades] = useState(true);
   const [displayAutomaticUpgrades, setDisplayAutomaticUpgrades] = useState(true);
 
+  const tabs = [
+    {
+      name: "Manual Upgrades",
+      icon: IconMouse,
+      description: "Upgrade the amount of money per click. Each upgrade is one time only.",
+      list: manualUpgradeList,
+      function: () => setDisplayManualUpgrades((prev) => !prev),
+      controller: displayManualUpgrades,
+    },
+    {
+      name: "Automatic Upgrades",
+      icon: IconAutomation,
+      description: "Increase the amount of money per second.",
+      list: automaticUpgradeList,
+      function: () => setDisplayAutomaticUpgrades((prev) => !prev),
+      controller: displayAutomaticUpgrades,
+    },
+  ];
+
   return (
     <Box>
       <UpgradeBarBalance />
       <Stack gap="md" p="lg">
-        <>
-          <Group gap="xs">
-            <HoverCard openDelay={300}>
-              <HoverCard.Target>
-                <Title order={3} c="white" w="max-content" fw={500}>
-                  Manual Upgrades
-                </Title>
-              </HoverCard.Target>
-              <HoverCard.Dropdown maw={400} p="xs">
-                <Text size="sm">Upgrade the amount of money per click. Each upgrade is one time only.</Text>
-              </HoverCard.Dropdown>
-            </HoverCard>
-            <ActionIcon variant="transparent" color="white" onClick={() => setDisplayManualUpgrades((prev) => !prev)}>
-              <IconChevronUp
-                stroke={2}
-                style={{
-                  transform: displayManualUpgrades ? "rotate(0deg)" : "rotate(-180deg)",
-                  transition: "transform 0.1s",
-                }}
-              />
-            </ActionIcon>
-          </Group>
-          <Stack gap="md" display={displayManualUpgrades ? "flex" : "none"}>
-            {manualUpgradeList.map((upgrade) => (
-              <Upgrade key={upgrade.name} upgrade={upgrade} />
-            ))}
-          </Stack>
-        </>
-        <>
-          <Group gap="xs">
-            <HoverCard openDelay={300}>
-              <HoverCard.Target>
-                <Title order={3} c="white" w="max-content" fw={500}>
-                  Automatic Upgrades
-                </Title>
-              </HoverCard.Target>
-              <HoverCard.Dropdown maw={400} p="xs">
-                <Text size="sm">Increase the amount of money per second.</Text>
-              </HoverCard.Dropdown>
-            </HoverCard>
-            <ActionIcon
-              variant="transparent"
-              color="white"
-              onClick={() => setDisplayAutomaticUpgrades((prev) => !prev)}
-            >
-              <IconChevronUp
-                stroke={2}
-                style={{
-                  transform: displayAutomaticUpgrades ? "rotate(0deg)" : "rotate(-180deg)",
-                  transition: "transform 0.1s",
-                }}
-              />
-            </ActionIcon>
-          </Group>
-          <Stack gap="md" display={displayAutomaticUpgrades ? "flex" : "none"}>
-            {automaticUpgradeList.map((upgrade) => (
-              <Upgrade key={upgrade.name} upgrade={upgrade} />
-            ))}
-          </Stack>
-        </>
+        {tabs.map((tab) => (
+          <Box key={tab.name}>
+            <Group gap="xs" mb="md">
+              <HoverCard openDelay={300}>
+                <HoverCard.Target>
+                  <Group gap="xs">
+                    <tab.icon size={24} color="white" />
+                    <Title order={3} c="white" w="max-content" fw={500}>
+                      {tab.name}
+                    </Title>
+                  </Group>
+                </HoverCard.Target>
+                <HoverCard.Dropdown maw={400} p="xs">
+                  <Text size="sm">{tab.description}</Text>
+                </HoverCard.Dropdown>
+              </HoverCard>
+              <ActionIcon variant="transparent" color="white" onClick={tab.function}>
+                <IconChevronUp
+                  stroke={2}
+                  style={{
+                    transform: tab.controller ? "rotate(0deg)" : "rotate(-180deg)",
+                    transition: "transform 0.1s",
+                  }}
+                />
+              </ActionIcon>
+            </Group>
+            <Stack gap="md" display={tab.controller ? "flex" : "none"}>
+              {tab.list.map((upgrade) => (
+                <Upgrade key={upgrade.name} upgrade={upgrade} />
+              ))}
+            </Stack>
+          </Box>
+        ))}
       </Stack>
     </Box>
   );

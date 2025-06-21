@@ -10,7 +10,7 @@ const MainGameBalance = () => {
       <Title order={2} fw={500}>
         money earned from students
       </Title>
-      <Title order={1}>
+      <Title order={1} size="2.5rem" className={classes.balance}>
         <NumberFormatter
           prefix="$ "
           value={Math.trunc(money)}

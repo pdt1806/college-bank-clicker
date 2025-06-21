@@ -20,6 +20,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [totalClicks, setTotalClicks] = useState(0);
   const [totalMoney, setTotalMoney] = useState(0);
   const [timeInGame, setTimeInGame] = useState(0);
+  const [maxMoney, setMaxMoney] = useState(0);
 
   const [achievements, setAchievements] = useState<AchievementListType>({});
 
@@ -44,10 +45,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   // --------------------
   // State Ref for Total Stats & Achievements
 
-  const totalStats = useRef({ totalClicks, totalMoney, timeInGame });
+  const totalStats = useRef({ totalClicks, totalMoney, timeInGame, maxMoney });
   useEffect(() => {
-    totalStats.current = { totalClicks, totalMoney, timeInGame };
-  }, [totalClicks, totalMoney, timeInGame]);
+    totalStats.current = { totalClicks, totalMoney, timeInGame, maxMoney };
+  }, [totalClicks, totalMoney, timeInGame, maxMoney]);
 
   const achievementsRef = useRef<AchievementListType>(achievements);
   useEffect(() => {
@@ -153,6 +154,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setTotalClicks(0);
     setTotalMoney(0);
     setTimeInGame(0);
+    setMaxMoney(0);
 
     setAchievements({});
 
@@ -193,10 +195,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
           setPerClick(perClick);
         }
         if (data.statsData) {
-          const { totalClicks, totalMoney, timeInGame } = JSON.parse(data.statsData);
+          const { totalClicks, totalMoney, timeInGame, maxMoney } = JSON.parse(data.statsData);
           setTotalClicks(totalClicks);
           setTotalMoney(totalMoney);
           setTimeInGame(timeInGame);
+          setMaxMoney(maxMoney);
         }
         if (data.achievementsData) {
           const achievementsList = JSON.parse(data.achievementsData);
@@ -284,10 +287,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const savedStats = localStorage.getItem("statsData");
     if (savedStats) {
-      const { totalClicks, totalMoney, timeInGame } = JSON.parse(savedStats);
+      const { totalClicks, totalMoney, timeInGame, maxMoney } = JSON.parse(savedStats);
       setTotalClicks(totalClicks);
       setTotalMoney(totalMoney);
       setTimeInGame(timeInGame);
+      setMaxMoney(maxMoney); // Ensure maxMoney is updated
     }
   }, []);
 
@@ -295,7 +299,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       saveGame();
-      setTimeInGame((prev) => prev + 1000); // Increment time in game by 1000ms
+      setTimeInGame((prev) => prev + 1); // Increment time in game by 1 second
       saveStats();
     }, 1000);
     return () => clearInterval(interval);
@@ -326,6 +330,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       if (money >= achievement.value!) addAchievement(achievement);
     });
   }, [money]); // this has to be based on money, not totalMoney
+
+  useEffect(() => {
+    if (money > maxMoney) setMaxMoney(money);
+  }, [money]);
 
   // --------------------
   // Context Provider
@@ -360,6 +368,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         saveStats,
         achievements,
         timeInGame,
+        maxMoney,
       }}
     >
       {children}
