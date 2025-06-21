@@ -1,6 +1,8 @@
 import { Divider, SimpleGrid, Title } from "@mantine/core";
 import PageWrapper from "../../components/PageWrapper";
 import AudioSettings from "./AudioSettings";
+
+import ExportImportGameData from "./ExportImportGameData";
 import ResetGameData from "./ResetGameData";
 
 const Settings = () => {
@@ -11,6 +13,7 @@ const Settings = () => {
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xl">
         <AudioSettings />
         <ResetGameData />
+        <ExportImportGameData />
       </SimpleGrid>
     </PageWrapper>
   );

@@ -27,7 +27,7 @@ const Statistics = () => {
     },
     {
       name: "Achievements earned",
-      value: `${achievements.length} / ${allAchievements.length}`,
+      value: `${Object.keys(achievements).length} / ${allAchievements.length}`,
     },
     {
       name: "Total time in game",

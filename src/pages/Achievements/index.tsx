@@ -33,12 +33,12 @@ const Achievements = () => {
   const generateContent = (tab: AchievementsTab) => {
     return tab.list.map((achievement) => {
       // Check if the achievement is in the user's achievements
-      const achieved = achievements.find((a) => a.id === achievement.id);
-      return (
-        <Box style={{ opacity: achieved ? 1 : 0.5 }} key={achievement.id}>
-          <AchievementBox achievement={achieved ?? achievement} />
-        </Box>
-      );
+      const achievedDate = achievements[achievement.id];
+      const displayedAchievement = {
+        ...achievement,
+        date: achievedDate ?? null,
+      };
+      return <AchievementBox achievement={displayedAchievement} key={achievement.id} />;
     });
   };
 
@@ -66,11 +66,11 @@ const Achievements = () => {
 
         {tabs.map((tab) => (
           <Tabs.Panel id={tab.name} key={tab.name} value={tab.name}>
-            <ScrollArea.Autosize h="100%">
-              <Box py="sm">
+            <ScrollArea.Autosize scrollbarSize={8} h="100%">
+              <Box pt="sm" pb="xl">
                 <Text mb="md">
-                  {achievements.filter((a) => tab.list.some((t) => t.id === a.id)).length} / {tab.list.length}{" "}
-                  achievements of this category earned
+                  {tab.list.filter((achievement) => Object.keys(achievements).includes(achievement.id)).length} /{" "}
+                  {tab.list.length} achievements of this category earned
                 </Text>
                 <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4, xl: 6 }} spacing={"md"}>
                   {generateContent(tab)}

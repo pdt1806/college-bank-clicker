@@ -14,6 +14,8 @@
   will-change: transform;
   touch-action: manipulation;
 
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+
   &:hover {
     cursor: pointer;
     transform: scale(1.1);

@@ -11,9 +11,9 @@ const PageWrapper = ({ children }: PageWrapperProps) => {
   const isMobile = useMediaQuery("(max-width: 75em)");
 
   return (
-    <Box py={{ base: 0, lg: "xs" }} c="white" h={isMobile ? UNIFORMED_HEIGHT : "100vh"}>
-      <ScrollArea.Autosize h="100%">
-        <Container size="xl" py={{ base: "xs", lg: 0 }}>
+    <Box c="white" h={isMobile ? UNIFORMED_HEIGHT : "100vh"}>
+      <ScrollArea.Autosize scrollbarSize={8} h="100%">
+        <Container size="xl" pt="xs" pb="xl">
           {children}
         </Container>
       </ScrollArea.Autosize>

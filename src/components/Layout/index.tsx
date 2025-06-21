@@ -1,4 +1,4 @@
-import { AppShell, ScrollArea } from "@mantine/core";
+import { AppShell, Box, ScrollArea } from "@mantine/core";
 import { useDisclosure, useMediaQuery, useOs } from "@mantine/hooks";
 import { Outlet, useLocation } from "react-router-dom";
 import { TOP_OFFSET, UNIFORMED_HEIGHT } from "../../utils/const";
@@ -39,8 +39,10 @@ const Layout = () => {
       pt={TOP_OFFSET}
       h="100vh"
     >
-      <AppShell.Navbar withBorder={false} className={classes.sidebarWrapper} w={{ base: "100%", lg: 300 }}>
+      <Box className={classes.background}></Box>
+      <AppShell.Navbar withBorder={false} className={classes.sidebarWrapper}>
         <ScrollArea.Autosize
+          scrollbarSize={8}
           h={isMobile ? adjustedHeight : "100%"}
           bg="cbc-bluegray.8"
           className={classes.sidebar}
@@ -56,6 +58,7 @@ const Layout = () => {
 
       <AppShell.Aside withBorder={false} className={classes.sidebarWrapper}>
         <ScrollArea.Autosize
+          scrollbarSize={8}
           h={isMobile ? adjustedHeight : "100%"}
           bg="cbc-bluegray.8"
           className={classes.sidebar}

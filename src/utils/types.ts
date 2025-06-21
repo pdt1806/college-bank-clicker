@@ -44,11 +44,13 @@ interface GameContextType {
   setSfxMutedIOS: React.Dispatch<React.SetStateAction<boolean>>;
   saveSettings: () => void;
   resetGameData: () => void;
+  exportGameData: () => void;
+  importGameData: (data: File) => void;
   totalClicks: number;
   totalMoney: number;
   setTotalClicks: React.Dispatch<React.SetStateAction<number>>;
   saveStats: () => void;
-  achievements: Achievement[];
+  achievements: AchievementListType;
   timeInGame: number;
 }
 
@@ -58,11 +60,15 @@ type Achievement = {
   icon: string;
   description: string;
   value: number;
-  date?: Date; // Optional, can be used to store the date when the achievement was unlocked
+  date?: Date | null;
 };
 
 type AchievementsTab = {
   name: string;
   icon: React.ComponentType<{ size?: number }>;
   list: Achievement[];
+};
+
+type AchievementListType = {
+  [key: string]: Date;
 };

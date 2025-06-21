@@ -7,9 +7,19 @@ const MainGameBalance = () => {
 
   return (
     <Box ta="center" p="lg" className={classes.counter} c="white">
-      <Title order={2}>money earned from students</Title>
+      <Title order={2} fw={500}>
+        money earned from students
+      </Title>
       <Title order={1}>
-        <NumberFormatter prefix="$" value={Math.trunc(money)} thousandSeparator decimalScale={0} />
+        <NumberFormatter
+          prefix="$ "
+          value={Math.trunc(money)}
+          thousandSeparator
+          decimalScale={0}
+          style={{
+            fontFamily: "Oxanium, sans-serif",
+          }}
+        />
       </Title>
       <Text size="md">per second: {perSecond.toFixed(1)}</Text>
       <Text size="md">per click: {perClick}</Text>

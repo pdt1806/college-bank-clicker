@@ -3,7 +3,17 @@ import { IconArrowUp, IconMoneybag, IconMouse } from "@tabler/icons-react";
 
 const AchievementBox = ({ achievement }: { achievement: Achievement }) => {
   return (
-    <Box style={{ borderRadius: "var(--mantine-radius-lg)" }} h="100%" w="100%" bg="cbc-bluegray.0" p="md">
+    <Box
+      style={{
+        borderRadius: "var(--mantine-radius-lg)",
+        boxShadow: achievement.date ? "0 5px 5px rgba(0, 0, 0, 0.25)" : "none",
+        opacity: achievement.date ? 1 : 0.5,
+      }}
+      h="100%"
+      w="100%"
+      bg="cbc-bluegray.0"
+      p="md"
+    >
       <Stack gap="lg" align="center" ta="center">
         {/* <Image
           src={`/assets/achievements/${achievement.id}.svg`}

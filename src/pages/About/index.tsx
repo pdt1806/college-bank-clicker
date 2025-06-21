@@ -109,7 +109,7 @@ const About = () => {
         }
         labelPosition="center"
       />
-      <Stack gap="xl" align="center" justify="center" style={{ textAlign: "center" }} pb="xl">
+      <Stack gap="xl" align="center" justify="center" style={{ textAlign: "center" }}>
         {credits.map((credit) => (
           <Box key={credit.role}>
             <Title order={3} fw={500} mb="md">

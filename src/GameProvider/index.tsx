@@ -1,5 +1,5 @@
 import { notifications } from "@mantine/notifications";
-import { IconStar } from "@tabler/icons-react";
+import { IconExclamationCircleFilled, IconStar, IconUpload } from "@tabler/icons-react";
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { clickAchievementList, moneyAchievementList, upgradeAchievementList } from "../utils/achievements";
 import { audio } from "../utils/audio";
@@ -21,7 +21,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [totalMoney, setTotalMoney] = useState(0);
   const [timeInGame, setTimeInGame] = useState(0);
 
-  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [achievements, setAchievements] = useState<AchievementListType>({});
 
   // --------------------
   // State Ref for Game Data
@@ -49,7 +49,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     totalStats.current = { totalClicks, totalMoney, timeInGame };
   }, [totalClicks, totalMoney, timeInGame]);
 
-  const achievementsRef = useRef<Achievement[]>(achievements);
+  const achievementsRef = useRef<AchievementListType>(achievements);
   useEffect(() => {
     achievementsRef.current = achievements;
   }, [achievements]);
@@ -119,16 +119,29 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     return Math.floor(upgrade.cost * Math.pow(upgrade.costMultiplier ?? 1, countUpgrade(upgrade)));
   };
 
-  const saveGame = () => {
-    localStorage.setItem("gameData", JSON.stringify(gameData.current));
-  };
+  const saveGame = () => localStorage.setItem("gameData", JSON.stringify(gameData.current));
 
-  const saveSettings = () => {
-    localStorage.setItem("settingsData", JSON.stringify(settingsData.current));
-  };
+  const saveSettings = () => localStorage.setItem("settingsData", JSON.stringify(settingsData.current));
 
-  const saveStats = () => {
-    localStorage.setItem("statsData", JSON.stringify(totalStats.current));
+  const saveStats = () => localStorage.setItem("statsData", JSON.stringify(totalStats.current));
+
+  const saveAchievements = () => localStorage.setItem("achievementsData", JSON.stringify(achievementsRef.current));
+
+  const addAchievement = (achievement: Achievement) => {
+    if (!achievementsRef.current[achievement.id]) {
+      const newAchievements = { ...achievementsRef.current, [achievement.id]: new Date() };
+      setAchievements(newAchievements);
+      playSound(audio.achievement);
+      notifications.show({
+        styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
+        title: "Achievement Unlocked!",
+        message: achievement.name,
+        color: "cbc-green",
+        autoClose: 5000,
+        position: "top-right",
+        icon: <IconStar size={24} />,
+      });
+    }
   };
 
   const resetGameData = () => {
@@ -141,29 +154,78 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setTotalMoney(0);
     setTimeInGame(0);
 
-    setAchievements([]);
+    setAchievements({});
 
     localStorage.removeItem("gameData");
     localStorage.removeItem("statsData");
     localStorage.removeItem("achievementsData");
   };
 
-  const addAchievement = (achievement: Achievement) => {
-    if (!achievementsRef.current.some((a) => a.id === achievement.id)) {
-      achievement.date = new Date();
-      setAchievements((prev) => [...prev, achievement]);
-      localStorage.setItem("achievementsData", JSON.stringify([...achievementsRef.current, achievement]));
-      playSound(audio.achievement);
-      notifications.show({
-        styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
-        title: "Achievement Unlocked!",
-        message: achievement.name,
-        color: "green",
-        autoClose: 5000,
-        position: "top-right",
-        icon: <IconStar size={24} />,
-      });
-    }
+  const exportGameData = () => {
+    [saveGame, saveStats, saveAchievements].forEach((fn) => fn());
+    const gameData = {
+      gameData: localStorage.getItem("gameData"),
+      statsData: localStorage.getItem("statsData"),
+      achievementsData: localStorage.getItem("achievementsData"),
+    };
+    const blob = new Blob([JSON.stringify(gameData, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "college-bank-clicker-export-" + new Date().toISOString() + ".json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const importGameData = (file: File | null) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const data = JSON.parse(event.target?.result as string);
+        if (data.gameData) {
+          const { money, perSecond, perClick, upgrades } = JSON.parse(data.gameData);
+          setMoney(money);
+          setPerSecond(perSecond);
+          setUpgrades(upgrades);
+          setPerClick(perClick);
+        }
+        if (data.statsData) {
+          const { totalClicks, totalMoney, timeInGame } = JSON.parse(data.statsData);
+          setTotalClicks(totalClicks);
+          setTotalMoney(totalMoney);
+          setTimeInGame(timeInGame);
+        }
+        if (data.achievementsData) {
+          const achievementsList = JSON.parse(data.achievementsData);
+          setAchievements(achievementsList);
+        }
+        saveGame();
+        saveStats();
+        saveAchievements();
+      } catch (error) {
+        console.error("Error importing game data:", error);
+        return notifications.show({
+          styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
+          title: "Import Failed",
+          message: "The selected file is not a valid game data file.",
+          color: "red",
+          autoClose: 5000,
+          icon: <IconExclamationCircleFilled size={24} />,
+        });
+      }
+    };
+    reader.readAsText(file);
+    notifications.show({
+      styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
+      title: "Import Successful",
+      message: "Game data has been successfully imported.",
+      color: "cbc-green",
+      autoClose: 3000,
+      icon: <IconUpload size={24} />,
+    });
   };
 
   // --------------------
@@ -229,18 +291,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Save game interval
+  // Save game interval - runs every second
   useEffect(() => {
     const interval = setInterval(() => {
       saveGame();
-      saveStats();
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Save time in game
-  useEffect(() => {
-    const interval = setInterval(() => {
       setTimeInGame((prev) => prev + 1000); // Increment time in game by 1000ms
       saveStats();
     }, 1000);
@@ -250,23 +304,26 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   // Save settings on change
   useEffect(saveSettings, [musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS]);
 
+  // Save achievements on change
+  useEffect(saveAchievements, [achievements]);
+
   // Check achievements with conditions
   useEffect(() => {
     clickAchievementList.forEach((achievement) => {
-      if (totalClicks >= achievement.value) addAchievement(achievement);
+      if (totalClicks >= achievement.value!) addAchievement(achievement);
     });
   }, [totalClicks]);
 
   useEffect(() => {
     upgradeAchievementList.forEach((achievement) => {
-      if (Object.values(upgrades).reduce((total, value) => total + value, 0) >= achievement.value)
+      if (Object.values(upgrades).reduce((total, value) => total + value, 0) >= achievement.value!)
         addAchievement(achievement);
     });
   }, [upgrades]);
 
   useEffect(() => {
     moneyAchievementList.forEach((achievement) => {
-      if (money >= achievement.value) addAchievement(achievement);
+      if (money >= achievement.value!) addAchievement(achievement);
     });
   }, [money]); // this has to be based on money, not totalMoney
 
@@ -295,6 +352,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         setSfxMutedIOS,
         saveSettings,
         resetGameData,
+        exportGameData,
+        importGameData,
         totalClicks,
         totalMoney,
         setTotalClicks,
