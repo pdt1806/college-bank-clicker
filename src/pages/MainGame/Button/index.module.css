@@ -21,6 +21,8 @@
   will-change: transform;
   touch-action: manipulation;
 
+  animation: glow 1.5s ease-in-out infinite alternate;
+
   &:hover {
     cursor: pointer;
     transform: scale(1.1);
@@ -28,6 +30,15 @@
 
   &:active {
     transform: scale(0.95);
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 48px var(--mantine-color-cbc-bluegreen-8);
+  }
+  100% {
+    box-shadow: 0 0 64px var(--mantine-color-cbc-bluegreen-8);
   }
 }
 

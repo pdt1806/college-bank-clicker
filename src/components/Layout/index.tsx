@@ -44,8 +44,7 @@ const Layout = () => {
         <ScrollArea.Autosize
           scrollbarSize={8}
           h={isMobile ? adjustedHeight : "100%"}
-          bg="cbc-bluegray.8"
-          className={classes.sidebar}
+          className={classes.sidebar + " " + classes.navBar}
           pt={TOP_OFFSET}
         >
           <Navbar navbarOpened toggleNavbar={toggleNavbar} />
@@ -60,8 +59,7 @@ const Layout = () => {
         <ScrollArea.Autosize
           scrollbarSize={8}
           h={isMobile ? adjustedHeight : "100%"}
-          bg="cbc-bluegray.8"
-          className={classes.sidebar}
+          className={classes.sidebar + " " + classes.upgradeBar}
           pt={TOP_OFFSET}
         >
           <UpgradeBar />

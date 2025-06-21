@@ -18,7 +18,7 @@ const Upgrade = ({ upgrade }: { upgrade: Upgrade }) => {
       <HoverCard.Target>
         <ButtonComponent />
       </HoverCard.Target>
-      <HoverCard.Dropdown bg="cbc-bluegray.0">
+      <HoverCard.Dropdown bg="cbc-bluegreen.0">
         <UpgradeInfo upgrade={upgrade} />
       </HoverCard.Dropdown>
     </HoverCard>

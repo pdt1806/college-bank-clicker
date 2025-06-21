@@ -12,8 +12,8 @@ const Settings = () => {
       <Divider my="xl" />
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xl">
         <AudioSettings />
-        <ResetGameData />
         <ExportImportGameData />
+        <ResetGameData />
       </SimpleGrid>
     </PageWrapper>
   );

@@ -1,30 +1,42 @@
 import { Box, Button, Flex, Image, Indicator, NumberFormatter, Text } from "@mantine/core";
+import { useEffect, useState } from "react";
 import { useGame } from "../../../GameProvider";
 import classes from "./index.module.css";
 
 const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
-  const { money, buyUpgrade, currentCost, countUpgrade, upgrades, maxMoney } = useGame();
+  const { money, buyUpgrade, currentCost, countUpgrade, maxMoney } = useGame();
 
-  const isReached = Object.keys(upgrades).includes(upgrade.id) || maxMoney >= upgrade.cost;
+  const [element, setElement] = useState<HTMLButtonElement | null>(null);
+
+  const isReached = maxMoney >= upgrade.cost;
+
+  const disabled = currentCost(upgrade) > money;
+
+  useEffect(() => {
+    if (!element) return;
+    if (!disabled) {
+      element.classList.add(classes.pop);
+      setTimeout(() => {
+        element.classList.remove(classes.pop);
+      }, 300);
+    }
+  }, [disabled]);
 
   return (
     <Button
-      color="cbc-bluegray.0"
+      color="cbc-bluegreen.0"
       variant="filled"
       c="cbc-purple.9"
       h="fit-content"
       py="md"
       justify="flex-start"
       w="100%"
-      disabled={currentCost(upgrade) > money || (!upgrade.perSecond && !!upgrades[upgrade.id])}
-      bg={upgrades[upgrade.id] && upgrade.perClick ? "cbc-yellow.1" : "cbc-bluegray.0"}
-      style={{
-        border: upgrades[upgrade.id] && upgrade.perClick ? "3px solid var(--mantine-color-cbc-yellow-6)" : "none",
-        opacity: money >= currentCost(upgrade) || (upgrades[upgrade.id] && upgrade.perClick) ? 1 : 0.5,
-      }}
+      disabled={disabled}
+      bg="cbc-bluegreen.0"
       className={classes.button}
       onClick={() => buyUpgrade(upgrade)}
       radius="lg"
+      onLoad={(e) => setElement(e.currentTarget as HTMLButtonElement)}
     >
       <Flex gap="lg" align="center">
         <Indicator

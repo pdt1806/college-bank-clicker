@@ -2,9 +2,9 @@ import { Box, Flex, Image, NumberFormatter, Stack, Table, Text } from "@mantine/
 import { useGame } from "../../../GameProvider";
 
 const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
-  const { countUpgrade, currentCost, upgrades, maxMoney } = useGame();
+  const { countUpgrade, currentCost, maxMoney } = useGame();
 
-  const isReached = Object.keys(upgrades).includes(upgrade.id) || maxMoney >= upgrade.cost;
+  const isReached = maxMoney >= upgrade.cost;
 
   return (
     <Box>
@@ -40,11 +40,6 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
         <Text size="sm" c="cbc-purple.9">
           {isReached ? upgrade.description : "Reach this upgrade to see what it really is (including its stats)!"}
         </Text>
-        {upgrade.perClick && (
-          <Text size="sm" c="cbc-purple.9">
-            Manual upgrade is one time only.
-          </Text>
-        )}
         {isReached && (
           <Table c="cbc-purple.9">
             <Table.Thead>

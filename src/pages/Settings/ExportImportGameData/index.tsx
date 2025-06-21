@@ -9,7 +9,10 @@ const ExportImportGameData = () => {
       <Title order={2} fw={500}>
         Export/Import game data
       </Title>
-      <Text c="dimmed">Export your game data to a JSON file, or import it from a file to restore your progress.</Text>
+      <Text c="dimmed">
+        Export your game data to a JSON file, or import it from a file to restore your progress. Importing will
+        overwrite your current game data.
+      </Text>
       <SimpleGrid cols={2}>
         <Button size="lg" color="cbc-green" radius="xl" onClick={exportGameData}>
           Export

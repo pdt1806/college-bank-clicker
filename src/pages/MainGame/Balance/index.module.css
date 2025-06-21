@@ -9,18 +9,5 @@
 }
 
 .balance {
-  /* text-shadow: 0 0 10px rgba(255, 255, 255 0.5); */
-  animation: balanceShadowPulse 3s infinite;
-}
-
-@keyframes balanceShadowPulse {
-  0% {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
-  }
-  50% {
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-  }
-  100% {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
-  }
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
 }

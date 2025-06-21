@@ -9,7 +9,7 @@ const UpgradeBarBalance = () => {
       ta="center"
       c="white"
       style={{ position: "sticky", top: 0, zIndex: 1 }}
-      bg="cbc-bluegray.8"
+      bg="cbc-bluegreen.8"
       hiddenFrom="lg"
     >
       Balance:{" "}

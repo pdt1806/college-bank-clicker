@@ -1,4 +1,4 @@
-import { Center, createTheme, MantineProvider, Text } from "@mantine/core";
+import { createTheme, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
@@ -42,16 +42,6 @@ const routes: RouteObject[] = [
       {
         path: "statistics",
         element: <Statistics />,
-      },
-      {
-        path: "*",
-        element: (
-          <Center h="100%" w="100%">
-            <Text c="white" p="md">
-              to be developed soon (trust me bro) - benny
-            </Text>
-          </Center>
-        ),
       },
     ],
   },

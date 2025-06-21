@@ -7,7 +7,7 @@ import { audio } from "../utils/audio";
 export const GameContext = createContext<GameContextType>({} as GameContextType);
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
-  const [money, setMoney] = useState(0.0);
+  const [money, setMoney] = useState(0);
   const [perSecond, setPerSecond] = useState(0.0);
   const [upgrades, setUpgrades] = useState<UpgradeListType>({});
   const [perClick, setPerClick] = useState(1);
@@ -181,39 +181,66 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     URL.revokeObjectURL(url);
   };
 
+  const checkGameDataAuthenticity = (data: any) => {
+    if (!data || typeof data !== "object") return "Invalid game data format.";
+
+    try {
+      JSON.parse(data.gameData);
+      JSON.parse(data.statsData);
+      JSON.parse(data.achievementsData);
+    } catch (error) {
+      return "Invalid game data structure. Please ensure the file is a valid game data file.";
+    }
+
+    if (!data.gameData) return "Game data is missing.";
+    if (!data.statsData) return "Stats data is missing.";
+    if (!data.achievementsData) return "Achievements data is missing.";
+
+    return null; // Data is valid
+  };
+
   const importGameData = (file: File | null) => {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
         const data = JSON.parse(event.target?.result as string);
-        if (data.gameData) {
-          const { money, perSecond, perClick, upgrades } = JSON.parse(data.gameData);
-          setMoney(money);
-          setPerSecond(perSecond);
-          setUpgrades(upgrades);
-          setPerClick(perClick);
-        }
-        if (data.statsData) {
-          const { totalClicks, totalMoney, timeInGame, maxMoney } = JSON.parse(data.statsData);
-          setTotalClicks(totalClicks);
-          setTotalMoney(totalMoney);
-          setTimeInGame(timeInGame);
-          setMaxMoney(maxMoney);
-        }
-        if (data.achievementsData) {
-          const achievementsList = JSON.parse(data.achievementsData);
-          setAchievements(achievementsList);
-        }
+
+        const invalid = checkGameDataAuthenticity(data);
+        if (invalid) throw new Error(invalid);
+
+        const { money, perSecond, perClick, upgrades } = JSON.parse(data.gameData);
+        setMoney(money);
+        setPerSecond(perSecond);
+        setUpgrades(upgrades);
+        setPerClick(perClick);
+
+        const { totalClicks, totalMoney, timeInGame, maxMoney } = JSON.parse(data.statsData);
+        setTotalClicks(totalClicks);
+        setTotalMoney(totalMoney);
+        setTimeInGame(timeInGame);
+        setMaxMoney(maxMoney);
+
+        const achievementsList = JSON.parse(data.achievementsData);
+        setAchievements(achievementsList);
+
         saveGame();
         saveStats();
         saveAchievements();
-      } catch (error) {
-        console.error("Error importing game data:", error);
+
+        notifications.show({
+          styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
+          title: "Import Successful",
+          message: "Game data has been successfully imported.",
+          color: "cbc-green",
+          autoClose: 3000,
+          icon: <IconUpload size={24} />,
+        });
+      } catch (error: any) {
         return notifications.show({
           styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
           title: "Import Failed",
-          message: "The selected file is not a valid game data file.",
+          message: error.message ?? "An error occurred while importing game data.",
           color: "red",
           autoClose: 5000,
           icon: <IconExclamationCircleFilled size={24} />,
@@ -221,33 +248,32 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       }
     };
     reader.readAsText(file);
-    notifications.show({
-      styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
-      title: "Import Successful",
-      message: "Game data has been successfully imported.",
-      color: "cbc-green",
-      autoClose: 3000,
-      icon: <IconUpload size={24} />,
-    });
   };
 
   // --------------------
   // React Effects
 
   // Increment money logic
+  // maximum 20 ticks per second
   useEffect(() => {
-    let last = performance.now();
+    if (perSecond == 0) return;
 
-    const interval = setInterval(() => {
-      const now = performance.now();
-      const deltaSeconds = (now - last) / 1000;
-      last = now;
+    if (perSecond < 20) {
+      const interval = setInterval(() => {
+        setMoney((prev) => Math.trunc(prev + 1));
+        setTotalMoney((prev) => Math.trunc(prev + 1));
+      }, 1000 / perSecond);
 
-      setMoney((prev) => prev + perSecond * deltaSeconds);
-      setTotalMoney((prev) => prev + perSecond * deltaSeconds);
-    }, 25);
+      return () => clearInterval(interval);
+    } else {
+      const amountPerTick = Math.trunc(perSecond / 20);
+      const interval = setInterval(() => {
+        setMoney((prev) => prev + amountPerTick);
+        setTotalMoney((prev) => prev + amountPerTick);
+      }, 1000 / 20);
 
-    return () => clearInterval(interval);
+      return () => clearInterval(interval);
+    }
   }, [perSecond]);
 
   // Init game data
@@ -291,7 +317,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       setTotalClicks(totalClicks);
       setTotalMoney(totalMoney);
       setTimeInGame(timeInGame);
-      setMaxMoney(maxMoney); // Ensure maxMoney is updated
+      setMaxMoney(maxMoney);
     }
   }, []);
 
@@ -311,27 +337,24 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   // Save achievements on change
   useEffect(saveAchievements, [achievements]);
 
-  // Check achievements with conditions
   useEffect(() => {
     clickAchievementList.forEach((achievement) => {
-      if (totalClicks >= achievement.value!) addAchievement(achievement);
+      if (totalClicks >= achievement.value) addAchievement(achievement);
     });
   }, [totalClicks]);
 
   useEffect(() => {
     upgradeAchievementList.forEach((achievement) => {
-      if (Object.values(upgrades).reduce((total, value) => total + value, 0) >= achievement.value!)
+      if (Object.values(upgrades).reduce((total, value) => total + value, 0) >= achievement.value)
         addAchievement(achievement);
     });
   }, [upgrades]);
 
   useEffect(() => {
     moneyAchievementList.forEach((achievement) => {
-      if (money >= achievement.value!) addAchievement(achievement);
+      if (money >= achievement.value) addAchievement(achievement);
     });
-  }, [money]); // this has to be based on money, not totalMoney
 
-  useEffect(() => {
     if (money > maxMoney) setMaxMoney(money);
   }, [money]);
 

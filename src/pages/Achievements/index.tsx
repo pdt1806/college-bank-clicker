@@ -31,14 +31,22 @@ const Achievements = () => {
   const { achievements } = useGame();
 
   const generateContent = (tab: AchievementsTab) => {
-    return tab.list.map((achievement) => {
-      // Check if the achievement is in the user's achievements
-      const achievedDate = achievements[achievement.id];
-      const displayedAchievement = {
-        ...achievement,
-        date: achievedDate ?? null,
-      };
-      return <AchievementBox achievement={displayedAchievement} key={achievement.id} />;
+    const sortedAchievementsWithDate = tab.list
+      .map((achievement) => {
+        const achievedDate = achievements[achievement.id];
+        return {
+          ...achievement,
+          date: achievedDate ?? null,
+        };
+      })
+      .sort((a, b) => {
+        if (a.date && b.date) return new Date(a.date).getTime() - new Date(b.date).getTime();
+        else if (a.date && !b.date) return -1;
+        else if (!a.date && b.date) return 1;
+        else return 0;
+      });
+    return sortedAchievementsWithDate.map((achievement) => {
+      return <AchievementBox achievement={achievement} key={achievement.id} />;
     });
   };
 

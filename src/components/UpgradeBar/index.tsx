@@ -4,6 +4,7 @@ import { useState } from "react";
 import { automaticUpgradeList, manualUpgradeList } from "../../utils/upgrades";
 import Upgrade from "../Upgrade";
 import UpgradeBarBalance from "./Balance";
+import classes from "./index.module.css";
 
 const UpgradeBar = () => {
   const [displayManualUpgrades, setDisplayManualUpgrades] = useState(true);
@@ -58,7 +59,7 @@ const UpgradeBar = () => {
                 />
               </ActionIcon>
             </Group>
-            <Stack gap="md" display={tab.controller ? "flex" : "none"}>
+            <Stack gap="md" display={tab.controller ? "flex" : "none"} className={classes.stack}>
               {tab.list.map((upgrade) => (
                 <Upgrade key={upgrade.name} upgrade={upgrade} />
               ))}

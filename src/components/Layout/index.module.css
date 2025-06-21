@@ -48,3 +48,23 @@
     transform: scale(1);
   }
 }
+
+.upgradeBar {
+  background-color: var(--mantine-color-cbc-bluegreen-8);
+  background-image: linear-gradient(var(--mantine-color-cbc-bluegreen-9) 1px, transparent 1px),
+    linear-gradient(to right, var(--mantine-color-cbc-bluegreen-9) 1px, var(--mantine-color-cbc-bluegreen-8) 1px);
+  background-size: 20px 20px;
+}
+
+.navBar {
+  background-color: #526377;
+  opacity: 1;
+  background-image: linear-gradient(30deg, #485c73 12%, transparent 12.5%, transparent 87%, #485c73 87.5%, #485c73),
+    linear-gradient(150deg, #485c73 12%, transparent 12.5%, transparent 87%, #485c73 87.5%, #485c73),
+    linear-gradient(30deg, #485c73 12%, transparent 12.5%, transparent 87%, #485c73 87.5%, #485c73),
+    linear-gradient(150deg, #485c73 12%, transparent 12.5%, transparent 87%, #485c73 87.5%, #485c73),
+    linear-gradient(60deg, #485c7377 25%, transparent 25.5%, transparent 75%, #485c7377 75%, #485c7377),
+    linear-gradient(60deg, #485c7377 25%, transparent 25.5%, transparent 75%, #485c7377 75%, #485c7377);
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+}
