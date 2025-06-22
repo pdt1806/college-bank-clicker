@@ -26,6 +26,7 @@ const ResetGameData = () => {
               resetGameData();
               playSound(audio.achievement);
               notifications.show({
+                radius: "lg",
                 styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
                 title: "Game data reset!",
                 message: "Now you can relive the whole progress.",
@@ -47,7 +48,15 @@ const ResetGameData = () => {
         <Text c="dimmed">
           Reset your game data to start over. This will erase all progress, including achievements, upgrades, and money.
         </Text>
-        <Button size="lg" color="red" onClick={open} radius="xl">
+        <Button
+          size="lg"
+          color="red"
+          onClick={() => {
+            open();
+            playSound(audio.pop);
+          }}
+          radius="xl"
+        >
           Reset
         </Button>
       </Stack>

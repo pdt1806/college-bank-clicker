@@ -1,0 +1,17 @@
+html,
+body,
+#root {
+  cursor: url("/assets/cursors/default.png"), auto;
+}
+
+button,
+[role="button"],
+a {
+  cursor: url("/assets/cursors/pointer.png"), pointer !important;
+}
+
+:disabled,
+[aria-disabled="true"],
+.m-disabled {
+  cursor: not-allowed !important;
+}

@@ -1,68 +1,60 @@
-import { Box, Group, HoverCard, Stack, Text, Title } from "@mantine/core";
+import { Accordion, Box, Stack } from "@mantine/core";
 import { IconAutomation, IconMouse } from "@tabler/icons-react";
 import { useState } from "react";
 import { automaticUpgradeList, manualUpgradeList } from "../../utils/upgrades";
 import Upgrade from "../Upgrade";
 import UpgradeBarBalance from "./Balance";
-import DropdownButton from "./DropdownButton";
-import classes from "./index.module.css";
+import { UpgradeBarTabControl } from "./TabControl";
 
 const UpgradeBar = () => {
-  const [displayManualUpgrades, setDisplayManualUpgrades] = useState(true);
-  const [displayAutomaticUpgrades, setDisplayAutomaticUpgrades] = useState(true);
+  const [value, setValue] = useState<string[]>(["Manual Upgrades", "Automatic Upgrades"]);
 
   const tabs: UpgradeBarTab[] = [
     {
       name: "Manual Upgrades",
       icon: IconMouse,
-      description: "Upgrade the amount of money per click. Each upgrade is one time only.",
+      description: "Increase the amount of money per click.",
       list: manualUpgradeList,
-      function: () => setDisplayManualUpgrades((prev) => !prev),
-      controller: displayManualUpgrades,
     },
     {
       name: "Automatic Upgrades",
       icon: IconAutomation,
       description: "Increase the amount of money per second.",
       list: automaticUpgradeList,
-      function: () => setDisplayAutomaticUpgrades((prev) => !prev),
-      controller: displayAutomaticUpgrades,
     },
   ];
 
-  // Never use `useGame` here, as it will cause re-renders of buttons
+  // Never call useGame() here, it will cause a render loop.
 
   return (
-    <Box>
+    <>
       <UpgradeBarBalance />
-      <Stack gap="md" p="lg">
-        {tabs.map((tab) => (
-          <Box key={tab.name}>
-            <Group gap="xs" mb="md">
-              <HoverCard openDelay={300}>
-                <HoverCard.Target>
-                  <Group gap="xs">
-                    <tab.icon size={24} color="white" />
-                    <Title order={3} c="white" w="max-content" fw={500}>
-                      {tab.name}
-                    </Title>
-                  </Group>
-                </HoverCard.Target>
-                <HoverCard.Dropdown maw={400} p="xs">
-                  <Text size="sm">{tab.description}</Text>
-                </HoverCard.Dropdown>
-              </HoverCard>
-              <DropdownButton tab={tab} />
-            </Group>
-            <Stack gap="md" display={tab.controller ? "flex" : "none"} className={classes.stack}>
-              {tab.list.map((upgrade) => (
-                <Upgrade key={upgrade.name} upgrade={upgrade} />
-              ))}
-            </Stack>
-          </Box>
-        ))}
-      </Stack>
-    </Box>
+      <Accordion
+        variant="filled"
+        styles={{
+          chevron: { color: "white" },
+        }}
+        multiple
+        value={value}
+        onChange={setValue}
+        py="xs"
+      >
+        <Box>
+          {tabs.map((tab) => (
+            <Accordion.Item key={tab.name} value={tab.name} bg="transparent" style={{ border: "none" }}>
+              <UpgradeBarTabControl tab={tab} />
+              <Accordion.Panel>
+                <Stack gap="md">
+                  {tab.list.map((upgrade) => (
+                    <Upgrade key={upgrade.name} upgrade={upgrade} />
+                  ))}
+                </Stack>
+              </Accordion.Panel>
+            </Accordion.Item>
+          ))}
+        </Box>
+      </Accordion>
+    </>
   );
 };
 

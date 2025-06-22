@@ -1,5 +1,7 @@
 import { Box, Button, Flex, Stack, Text } from "@mantine/core";
 import { IconMenu2, IconShoppingCart } from "@tabler/icons-react";
+import { useGame } from "../../GameProvider";
+import { audio } from "../../utils/audio";
 
 const BottomNav = ({
   toggleAside,
@@ -31,11 +33,24 @@ const BottomNav = ({
     },
   ];
 
+  const { playSound } = useGame();
+
   return (
     <Box w="100vw" h={60} bg="cbc-bluegray.9" style={{ position: "fixed", bottom: 0, zIndex: 2 }}>
       <Flex align="center" h="100%">
         {links.map((link) => (
-          <Button h={60} w="50vw" variant="subtle" color="white" onClick={link.action} radius="0" key={link.label}>
+          <Button
+            h={60}
+            w="50vw"
+            variant="subtle"
+            color="white"
+            onClick={() => {
+              link.action();
+              playSound(audio.pop);
+            }}
+            radius="0"
+            key={link.label}
+          >
             <Stack gap={2}>
               <link.icon size={24} color="white" style={{ margin: "auto" }} />
               <Text size="xs" c="white" style={{ textAlign: "center" }}>

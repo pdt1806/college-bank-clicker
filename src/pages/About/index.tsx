@@ -131,7 +131,7 @@ const About = () => {
                   rel={author.link ? "noopener noreferrer" : undefined}
                   style={{
                     borderRadius: "var(--mantine-radius-xl)",
-                    cursor: author.link ? "pointer" : "default",
+
                     textDecoration: "none",
                   }}
                 >

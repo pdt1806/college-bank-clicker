@@ -4,8 +4,8 @@ export const audio: Record<string, HTMLAudioElement> = {
   achievement: new Audio("/assets/audio/achievement.mp3"),
   isReached: new Audio("/assets/audio/is_reached.mp3"),
   pop: new Audio("/assets/audio/pop.mp3"),
-  pop2: new Audio("/assets/audio/pop_2.mp3"),
-  pop3: new Audio("/assets/audio/pop_3.mp3"),
+  pop2: new Audio("/assets/audio/pop_2.mp3"), // money button
+  pop3: new Audio("/assets/audio/pop_3.mp3"), // navigation
   dropdown: new Audio("/assets/audio/dropdown.mp3"),
 };
 

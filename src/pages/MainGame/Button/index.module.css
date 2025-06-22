@@ -16,6 +16,8 @@
 
   position: absolute;
 
+  cursor: url("/assets/cursors/pointer.png"), pointer !important;
+
   border-radius: 50%;
   transition: transform 0.1s;
   will-change: transform;
@@ -24,7 +26,6 @@
   animation: glow 1.5s ease-in-out infinite alternate;
 
   &:hover {
-    cursor: pointer;
     transform: scale(1.1);
   }
 

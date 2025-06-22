@@ -1,8 +1,10 @@
 import { ActionIcon, Slider, Stack, Table, Title } from "@mantine/core";
 import { useOs } from "@mantine/hooks";
 import { IconVolume, IconVolumeOff } from "@tabler/icons-react";
+import { useEffect } from "react";
 import { useGame } from "../../../GameProvider";
 import { audio } from "../../../utils/audio";
+import classes from "./index.module.css";
 
 const AudioSettings = () => {
   const {
@@ -19,6 +21,29 @@ const AudioSettings = () => {
 
   const os = useOs();
 
+  const data = [
+    {
+      label: "Music",
+      value: musicVolume,
+      onChange: setMusicVolume,
+      mutedIOS: musicMutedIOS,
+      setMutedIOS: setMusicMutedIOS,
+      onChangeEnd: () => {}, // No sound for music change
+    },
+    {
+      label: "SFX",
+      value: sfxVolume,
+      onChange: setSfxVolume,
+      mutedIOS: sfxMutedIOS,
+      setMutedIOS: setSfxMutedIOS,
+      onChangeEnd: () => playSound(audio.pop),
+    },
+  ];
+
+  useEffect(() => {
+    os == "ios" && playSound(audio.pop);
+  }, [sfxMutedIOS]);
+
   return (
     <Stack w="100%">
       <Title order={2} fw={500}>
@@ -26,59 +51,43 @@ const AudioSettings = () => {
       </Title>
       <Table verticalSpacing="sm" withRowBorders={false}>
         <Table.Tbody>
-          <Table.Tr>
-            <Table.Th p="0">
-              <Title order={4} fw={400}>
-                Music
-              </Title>
-            </Table.Th>
-            <Table.Td w={os !== "ios" ? "70%" : "max-content"}>
-              {os !== "ios" ? (
-                <Slider color="cbc-purple" defaultValue={musicVolume} onChange={setMusicVolume} size="xl" />
-              ) : (
-                <ActionIcon
-                  radius="xl"
-                  w="100%"
-                  variant="white"
-                  color="cbc-purple"
-                  onClick={() => setMusicMutedIOS((prev) => !prev)}
-                  size="xl"
-                >
-                  {!musicMutedIOS ? <IconVolume /> : <IconVolumeOff />}
-                </ActionIcon>
-              )}
-            </Table.Td>
-          </Table.Tr>
-
-          <Table.Tr>
-            <Table.Th p="0">
-              <Title order={4} fw={400}>
-                SFX
-              </Title>
-            </Table.Th>
-            <Table.Td>
-              {os !== "ios" ? (
-                <Slider
-                  color="cbc-purple"
-                  defaultValue={sfxVolume}
-                  onChange={setSfxVolume}
-                  size="xl"
-                  onChangeEnd={() => playSound(audio.pop)}
-                />
-              ) : (
-                <ActionIcon
-                  radius="xl"
-                  w="100%"
-                  variant="white"
-                  color="cbc-purple"
-                  onClick={() => setSfxMutedIOS((prev) => !prev)}
-                  size="xl"
-                >
-                  {!sfxMutedIOS ? <IconVolume /> : <IconVolumeOff />}
-                </ActionIcon>
-              )}
-            </Table.Td>
-          </Table.Tr>
+          {data.map((item) => (
+            <Table.Tr key={item.label}>
+              <Table.Th p="0">
+                <Title order={4} fw={400}>
+                  {item.label}
+                </Title>
+              </Table.Th>
+              <Table.Td w={os !== "ios" ? "70%" : "max-content"}>
+                {os !== "ios" ? (
+                  <Slider
+                    color="cbc-purple"
+                    defaultValue={item.value}
+                    onChange={item.onChange}
+                    size="xl"
+                    onChangeEnd={item.onChangeEnd}
+                    classNames={{
+                      trackContainer: classes.cursorPointer,
+                      thumb: classes.cursorPointer,
+                    }}
+                  />
+                ) : (
+                  <ActionIcon
+                    radius="xl"
+                    w="100%"
+                    variant="white"
+                    color="cbc-purple"
+                    onClick={() => {
+                      item.setMutedIOS(!item.mutedIOS);
+                    }}
+                    size="xl"
+                  >
+                    {!item.mutedIOS ? <IconVolume /> : <IconVolumeOff />}
+                  </ActionIcon>
+                )}
+              </Table.Td>
+            </Table.Tr>
+          ))}
         </Table.Tbody>
       </Table>
     </Stack>

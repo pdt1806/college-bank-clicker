@@ -62,7 +62,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   }, [achievements]);
 
   // --------------------
-  // BGM Logic
+  // BGM & SFX Logic
 
   const bgm = audio.bgm;
   bgm.loop = true;
@@ -139,6 +139,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const saveAchievements = () => localStorage.setItem("achievementsData", JSON.stringify(achievementsRef.current));
 
   const addAchievement = (achievement: Achievement | string) => {
+    // console.log("Received achievement:", achievement);
     if (typeof achievement === "string") {
       const foundAchievement = allAchievements.find((ach) => ach.id === achievement);
       if (!foundAchievement) {
@@ -148,10 +149,14 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       achievement = foundAchievement;
     }
     if (!achievementsRef.current[achievement.id]) {
-      const newAchievements = { ...achievementsRef.current, [achievement.id]: achievement.date ?? new Date() };
-      setAchievements(newAchievements);
+      console.log("Unlocking achievement:", achievement);
+      setAchievements((prev) => ({
+        ...prev,
+        [achievement.id]: achievement.date ?? new Date(),
+      }));
       playSound(audio.achievement);
       notifications.show({
+        radius: "lg",
         styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
         title: "Achievement Unlocked!",
         message: achievement.name,
@@ -247,6 +252,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         saveAchievements();
 
         notifications.show({
+          radius: "lg",
           styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
           title: "Import Successful",
           message: "Game data has been successfully imported.",
@@ -256,6 +262,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         });
       } catch (error: any) {
         return notifications.show({
+          radius: "lg",
           styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
           title: "Import Failed",
           message: error.message ?? "An error occurred while importing game data.",

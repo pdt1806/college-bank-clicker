@@ -87,6 +87,4 @@ interface UpgradeBarTab {
   icon: React.FC<{ size?: number; color?: string }>;
   description: string;
   list: Upgrade[];
-  function: () => void;
-  controller: boolean;
 }

@@ -71,7 +71,7 @@ const Achievements = () => {
                 value={tab.name}
                 leftSection={<tab.icon size={24} />}
                 className={classes.tab}
-                onClick={() => playSound(audio.pop)}
+                onClick={() => playSound(audio.pop3)}
               >
                 <Text>{tab.name}</Text>
               </Tabs.Tab>

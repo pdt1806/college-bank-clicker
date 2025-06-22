@@ -1,5 +1,6 @@
 import { Button, FileButton, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 import { useGame } from "../../../GameProvider";
+import classes from "./index.module.css"; // Assuming you have a CSS module for styles
 
 const ExportImportGameData = () => {
   const { exportGameData, importGameData } = useGame();
@@ -18,12 +19,21 @@ const ExportImportGameData = () => {
           Export
         </Button>
         <FileButton
-          // @ts-expect-error: File should be a single file
-          onChange={importGameData}
+          onChange={(file) => {
+            if (file) importGameData(file);
+          }}
+          name="Import"
           accept=".json"
         >
           {(props) => (
-            <Button {...props} component="label" size="lg" color="cbc-teal" radius="xl">
+            <Button
+              {...props}
+              component="label"
+              size="lg"
+              color="cbc-teal"
+              radius="xl"
+              className={classes.cursorPointer}
+            >
               Import
             </Button>
           )}
