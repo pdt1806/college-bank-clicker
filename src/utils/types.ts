@@ -53,6 +53,7 @@ interface GameContextType {
   achievements: AchievementListType;
   timeInGame: number;
   maxMoney: number;
+  playSound: (audio: HTMLAudioElement) => void;
 }
 
 type Achievement = {
@@ -60,8 +61,8 @@ type Achievement = {
   name: string;
   icon: string;
   description: string;
-  value: number;
-  date?: Date | null;
+  value?: number;
+  date?: Date;
 };
 
 type AchievementsTab = {
@@ -79,4 +80,13 @@ interface FloatingText {
   x: number;
   y: number;
   value: string;
+}
+
+interface UpgradeBarTab {
+  name: string;
+  icon: React.FC<{ size?: number; color?: string }>;
+  description: string;
+  list: Upgrade[];
+  function: () => void;
+  controller: boolean;
 }

@@ -4,7 +4,7 @@ import { useGame } from "../../../GameProvider";
 import classes from "./index.module.css";
 
 const MainGameButton = () => {
-  const { increment, saveGame, setTotalClicks, saveStats, perClick } = useGame();
+  const { increment, perClick } = useGame();
 
   const [floatingTexts, setFloatingTexts] = useState<FloatingText[]>([]);
 
@@ -31,9 +31,6 @@ const MainGameButton = () => {
           onClick={(e) => {
             animate(e);
             increment();
-            saveGame();
-            setTotalClicks((prev) => prev + 1);
-            saveStats();
           }}
           className={classes.image}
           alt="Money Button"

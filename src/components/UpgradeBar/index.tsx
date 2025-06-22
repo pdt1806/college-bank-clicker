@@ -1,16 +1,17 @@
-import { ActionIcon, Box, Group, HoverCard, Stack, Text, Title } from "@mantine/core";
-import { IconAutomation, IconChevronUp, IconMouse } from "@tabler/icons-react";
+import { Box, Group, HoverCard, Stack, Text, Title } from "@mantine/core";
+import { IconAutomation, IconMouse } from "@tabler/icons-react";
 import { useState } from "react";
 import { automaticUpgradeList, manualUpgradeList } from "../../utils/upgrades";
 import Upgrade from "../Upgrade";
 import UpgradeBarBalance from "./Balance";
+import DropdownButton from "./DropdownButton";
 import classes from "./index.module.css";
 
 const UpgradeBar = () => {
   const [displayManualUpgrades, setDisplayManualUpgrades] = useState(true);
   const [displayAutomaticUpgrades, setDisplayAutomaticUpgrades] = useState(true);
 
-  const tabs = [
+  const tabs: UpgradeBarTab[] = [
     {
       name: "Manual Upgrades",
       icon: IconMouse,
@@ -28,6 +29,8 @@ const UpgradeBar = () => {
       controller: displayAutomaticUpgrades,
     },
   ];
+
+  // Never use `useGame` here, as it will cause re-renders of buttons
 
   return (
     <Box>
@@ -49,15 +52,7 @@ const UpgradeBar = () => {
                   <Text size="sm">{tab.description}</Text>
                 </HoverCard.Dropdown>
               </HoverCard>
-              <ActionIcon variant="transparent" color="white" onClick={tab.function}>
-                <IconChevronUp
-                  stroke={2}
-                  style={{
-                    transform: tab.controller ? "rotate(0deg)" : "rotate(-180deg)",
-                    transition: "transform 0.1s",
-                  }}
-                />
-              </ActionIcon>
+              <DropdownButton tab={tab} />
             </Group>
             <Stack gap="md" display={tab.controller ? "flex" : "none"} className={classes.stack}>
               {tab.list.map((upgrade) => (

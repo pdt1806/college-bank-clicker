@@ -14,11 +14,18 @@ const Upgrade = ({ upgrade }: { upgrade: Upgrade }) => {
   ));
 
   return (
-    <HoverCard width={400} shadow="md" withArrow openDelay={300} position="left" disabled={isMobile} radius="lg">
+    <HoverCard width={400} shadow="md" withArrow openDelay={300} position="left" disabled={isMobile} radius="xl">
       <HoverCard.Target>
         <ButtonComponent />
       </HoverCard.Target>
-      <HoverCard.Dropdown bg="cbc-bluegreen.0">
+      <HoverCard.Dropdown
+        bg="cbc-bluegreen.0"
+        style={{
+          border: `3px solid ${
+            upgrade.perClick ? "var(--mantine-color-cbc-yellow-9)" : "var(--mantine-color-cbc-bluegreen-9)"
+          }`,
+        }}
+      >
         <UpgradeInfo upgrade={upgrade} />
       </HoverCard.Dropdown>
     </HoverCard>

@@ -3,9 +3,10 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconRefresh } from "@tabler/icons-react";
 import { useGame } from "../../../GameProvider";
+import { audio } from "../../../utils/audio";
 
 const ResetGameData = () => {
-  const { resetGameData } = useGame();
+  const { resetGameData, playSound } = useGame();
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
@@ -23,6 +24,7 @@ const ResetGameData = () => {
             color="red"
             onClick={() => {
               resetGameData();
+              playSound(audio.achievement);
               notifications.show({
                 styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
                 title: "Game data reset!",

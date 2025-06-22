@@ -2,6 +2,7 @@ import { ActionIcon, Slider, Stack, Table, Title } from "@mantine/core";
 import { useOs } from "@mantine/hooks";
 import { IconVolume, IconVolumeOff } from "@tabler/icons-react";
 import { useGame } from "../../../GameProvider";
+import { audio } from "../../../utils/audio";
 
 const AudioSettings = () => {
   const {
@@ -13,6 +14,7 @@ const AudioSettings = () => {
     setMusicMutedIOS,
     sfxMutedIOS,
     setSfxMutedIOS,
+    playSound,
   } = useGame();
 
   const os = useOs();
@@ -56,7 +58,13 @@ const AudioSettings = () => {
             </Table.Th>
             <Table.Td>
               {os !== "ios" ? (
-                <Slider color="cbc-purple" defaultValue={sfxVolume} onChange={setSfxVolume} size="xl" />
+                <Slider
+                  color="cbc-purple"
+                  defaultValue={sfxVolume}
+                  onChange={setSfxVolume}
+                  size="xl"
+                  onChangeEnd={() => playSound(audio.pop)}
+                />
               ) : (
                 <ActionIcon
                   radius="xl"

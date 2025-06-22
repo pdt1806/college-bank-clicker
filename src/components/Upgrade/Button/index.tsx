@@ -1,10 +1,11 @@
 import { Box, Button, Flex, Image, Indicator, NumberFormatter, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useGame } from "../../../GameProvider";
+import { audio } from "../../../utils/audio";
 import classes from "./index.module.css";
 
 const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
-  const { money, buyUpgrade, currentCost, countUpgrade, maxMoney } = useGame();
+  const { money, buyUpgrade, currentCost, countUpgrade, maxMoney, playSound } = useGame();
 
   const [element, setElement] = useState<HTMLButtonElement | null>(null);
 
@@ -15,6 +16,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
   useEffect(() => {
     if (!element) return;
     if (!disabled) {
+      playSound(audio.isReached);
       element.classList.add(classes.pop);
       setTimeout(() => {
         element.classList.remove(classes.pop);
@@ -35,8 +37,13 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
       bg="cbc-bluegreen.0"
       className={classes.button}
       onClick={() => buyUpgrade(upgrade)}
-      radius="lg"
+      radius="xl"
       onLoad={(e) => setElement(e.currentTarget as HTMLButtonElement)}
+      style={{
+        border: `4px solid ${
+          upgrade.perClick ? "var(--mantine-color-cbc-yellow-9)" : "var(--mantine-color-cbc-bluegreen-9)"
+        }`,
+      }}
     >
       <Flex gap="lg" align="center">
         <Indicator

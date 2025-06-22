@@ -1,6 +1,8 @@
 import { Button, Image, Stack, Text, Title } from "@mantine/core";
 import { IconChartBar, IconClick, IconInfoCircle, IconSettings, IconStar } from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useGame } from "../../GameProvider";
+import { audio } from "../../utils/audio";
 
 const links = [
   { label: "Game", icon: IconClick, to: "/" },
@@ -14,6 +16,8 @@ const Navbar = ({ navbarOpened, toggleNavbar }: { navbarOpened: boolean; toggleN
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { playSound } = useGame();
+
   return (
     <Stack gap={0} justify="space-between" px="xs">
       <Image src="/assets/cbc-logo.svg" alt="Logo" w="100%" maw={400} mx="auto" py="md" />
@@ -23,6 +27,7 @@ const Navbar = ({ navbarOpened, toggleNavbar }: { navbarOpened: boolean; toggleN
           onClick={() => {
             navigate(link.to, { replace: true });
             navbarOpened && toggleNavbar();
+            playSound(audio.pop3);
           }}
           variant={location.pathname === link.to ? "filled" : "subtle"}
           color={location.pathname === link.to ? "cbc-bluegray.6" : "cbc-bluegray.0"}

@@ -1,8 +1,14 @@
 import { notifications } from "@mantine/notifications";
 import { IconExclamationCircleFilled, IconStar, IconUpload } from "@tabler/icons-react";
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
-import { clickAchievementList, moneyAchievementList, upgradeAchievementList } from "../utils/achievements";
+import {
+  allAchievements,
+  clickAchievementList,
+  moneyAchievementList,
+  totalUpgradeAchievementList,
+} from "../utils/achievements";
 import { audio } from "../utils/audio";
+import { automaticUpgradeList, manualUpgradeList } from "../utils/upgrades";
 
 export const GameContext = createContext<GameContextType>({} as GameContextType);
 
@@ -78,6 +84,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const increment = () => {
     setMoney((prev) => prev + perClick);
     setTotalMoney((prev) => prev + perClick);
+    saveGame();
+    setTotalClicks((prev) => prev + 1);
+    saveStats();
+    playSound(audio.pop2);
   };
 
   const playSound = (audio: HTMLAudioElement) => {
@@ -128,9 +138,17 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
   const saveAchievements = () => localStorage.setItem("achievementsData", JSON.stringify(achievementsRef.current));
 
-  const addAchievement = (achievement: Achievement) => {
+  const addAchievement = (achievement: Achievement | string) => {
+    if (typeof achievement === "string") {
+      const foundAchievement = allAchievements.find((ach) => ach.id === achievement);
+      if (!foundAchievement) {
+        console.warn(`Achievement with id "${achievement}" not found.`);
+        return;
+      }
+      achievement = foundAchievement;
+    }
     if (!achievementsRef.current[achievement.id]) {
-      const newAchievements = { ...achievementsRef.current, [achievement.id]: new Date() };
+      const newAchievements = { ...achievementsRef.current, [achievement.id]: achievement.date ?? new Date() };
       setAchievements(newAchievements);
       playSound(audio.achievement);
       notifications.show({
@@ -339,20 +357,28 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     clickAchievementList.forEach((achievement) => {
-      if (totalClicks >= achievement.value) addAchievement(achievement);
+      if (totalClicks >= achievement.value!) addAchievement(achievement);
     });
   }, [totalClicks]);
 
   useEffect(() => {
-    upgradeAchievementList.forEach((achievement) => {
-      if (Object.values(upgrades).reduce((total, value) => total + value, 0) >= achievement.value)
+    totalUpgradeAchievementList.forEach((achievement) => {
+      // This checks total upgrades purchased count
+      if (Object.values(upgrades).reduce((total, value) => total + value, 0) >= achievement.value!)
         addAchievement(achievement);
     });
+
+    // This checks if all upgrades of a specific category are purchased
+    const allManualUpgrades = manualUpgradeList.every((upgrade) => countUpgrade(upgrade) > 0);
+    if (allManualUpgrades) addAchievement("achievement-upgrade-manual");
+
+    const allAutomaticUpgrades = automaticUpgradeList.every((upgrade) => countUpgrade(upgrade) > 0);
+    if (allAutomaticUpgrades) addAchievement("achievement-upgrade-automation");
   }, [upgrades]);
 
   useEffect(() => {
     moneyAchievementList.forEach((achievement) => {
-      if (money >= achievement.value) addAchievement(achievement);
+      if (money >= achievement.value!) addAchievement(achievement);
     });
 
     if (money > maxMoney) setMaxMoney(money);
@@ -392,6 +418,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         achievements,
         timeInGame,
         maxMoney,
+        playSound,
       }}
     >
       {children}

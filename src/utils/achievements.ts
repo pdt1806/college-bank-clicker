@@ -88,7 +88,7 @@ export const clickAchievementList: Achievement[] = [
   },
 ];
 
-export const upgradeAchievementList: Achievement[] = [
+export const totalUpgradeAchievementList: Achievement[] = [
   {
     id: "achievement-upgrade-first",
     name: "Upgrade Rookie",
@@ -133,8 +133,29 @@ export const upgradeAchievementList: Achievement[] = [
   },
 ];
 
+export const categoryUpgradeAchievementList: Achievement[] = [
+  {
+    id: "achievement-upgrade-automation",
+    name: "Automation Aficionado",
+    description: "You purchased all automation upgrades. Embrace the future!",
+    icon: "",
+  },
+  {
+    id: "achievement-upgrade-manual",
+    name: "Click Connoisseur",
+    description: "You purchased all manual upgrades. Click like a pro!",
+    icon: "",
+  },
+];
+
+export const upgradeAchievementList: Achievement[] = [
+  ...totalUpgradeAchievementList,
+  ...categoryUpgradeAchievementList,
+];
+
 export const allAchievements: Achievement[] = [
   ...moneyAchievementList,
   ...clickAchievementList,
-  ...upgradeAchievementList,
+  ...totalUpgradeAchievementList,
+  ...categoryUpgradeAchievementList,
 ];

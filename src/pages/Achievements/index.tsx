@@ -4,6 +4,7 @@ import { IconArrowUp, IconMoneybag, IconMouse } from "@tabler/icons-react";
 import AchievementBox from "../../components/AchievementBox";
 import { useGame } from "../../GameProvider";
 import { clickAchievementList, moneyAchievementList, upgradeAchievementList } from "../../utils/achievements";
+import { audio } from "../../utils/audio";
 import { UNIFORMED_HEIGHT } from "../../utils/const";
 import classes from "./index.module.css";
 
@@ -28,7 +29,7 @@ const tabs = [
 const Achievements = () => {
   const isMobile = useMediaQuery("(max-width: 75em)");
 
-  const { achievements } = useGame();
+  const { achievements, playSound } = useGame();
 
   const generateContent = (tab: AchievementsTab) => {
     const sortedAchievementsWithDate = tab.list
@@ -65,7 +66,13 @@ const Achievements = () => {
         <ScrollArea w="100%" scrollbarSize={0}>
           <Tabs.List style={{ flexWrap: "nowrap" }} className={classes.tabList}>
             {tabs.map((tab) => (
-              <Tabs.Tab key={tab.name} value={tab.name} leftSection={<tab.icon size={24} />} className={classes.tab}>
+              <Tabs.Tab
+                key={tab.name}
+                value={tab.name}
+                leftSection={<tab.icon size={24} />}
+                className={classes.tab}
+                onClick={() => playSound(audio.pop)}
+              >
                 <Text>{tab.name}</Text>
               </Tabs.Tab>
             ))}
