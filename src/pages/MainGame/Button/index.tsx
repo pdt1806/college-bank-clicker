@@ -1,10 +1,10 @@
 import { Box, Center, Image, Text } from "@mantine/core";
-import { useState } from "react";
-import { useGame } from "../../../GameProvider";
+import { memo, useState } from "react";
+import { useGameData } from "../../../GameProvider/Contexts/GameDataContext";
 import classes from "./index.module.css";
 
 const MainGameButton = () => {
-  const { increment, perClick } = useGame();
+  const { increment, perClick } = useGameData();
 
   const [floatingTexts, setFloatingTexts] = useState<FloatingText[]>([]);
 
@@ -56,4 +56,4 @@ const MainGameButton = () => {
   );
 };
 
-export default MainGameButton;
+export default memo(MainGameButton);

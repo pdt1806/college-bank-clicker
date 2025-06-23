@@ -24,7 +24,7 @@ const UpgradeBar = () => {
     },
   ];
 
-  // Never call useGame() here, it will cause a render loop.
+  // Never call useGameData() here, it will cause a render loop.
 
   return (
     <>

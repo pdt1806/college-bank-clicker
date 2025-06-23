@@ -20,46 +20,9 @@ type UpgradeListType = {
   [key: string]: number;
 };
 
-interface GameContextType {
-  // setMoney: React.Dispatch<React.SetStateAction<number>>;
-  // setPerSecond: React.Dispatch<React.SetStateAction<number>>;
-  // upgrades: UpgradeListType;
-  // setUpgrades: React.Dispatch<React.SetStateAction<UpgradeListType>>;
-  money: number;
-  upgrades: UpgradeListType;
-  increment: (amount?: number) => void;
-  perSecond: number;
-  buyUpgrade: (upgrade: AutomaticUpgrade) => void;
-  countUpgrade: (upgrade: AutomaticUpgrade) => number;
-  currentCost: (upgrade: AutomaticUpgrade) => number;
-  perClick: number;
-  saveGame: () => void;
-  musicVolume: number;
-  setMusicVolume: React.Dispatch<React.SetStateAction<number>>;
-  musicMutedIOS: boolean;
-  setMusicMutedIOS: React.Dispatch<React.SetStateAction<boolean>>;
-  sfxVolume: number;
-  setSfxVolume: React.Dispatch<React.SetStateAction<number>>;
-  sfxMutedIOS: boolean;
-  setSfxMutedIOS: React.Dispatch<React.SetStateAction<boolean>>;
-  saveSettings: () => void;
-  resetGameData: () => void;
-  exportGameData: () => void;
-  importGameData: (data: File) => void;
-  totalClicks: number;
-  totalMoney: number;
-  setTotalClicks: React.Dispatch<React.SetStateAction<number>>;
-  saveStats: () => void;
-  achievements: AchievementListType;
-  timeInGame: number;
-  maxMoney: number;
-  playSound: (audio: HTMLAudioElement) => void;
-}
-
 type Achievement = {
   id: string;
   name: string;
-  icon: string;
   description: string;
   value?: number;
   date?: Date;
@@ -87,4 +50,50 @@ interface UpgradeBarTab {
   icon: React.FC<{ size?: number; color?: string }>;
   description: string;
   list: Upgrade[];
+}
+
+interface GameDataContextType {
+  money: number;
+  upgrades: UpgradeListType;
+  perSecond: number;
+  perClick: number;
+  increment: (amount?: number) => void;
+  buyUpgrade: (upgrade: AutomaticUpgrade) => void;
+  countUpgrade: (upgrade: AutomaticUpgrade) => number;
+  currentCost: (upgrade: AutomaticUpgrade) => number;
+  saveGame: () => void;
+  resetGameData: () => void;
+  exportGameData: () => void;
+  importGameData: (data: File) => void;
+}
+
+interface SettingsDataContextType {
+  musicVolume: number;
+  musicMutedIOS: boolean;
+  sfxVolume: number;
+  sfxMutedIOS: boolean;
+  setMusicVolume: React.Dispatch<React.SetStateAction<number>>;
+  setMusicMutedIOS: React.Dispatch<React.SetStateAction<boolean>>;
+  setSfxVolume: React.Dispatch<React.SetStateAction<number>>;
+  setSfxMutedIOS: React.Dispatch<React.SetStateAction<boolean>>;
+  saveSettings: () => void;
+  playSound: (audio: HTMLAudioElement) => void;
+}
+
+interface StatsDataContextType {
+  totalMoney: number;
+  totalClicks: number;
+  timeInGame: number;
+  maxMoney: number;
+  setTotalClicks: React.Dispatch<React.SetStateAction<number>>;
+  saveStats: () => void;
+  setTotalMoney: React.Dispatch<React.SetStateAction<number>>;
+  setTimeInGame: React.Dispatch<React.SetStateAction<number>>;
+  setMaxMoney: React.Dispatch<React.SetStateAction<number>>;
+}
+
+interface AchievementsDataContextType {
+  achievements: AchievementListType;
+  saveAchievements: () => void;
+  setAchievements: React.Dispatch<React.SetStateAction<AchievementListType>>;
 }

@@ -2,11 +2,13 @@ import { Button, Group, Modal, Stack, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconRefresh } from "@tabler/icons-react";
-import { useGame } from "../../../GameProvider";
+import { useGameData } from "../../../GameProvider/Contexts/GameDataContext";
+import { useSettingsData } from "../../../GameProvider/Contexts/SettingsDataContext";
 import { audio } from "../../../utils/audio";
 
 const ResetGameData = () => {
-  const { resetGameData, playSound } = useGame();
+  const { resetGameData } = useGameData();
+  const { playSound } = useSettingsData();
   const [opened, { open, close }] = useDisclosure(false);
 
   return (

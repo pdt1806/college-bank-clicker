@@ -1,11 +1,15 @@
 import { Box, Button, Flex, Image, Indicator, NumberFormatter, Text } from "@mantine/core";
-import { useEffect, useState } from "react";
-import { useGame } from "../../../GameProvider";
+import { memo, useEffect, useState } from "react";
+import { useGameData } from "../../../GameProvider/Contexts/GameDataContext";
+import { useSettingsData } from "../../../GameProvider/Contexts/SettingsDataContext";
+import { useStatsData } from "../../../GameProvider/Contexts/StatsDataContext";
 import { audio } from "../../../utils/audio";
 import classes from "./index.module.css";
 
 const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
-  const { money, buyUpgrade, currentCost, countUpgrade, maxMoney, playSound } = useGame();
+  const { money, buyUpgrade, currentCost, countUpgrade } = useGameData();
+  const { maxMoney } = useStatsData();
+  const { playSound } = useSettingsData();
 
   const [element, setElement] = useState<HTMLButtonElement | null>(null);
 
@@ -99,4 +103,4 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
   );
 };
 
-export default UpgradeButton;
+export default memo(UpgradeButton);

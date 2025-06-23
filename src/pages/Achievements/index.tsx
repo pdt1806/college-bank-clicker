@@ -2,7 +2,8 @@ import { Box, Container, ScrollArea, SimpleGrid, Tabs, Text, Title } from "@mant
 import { useMediaQuery } from "@mantine/hooks";
 import { IconArrowUp, IconMoneybag, IconMouse } from "@tabler/icons-react";
 import AchievementBox from "../../components/AchievementBox";
-import { useGame } from "../../GameProvider";
+import { useAchievementsData } from "../../GameProvider/Contexts/AchievementsDataContext";
+import { useSettingsData } from "../../GameProvider/Contexts/SettingsDataContext";
 import { clickAchievementList, moneyAchievementList, upgradeAchievementList } from "../../utils/achievements";
 import { audio } from "../../utils/audio";
 import { UNIFORMED_HEIGHT } from "../../utils/const";
@@ -29,7 +30,8 @@ const tabs = [
 const Achievements = () => {
   const isMobile = useMediaQuery("(max-width: 75em)");
 
-  const { achievements, playSound } = useGame();
+  const { playSound } = useSettingsData();
+  const { achievements } = useAchievementsData();
 
   const generateContent = (tab: AchievementsTab) => {
     const sortedAchievementsWithDate = tab.list

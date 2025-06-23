@@ -5,7 +5,7 @@ import "@mantine/notifications/styles.css";
 import { createMemoryRouter, RouteObject, RouterProvider } from "react-router-dom";
 import "./App.css";
 import Layout from "./components/Layout";
-import { GameProvider } from "./GameProvider";
+import { GameProvider } from "./GameProvider/GameProvider";
 import About from "./pages/About";
 import Achievements from "./pages/Achievements";
 import MainGame from "./pages/MainGame";

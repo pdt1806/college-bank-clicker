@@ -1,8 +1,11 @@
 import { Box, Flex, Image, NumberFormatter, Stack, Table, Text } from "@mantine/core";
-import { useGame } from "../../../GameProvider";
+import { memo } from "react";
+import { useGameData } from "../../../GameProvider/Contexts/GameDataContext";
+import { useStatsData } from "../../../GameProvider/Contexts/StatsDataContext";
 
 const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
-  const { countUpgrade, currentCost, maxMoney } = useGame();
+  const { countUpgrade, currentCost } = useGameData();
+  const { maxMoney } = useStatsData();
 
   const isReached = maxMoney >= upgrade.cost;
 
@@ -66,4 +69,4 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
   );
 };
 
-export default UpgradeInfo;
+export default memo(UpgradeInfo);
