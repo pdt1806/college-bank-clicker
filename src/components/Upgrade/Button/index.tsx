@@ -33,7 +33,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
         element.classList.remove(classes.pop);
       }, 300);
     }
-  }, [disabled, element, playSound]);
+  }, [disabled]);
 
   return (
     <Button
