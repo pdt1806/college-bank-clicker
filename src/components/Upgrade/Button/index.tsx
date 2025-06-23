@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Image, Indicator, NumberFormatter, Text } from "@mantine/core";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useGameData } from "../../../GameProvider/Contexts/GameDataContext";
 import { useSettingsData } from "../../../GameProvider/Contexts/SettingsDataContext";
 import { useStatsData } from "../../../GameProvider/Contexts/StatsDataContext";
@@ -12,10 +12,17 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
   const { playSound } = useSettingsData();
 
   const [element, setElement] = useState<HTMLButtonElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const isReached = maxMoney >= upgrade.cost;
 
   const disabled = currentCost(upgrade) > money;
+
+  useEffect(() => {
+    if (buttonRef.current) {
+      setElement(buttonRef.current);
+    }
+  }, []);
 
   useEffect(() => {
     if (!element) return;
@@ -26,7 +33,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
         element.classList.remove(classes.pop);
       }, 300);
     }
-  }, [disabled]);
+  }, [disabled, element, playSound]);
 
   return (
     <Button
@@ -42,7 +49,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
       className={classes.button}
       onClick={() => buyUpgrade(upgrade)}
       radius="xl"
-      onLoad={(e) => setElement(e.currentTarget as HTMLButtonElement)}
+      ref={buttonRef}
       style={{
         border: `4px solid ${
           upgrade.perClick ? "var(--mantine-color-cbc-yellow-9)" : "var(--mantine-color-cbc-bluegreen-9)"
