@@ -5,7 +5,7 @@ import "@mantine/notifications/styles.css";
 import { createMemoryRouter, RouteObject, RouterProvider } from "react-router-dom";
 import "./App.css";
 import Layout from "./components/Layout";
-import { GameProvider } from "./GameProvider";
+import { GameProvider } from "./GameProvider/GameProvider";
 import About from "./pages/About";
 import Achievements from "./pages/Achievements";
 import MainGame from "./pages/MainGame";
@@ -17,6 +17,7 @@ export const theme = createTheme({
   fontFamily: "Host Grotesk, sans-serif",
   headings: { fontFamily: "Host Grotesk, sans-serif" },
   colors: colors,
+  primaryColor: "cbc-purple",
 });
 
 const routes: RouteObject[] = [

@@ -1,8 +1,9 @@
 import { NumberFormatter, Text } from "@mantine/core";
-import { useGame } from "../../../GameProvider";
+import { memo } from "react";
+import { useGameData } from "../../../GameProvider/Contexts/GameDataContext";
 
 const UpgradeBarBalance = () => {
-  const { money } = useGame();
+  const { money } = useGameData();
   return (
     <Text
       p="xs"
@@ -20,4 +21,4 @@ const UpgradeBarBalance = () => {
   );
 };
 
-export default UpgradeBarBalance;
+export default memo(UpgradeBarBalance);

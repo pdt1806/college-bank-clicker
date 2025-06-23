@@ -1,7 +1,7 @@
 import { Button, Image, Stack, Text, Title } from "@mantine/core";
 import { IconChartBar, IconClick, IconInfoCircle, IconSettings, IconStar } from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useGame } from "../../GameProvider";
+import { useSettingsData } from "../../GameProvider/Contexts/SettingsDataContext";
 import { audio } from "../../utils/audio";
 
 const links = [
@@ -16,7 +16,7 @@ const Navbar = ({ navbarOpened, toggleNavbar }: { navbarOpened: boolean; toggleN
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { playSound } = useGame();
+  const { playSound } = useSettingsData();
 
   return (
     <Stack gap={0} justify="space-between" px="xs">

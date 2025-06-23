@@ -1,17 +1,28 @@
 import { Box, Button, Flex, Image, Indicator, NumberFormatter, Text } from "@mantine/core";
-import { useEffect, useState } from "react";
-import { useGame } from "../../../GameProvider";
+import { memo, useEffect, useRef, useState } from "react";
+import { useGameData } from "../../../GameProvider/Contexts/GameDataContext";
+import { useSettingsData } from "../../../GameProvider/Contexts/SettingsDataContext";
+import { useStatsData } from "../../../GameProvider/Contexts/StatsDataContext";
 import { audio } from "../../../utils/audio";
 import classes from "./index.module.css";
 
 const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
-  const { money, buyUpgrade, currentCost, countUpgrade, maxMoney, playSound } = useGame();
+  const { money, buyUpgrade, currentCost, countUpgrade } = useGameData();
+  const { maxMoney } = useStatsData();
+  const { playSound } = useSettingsData();
 
   const [element, setElement] = useState<HTMLButtonElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const isReached = maxMoney >= upgrade.cost;
 
   const disabled = currentCost(upgrade) > money;
+
+  useEffect(() => {
+    if (buttonRef.current) {
+      setElement(buttonRef.current);
+    }
+  }, []);
 
   useEffect(() => {
     if (!element) return;
@@ -22,7 +33,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
         element.classList.remove(classes.pop);
       }, 300);
     }
-  }, [disabled]);
+  }, [disabled, element, playSound]);
 
   return (
     <Button
@@ -38,7 +49,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
       className={classes.button}
       onClick={() => buyUpgrade(upgrade)}
       radius="xl"
-      onLoad={(e) => setElement(e.currentTarget as HTMLButtonElement)}
+      ref={buttonRef}
       style={{
         border: `4px solid ${
           upgrade.perClick ? "var(--mantine-color-cbc-yellow-9)" : "var(--mantine-color-cbc-bluegreen-9)"
@@ -99,4 +110,4 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
   );
 };
 
-export default UpgradeButton;
+export default memo(UpgradeButton);

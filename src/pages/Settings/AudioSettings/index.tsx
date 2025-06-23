@@ -2,7 +2,7 @@ import { ActionIcon, Slider, Stack, Table, Title } from "@mantine/core";
 import { useOs } from "@mantine/hooks";
 import { IconVolume, IconVolumeOff } from "@tabler/icons-react";
 import { useEffect } from "react";
-import { useGame } from "../../../GameProvider";
+import { useSettingsData } from "../../../GameProvider/Contexts/SettingsDataContext";
 import { audio } from "../../../utils/audio";
 import classes from "./index.module.css";
 
@@ -17,7 +17,7 @@ const AudioSettings = () => {
     sfxMutedIOS,
     setSfxMutedIOS,
     playSound,
-  } = useGame();
+  } = useSettingsData();
 
   const os = useOs();
 

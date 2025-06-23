@@ -1,12 +1,17 @@
 import { Box, Divider, NumberFormatter, Table, Text, Title } from "@mantine/core";
 import prettyMilliseconds from "pretty-ms";
+import { memo } from "react";
 import PageWrapper from "../../components/PageWrapper";
-import { useGame } from "../../GameProvider";
+import { useAchievementsData } from "../../GameProvider/Contexts/AchievementsDataContext";
+import { useGameData } from "../../GameProvider/Contexts/GameDataContext";
+import { useStatsData } from "../../GameProvider/Contexts/StatsDataContext";
 import { allAchievements } from "../../utils/achievements";
 import { allUpgrades } from "../../utils/upgrades";
 
 const Statistics = () => {
-  const { totalClicks, totalMoney, upgrades, achievements, timeInGame, maxMoney } = useGame();
+  const { upgrades } = useGameData();
+  const { totalClicks, totalMoney, timeInGame, maxMoney } = useStatsData();
+  const { achievements } = useAchievementsData();
 
   const table = [
     {
@@ -78,4 +83,4 @@ const Statistics = () => {
   );
 };
 
-export default Statistics;
+export default memo(Statistics);

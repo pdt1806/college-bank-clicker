@@ -6,29 +6,32 @@ import {
   clickAchievementList,
   moneyAchievementList,
   totalUpgradeAchievementList,
-} from "../utils/achievements";
-import { audio } from "../utils/audio";
-import { automaticUpgradeList, manualUpgradeList } from "../utils/upgrades";
+} from "../../utils/achievements";
+import { audio } from "../../utils/audio";
+import { automaticUpgradeList, manualUpgradeList } from "../../utils/upgrades";
+import { useAchievementsData } from "./AchievementsDataContext";
+import { useSettingsData } from "./SettingsDataContext";
+import { useStatsData } from "./StatsDataContext";
 
-export const GameContext = createContext<GameContextType>({} as GameContextType);
+export const GameDataContext = createContext<GameDataContextType>({} as GameDataContextType);
 
-export const GameProvider = ({ children }: { children: ReactNode }) => {
+export const GameDataProvider = ({ children }: { children: ReactNode }) => {
+  // --------------------
+  // Use other contexts
+  // This should be the only context that uses other contexts directly.
+
+  const { playSound, TPS } = useSettingsData();
+  const { achievements, setAchievements, saveAchievements } = useAchievementsData();
+  const { setTotalClicks, setTotalMoney, setTimeInGame, setMaxMoney, saveStats, maxMoney, totalClicks } =
+    useStatsData();
+
+  // --------------------
+  // State for Game Data
+
   const [money, setMoney] = useState(0);
   const [perSecond, setPerSecond] = useState(0.0);
   const [upgrades, setUpgrades] = useState<UpgradeListType>({});
   const [perClick, setPerClick] = useState(1);
-
-  const [musicVolume, setMusicVolume] = useState(50);
-  const [sfxVolume, setSfxVolume] = useState(50);
-  const [musicMutedIOS, setMusicMutedIOS] = useState(false);
-  const [sfxMutedIOS, setSfxMutedIOS] = useState(false);
-
-  const [totalClicks, setTotalClicks] = useState(0);
-  const [totalMoney, setTotalMoney] = useState(0);
-  const [timeInGame, setTimeInGame] = useState(0);
-  const [maxMoney, setMaxMoney] = useState(0);
-
-  const [achievements, setAchievements] = useState<AchievementListType>({});
 
   // --------------------
   // State Ref for Game Data
@@ -40,45 +43,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   }, [money, perSecond, perClick, upgrades]);
 
   // --------------------
-  // State Ref for Settings Data
-
-  const settingsData = useRef({ musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS });
-
-  useEffect(() => {
-    settingsData.current = { musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS };
-  }, [musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS]);
-
-  // --------------------
-  // State Ref for Total Stats & Achievements
-
-  const totalStats = useRef({ totalClicks, totalMoney, timeInGame, maxMoney });
-  useEffect(() => {
-    totalStats.current = { totalClicks, totalMoney, timeInGame, maxMoney };
-  }, [totalClicks, totalMoney, timeInGame, maxMoney]);
-
-  const achievementsRef = useRef<AchievementListType>(achievements);
-  useEffect(() => {
-    achievementsRef.current = achievements;
-  }, [achievements]);
-
-  // --------------------
-  // BGM & SFX Logic
-
-  const bgm = audio.bgm;
-  bgm.loop = true;
-  bgm.muted = musicMutedIOS;
-  bgm.volume = musicVolume / 100;
-
-  document.body.addEventListener("click", () => {
-    bgm.play().catch((err) => console.error("Playback failed:", err));
-  });
-
-  useEffect(() => {
-    bgm.volume = musicVolume / 100;
-    bgm.muted = musicMutedIOS;
-  }, [musicVolume, musicMutedIOS]);
-
-  // --------------------
   // Game Logic
 
   const increment = () => {
@@ -88,15 +52,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setTotalClicks((prev) => prev + 1);
     saveStats();
     playSound(audio.pop2);
-  };
-
-  const playSound = (audio: HTMLAudioElement) => {
-    const sound = new Audio(audio.src);
-    sound.muted = sfxMutedIOS;
-    sound.volume = sfxVolume / 100;
-    sound.play().catch((error) => {
-      console.error("Error playing audio:", error);
-    });
   };
 
   const buyUpgrade = (upgrade: Upgrade) => {
@@ -131,42 +86,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const saveGame = () => localStorage.setItem("gameData", JSON.stringify(gameData.current));
-
-  const saveSettings = () => localStorage.setItem("settingsData", JSON.stringify(settingsData.current));
-
-  const saveStats = () => localStorage.setItem("statsData", JSON.stringify(totalStats.current));
-
-  const saveAchievements = () => localStorage.setItem("achievementsData", JSON.stringify(achievementsRef.current));
-
-  const addAchievement = (achievement: Achievement | string) => {
-    // console.log("Received achievement:", achievement);
-    if (typeof achievement === "string") {
-      const foundAchievement = allAchievements.find((ach) => ach.id === achievement);
-      if (!foundAchievement) {
-        console.warn(`Achievement with id "${achievement}" not found.`);
-        return;
-      }
-      achievement = foundAchievement;
-    }
-    if (!achievementsRef.current[achievement.id]) {
-      console.log("Unlocking achievement:", achievement);
-      setAchievements((prev) => ({
-        ...prev,
-        [achievement.id]: achievement.date ?? new Date(),
-      }));
-      playSound(audio.achievement);
-      notifications.show({
-        radius: "lg",
-        styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
-        title: "Achievement Unlocked!",
-        message: achievement.name,
-        color: "cbc-green",
-        autoClose: 5000,
-        position: "top-right",
-        icon: <IconStar size={24} />,
-      });
-    }
-  };
 
   const resetGameData = () => {
     setMoney(0);
@@ -275,31 +194,66 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     reader.readAsText(file);
   };
 
+  // since it depends on playSound also, put this function in this instead of AchievementsDataContext
+  const addAchievement = (achievement: Achievement | string) => {
+    if (typeof achievement === "string") {
+      const foundAchievement = allAchievements.find((ach) => ach.id === achievement);
+      if (!foundAchievement) {
+        console.warn(`Achievement with id "${achievement}" not found.`);
+        return;
+      }
+      achievement = foundAchievement;
+    }
+
+    if (!achievements[achievement.id]) {
+      setAchievements((prev) => ({
+        ...prev,
+        [achievement.id]: achievement.date ?? new Date(),
+      }));
+      playSound(audio.achievement);
+      notifications.show({
+        radius: "lg",
+        styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
+        title: "Achievement Unlocked!",
+        message: achievement.name,
+        color: "cbc-green",
+        autoClose: 5000,
+        position: "top-right",
+        icon: <IconStar size={24} />,
+      });
+    }
+  };
+
   // --------------------
   // React Effects
 
   // Increment money logic
-  // maximum 20 ticks per second
+  // using RAF + TPS for smooth updates & saving battery
   useEffect(() => {
     if (perSecond == 0) return;
 
-    if (perSecond < 20) {
-      const interval = setInterval(() => {
-        setMoney((prev) => Math.trunc(prev + 1));
-        setTotalMoney((prev) => Math.trunc(prev + 1));
-      }, 1000 / perSecond);
+    let lastFrameTime = performance.now();
+    const frameDuration = 1000 / TPS;
 
-      return () => clearInterval(interval);
-    } else {
-      const amountPerTick = Math.trunc(perSecond / 20);
-      const interval = setInterval(() => {
-        setMoney((prev) => prev + amountPerTick);
-        setTotalMoney((prev) => prev + amountPerTick);
-      }, 1000 / 20);
+    const tick = (now: number) => {
+      const delta = now - lastFrameTime;
 
-      return () => clearInterval(interval);
-    }
-  }, [perSecond]);
+      if (delta >= frameDuration) {
+        lastFrameTime = now;
+
+        const deltaSeconds = delta / 1000;
+        const earned = perSecond * deltaSeconds;
+        setMoney((prev) => prev + earned);
+        setTotalMoney((prev) => prev + earned);
+      }
+
+      animationFrameId = requestAnimationFrame(tick);
+    };
+
+    let animationFrameId = requestAnimationFrame(tick);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [perSecond, TPS]);
 
   // Init game data
   useEffect(() => {
@@ -313,60 +267,15 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Init settings data
-  useEffect(() => {
-    const savedSettings = localStorage.getItem("settingsData");
-    if (savedSettings) {
-      const { musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS } = JSON.parse(savedSettings);
-      setMusicVolume(musicVolume);
-      setSfxVolume(sfxVolume);
-      setMusicMutedIOS(musicMutedIOS);
-      setSfxMutedIOS(sfxMutedIOS);
-    }
-  }, []);
-
-  // Init achievements
-  useEffect(() => {
-    const savedAchievements = localStorage.getItem("achievementsData");
-    if (savedAchievements) {
-      const achievementsList = JSON.parse(savedAchievements);
-      setAchievements(achievementsList);
-    }
-  }, []);
-
-  // Init total stats
-  useEffect(() => {
-    const savedStats = localStorage.getItem("statsData");
-    if (savedStats) {
-      const { totalClicks, totalMoney, timeInGame, maxMoney } = JSON.parse(savedStats);
-      setTotalClicks(totalClicks);
-      setTotalMoney(totalMoney);
-      setTimeInGame(timeInGame);
-      setMaxMoney(maxMoney);
-    }
-  }, []);
-
   // Save game interval - runs every second
   useEffect(() => {
     const interval = setInterval(() => {
       saveGame();
-      setTimeInGame((prev) => prev + 1); // Increment time in game by 1 second
+      setTimeInGame((prev) => prev + 1);
       saveStats();
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-
-  // Save settings on change
-  useEffect(saveSettings, [musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS]);
-
-  // Save achievements on change
-  useEffect(saveAchievements, [achievements]);
-
-  useEffect(() => {
-    clickAchievementList.forEach((achievement) => {
-      if (totalClicks >= achievement.value!) addAchievement(achievement);
-    });
-  }, [totalClicks]);
 
   useEffect(() => {
     totalUpgradeAchievementList.forEach((achievement) => {
@@ -391,50 +300,40 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     if (money > maxMoney) setMaxMoney(money);
   }, [money]);
 
+  // Check achievements based on total clicks
+  useEffect(() => {
+    clickAchievementList.forEach((achievement) => {
+      if (totalClicks >= achievement.value!) addAchievement(achievement);
+    });
+  }, [totalClicks]);
+
   // --------------------
   // Context Provider
 
   return (
-    <GameContext.Provider
+    <GameDataContext.Provider
       value={{
         money,
         upgrades,
-        increment,
         perSecond,
+        perClick,
+        increment,
         buyUpgrade,
         countUpgrade,
         currentCost,
-        perClick,
         saveGame,
-        musicVolume,
-        setMusicVolume,
-        musicMutedIOS,
-        setMusicMutedIOS,
-        sfxVolume,
-        setSfxVolume,
-        sfxMutedIOS,
-        setSfxMutedIOS,
-        saveSettings,
         resetGameData,
         exportGameData,
         importGameData,
-        totalClicks,
-        totalMoney,
-        setTotalClicks,
-        saveStats,
-        achievements,
-        timeInGame,
-        maxMoney,
-        playSound,
       }}
     >
       {children}
-    </GameContext.Provider>
+    </GameDataContext.Provider>
   );
 };
 
-export const useGame = (): GameContextType => {
-  const context = useContext(GameContext);
-  if (!context) throw new Error("useGame must be used within a GameProvider");
+export const useGameData = (): GameDataContextType => {
+  const context = useContext(GameDataContext);
+  if (!context) throw new Error("useGameData must be used within a GameProvider");
   return context;
 };

@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Stack, Text } from "@mantine/core";
 import { IconMenu2, IconShoppingCart } from "@tabler/icons-react";
-import { useGame } from "../../GameProvider";
+import { useSettingsData } from "../../GameProvider/Contexts/SettingsDataContext";
 import { audio } from "../../utils/audio";
 
 const BottomNav = ({
@@ -33,7 +33,7 @@ const BottomNav = ({
     },
   ];
 
-  const { playSound } = useGame();
+  const { playSound } = useSettingsData();
 
   return (
     <Box w="100vw" h={60} bg="cbc-bluegray.9" style={{ position: "fixed", bottom: 0, zIndex: 2 }}>

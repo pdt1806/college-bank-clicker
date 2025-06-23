@@ -1,9 +1,9 @@
 import { Button, FileButton, SimpleGrid, Stack, Text, Title } from "@mantine/core";
-import { useGame } from "../../../GameProvider";
+import { useGameData } from "../../../GameProvider/Contexts/GameDataContext";
 import classes from "./index.module.css"; // Assuming you have a CSS module for styles
 
 const ExportImportGameData = () => {
-  const { exportGameData, importGameData } = useGame();
+  const { exportGameData, importGameData } = useGameData();
 
   return (
     <Stack>
