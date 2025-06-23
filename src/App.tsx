@@ -17,6 +17,7 @@ export const theme = createTheme({
   fontFamily: "Host Grotesk, sans-serif",
   headings: { fontFamily: "Host Grotesk, sans-serif" },
   colors: colors,
+  primaryColor: "cbc-purple",
 });
 
 const routes: RouteObject[] = [

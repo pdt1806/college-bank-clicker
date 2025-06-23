@@ -8,15 +8,16 @@ export const SettingsDataProvider = ({ children }: { children: ReactNode }) => {
   const [sfxVolume, setSfxVolume] = useState(50);
   const [musicMutedIOS, setMusicMutedIOS] = useState(false);
   const [sfxMutedIOS, setSfxMutedIOS] = useState(false);
+  const [TPS, setTPS] = useState(25);
 
   // --------------------
   // State Ref for Settings Data
 
-  const settingsData = useRef({ musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS });
+  const settingsData = useRef({ musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS, TPS });
 
   useEffect(() => {
-    settingsData.current = { musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS };
-  }, [musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS]);
+    settingsData.current = { musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS, TPS };
+  }, [musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS, TPS]);
 
   // --------------------
   // BGM & SFX Logic
@@ -47,7 +48,9 @@ export const SettingsDataProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const saveSettings = () => localStorage.setItem("settingsData", JSON.stringify(settingsData.current));
+  const saveSettings = () => {
+    localStorage.setItem("settingsData", JSON.stringify(settingsData.current));
+  };
 
   // --------------------
   // React Hooks
@@ -56,16 +59,17 @@ export const SettingsDataProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const savedSettings = localStorage.getItem("settingsData");
     if (savedSettings) {
-      const { musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS } = JSON.parse(savedSettings);
+      const { musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS, TPS } = JSON.parse(savedSettings);
       setMusicVolume(musicVolume);
       setSfxVolume(sfxVolume);
       setMusicMutedIOS(musicMutedIOS);
       setSfxMutedIOS(sfxMutedIOS);
+      setTPS(TPS);
     }
   }, []);
 
   // Save settings on change
-  useEffect(saveSettings, [musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS]);
+  useEffect(saveSettings, [musicVolume, sfxVolume, musicMutedIOS, sfxMutedIOS, TPS]);
 
   return (
     <SettingsDataContext.Provider
@@ -80,6 +84,8 @@ export const SettingsDataProvider = ({ children }: { children: ReactNode }) => {
         setSfxMutedIOS,
         saveSettings,
         playSound,
+        TPS,
+        setTPS,
       }}
     >
       {children}

@@ -12,6 +12,12 @@ export const moneyAchievementList: Achievement[] = [
     value: 1000,
   },
   {
+    id: "achievement-money-ten-thousand",
+    name: "Cash Collector",
+    description: "You earned your first 10,000 dollars. Well done!",
+    value: 10000,
+  },
+  {
     id: "achievement-money-one-hundred-thousand",
     name: "Couch Cushion Tycoon",
     description: "You earned your first 100,000 dollars. Amazing!",

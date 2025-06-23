@@ -18,8 +18,9 @@ export const GameDataContext = createContext<GameDataContextType>({} as GameData
 export const GameDataProvider = ({ children }: { children: ReactNode }) => {
   // --------------------
   // Use other contexts
+  // This should be the only context that uses other contexts directly.
 
-  const { playSound } = useSettingsData();
+  const { playSound, TPS } = useSettingsData();
   const { achievements, setAchievements, saveAchievements } = useAchievementsData();
   const { setTotalClicks, setTotalMoney, setTimeInGame, setMaxMoney, saveStats, maxMoney, totalClicks } =
     useStatsData();
@@ -227,13 +228,12 @@ export const GameDataProvider = ({ children }: { children: ReactNode }) => {
   // React Effects
 
   // Increment money logic
-  // using RAF, limit to 60 TPS
+  // using RAF + TPS for smooth updates & saving battery
   useEffect(() => {
     if (perSecond == 0) return;
 
     let lastFrameTime = performance.now();
-    const fpsLimit = 60;
-    const frameDuration = 1000 / fpsLimit;
+    const frameDuration = 1000 / TPS;
 
     const tick = (now: number) => {
       const delta = now - lastFrameTime;
@@ -253,7 +253,7 @@ export const GameDataProvider = ({ children }: { children: ReactNode }) => {
     let animationFrameId = requestAnimationFrame(tick);
 
     return () => cancelAnimationFrame(animationFrameId);
-  }, [perSecond]);
+  }, [perSecond, TPS]);
 
   // Init game data
   useEffect(() => {
@@ -315,14 +315,13 @@ export const GameDataProvider = ({ children }: { children: ReactNode }) => {
       value={{
         money,
         upgrades,
-        increment,
         perSecond,
+        perClick,
+        increment,
         buyUpgrade,
         countUpgrade,
         currentCost,
-        perClick,
         saveGame,
-
         resetGameData,
         exportGameData,
         importGameData,

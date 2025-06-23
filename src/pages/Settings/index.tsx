@@ -3,6 +3,7 @@ import PageWrapper from "../../components/PageWrapper";
 import AudioSettings from "./AudioSettings";
 
 import ExportImportGameData from "./ExportImportGameData";
+import TPSSettings from "./Performance";
 import ResetGameData from "./ResetGameData";
 
 const Settings = () => {
@@ -12,6 +13,7 @@ const Settings = () => {
       <Divider my="xl" />
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xl">
         <AudioSettings />
+        <TPSSettings />
         <ExportImportGameData />
         <ResetGameData />
       </SimpleGrid>

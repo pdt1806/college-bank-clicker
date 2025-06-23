@@ -78,6 +78,8 @@ interface SettingsDataContextType {
   setSfxMutedIOS: React.Dispatch<React.SetStateAction<boolean>>;
   saveSettings: () => void;
   playSound: (audio: HTMLAudioElement) => void;
+  TPS: number;
+  setTPS: React.Dispatch<React.SetStateAction<number>>;
 }
 
 interface StatsDataContextType {
