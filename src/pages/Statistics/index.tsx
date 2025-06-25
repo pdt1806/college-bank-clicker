@@ -58,7 +58,7 @@ const Statistics = () => {
     },
     {
       name: "Total time in game",
-      value: StatsTimeInGame(),
+      value: <StatsTimeInGame />,
     },
   ];
 

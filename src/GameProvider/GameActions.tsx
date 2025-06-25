@@ -81,7 +81,7 @@ export const resetAllGame = () => {
   resetStats();
 };
 
-export const saveAllGame = () => {
+const saveAllGame = () => {
   const { saveGame } = GameDataStore.getState();
   const { saveStats } = StatsDataStore.getState();
   const { saveAchievements } = AchievementsDataStore.getState();

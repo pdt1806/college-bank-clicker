@@ -55,12 +55,12 @@ const Layout = () => {
             className={classes.sidebar + " " + classes.navBar}
             pt={TOP_OFFSET}
           >
-            <Navbar navbarOpened toggleNavbar={toggleNavbar} />
+            <Navbar navbarOpened={navbarOpened} toggleNavbar={toggleNavbar} />
           </ScrollArea.Autosize>
         </AppShell.Navbar>
 
         <AppShell.Main className={classes.main}>
-          <Outlet />
+          <Outlet context={{ asideOpened, navbarOpened }} />
         </AppShell.Main>
 
         <AppShell.Aside withBorder={false} className={classes.sidebarWrapper}>
@@ -70,7 +70,7 @@ const Layout = () => {
             className={classes.sidebar + " " + classes.upgradeBar}
             pt={TOP_OFFSET}
           >
-            <UpgradeBar />
+            <UpgradeBar asideOpened={asideOpened} />
           </ScrollArea.Autosize>
         </AppShell.Aside>
 

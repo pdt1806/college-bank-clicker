@@ -1,9 +1,23 @@
 import { NumberFormatter, Text } from "@mantine/core";
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { GameDataStore } from "../../../GameProvider/Stores/GameDataStore";
 
-const UpgradeBarBalance = () => {
-  const money = GameDataStore((state) => state.money);
+const UpgradeBarBalance = ({ asideOpened }: { asideOpened: boolean }) => {
+  const [money, setMoney] = useState(() => GameDataStore.getState().money);
+
+  useEffect(() => {
+    console.log(asideOpened);
+    if (!asideOpened) return;
+
+    const unsub = GameDataStore.subscribe((state) => {
+      setMoney(Math.trunc(state.money));
+    });
+
+    return () => unsub();
+  }, [asideOpened]);
+
+  if (!asideOpened) return null;
+
   return (
     <Text
       p="xs"

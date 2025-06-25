@@ -6,7 +6,7 @@ import Upgrade from "../Upgrade";
 import UpgradeBarBalance from "./Balance";
 import { UpgradeBarTabControl } from "./TabControl";
 
-const UpgradeBar = () => {
+const UpgradeBar = ({ asideOpened }: { asideOpened: boolean }) => {
   const [value, setValue] = useState<string[]>([
     "Manual Upgrades",
     "Automatic Upgrades",
@@ -29,7 +29,7 @@ const UpgradeBar = () => {
 
   return (
     <>
-      <UpgradeBarBalance />
+      <UpgradeBarBalance asideOpened={asideOpened} />
       <Accordion
         variant="filled"
         styles={{

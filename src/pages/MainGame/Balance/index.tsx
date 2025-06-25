@@ -1,13 +1,13 @@
-import { Box, NumberFormatter, Text, Title } from "@mantine/core";
+import { Box, Text, Title } from "@mantine/core";
 import { memo } from "react";
 import { useShallow } from "zustand/shallow";
 import { GameDataStore } from "../../../GameProvider/Stores/GameDataStore";
 import classes from "./index.module.css";
+import { MainGameBalanceNumber } from "./Number";
 
 const MainGameBalance = () => {
-  const { money, perSecond, perClick } = GameDataStore(
-    useShallow(({ money, perSecond, perClick }) => ({
-      money,
+  const { perSecond, perClick } = GameDataStore(
+    useShallow(({ perSecond, perClick }) => ({
       perSecond,
       perClick,
     }))
@@ -19,15 +19,7 @@ const MainGameBalance = () => {
         money earned from students
       </Title>
       <Title order={1} size="2.5rem" className={classes.balance}>
-        <NumberFormatter
-          prefix="$ "
-          value={Math.trunc(money)}
-          thousandSeparator
-          decimalScale={0}
-          style={{
-            fontFamily: "Oxanium, sans-serif",
-          }}
-        />
+        <MainGameBalanceNumber />
       </Title>
       <Text size="md">per second: {perSecond.toFixed(1)}</Text>
       <Text size="md">per click: {perClick}</Text>

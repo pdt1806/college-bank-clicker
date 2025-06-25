@@ -100,3 +100,8 @@ interface AchievementsDataState {
   saveAchievements: () => void;
   resetAchievements: () => void;
 }
+
+interface OutletContext {
+  asideOpened: boolean;
+  navbarOpened: boolean;
+}
