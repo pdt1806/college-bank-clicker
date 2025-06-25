@@ -6,8 +6,11 @@ import Upgrade from "../Upgrade";
 import UpgradeBarBalance from "./Balance";
 import { UpgradeBarTabControl } from "./TabControl";
 
-const UpgradeBar = () => {
-  const [value, setValue] = useState<string[]>(["Manual Upgrades", "Automatic Upgrades"]);
+const UpgradeBar = ({ asideOpened }: { asideOpened: boolean }) => {
+  const [value, setValue] = useState<string[]>([
+    "Manual Upgrades",
+    "Automatic Upgrades",
+  ]);
 
   const tabs: UpgradeBarTab[] = [
     {
@@ -24,11 +27,9 @@ const UpgradeBar = () => {
     },
   ];
 
-  // Never call useGameData() here, it will cause a render loop.
-
   return (
     <>
-      <UpgradeBarBalance />
+      <UpgradeBarBalance asideOpened={asideOpened} />
       <Accordion
         variant="filled"
         styles={{
@@ -41,7 +42,12 @@ const UpgradeBar = () => {
       >
         <Box>
           {tabs.map((tab) => (
-            <Accordion.Item key={tab.name} value={tab.name} bg="transparent" style={{ border: "none" }}>
+            <Accordion.Item
+              key={tab.name}
+              value={tab.name}
+              bg="transparent"
+              style={{ border: "none" }}
+            >
               <UpgradeBarTabControl tab={tab} />
               <Accordion.Panel>
                 <Stack gap="md">

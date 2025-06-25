@@ -1,10 +1,8 @@
 import { Accordion, Group, HoverCard, Text, Title } from "@mantine/core";
-import { useSettingsData } from "../../../GameProvider/Contexts/SettingsDataContext";
+import { playSound } from "../../../GameProvider/GameActions";
 import { audio } from "../../../utils/audio";
 
 export const UpgradeBarTabControl = ({ tab }: { tab: UpgradeBarTab }) => {
-  const { playSound } = useSettingsData();
-
   return (
     <Accordion.Control onClick={() => playSound(audio.dropdown)}>
       <Group gap="xs">

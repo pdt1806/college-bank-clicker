@@ -2,7 +2,9 @@ import { ActionIcon, Slider, Stack, Table, Title } from "@mantine/core";
 import { useOs } from "@mantine/hooks";
 import { IconVolume, IconVolumeOff } from "@tabler/icons-react";
 import { useEffect } from "react";
-import { useSettingsData } from "../../../GameProvider/Contexts/SettingsDataContext";
+import { useShallow } from "zustand/shallow";
+import { playSound } from "../../../GameProvider/GameActions";
+import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
 import { audio } from "../../../utils/audio";
 import classes from "./index.module.css";
 
@@ -16,8 +18,29 @@ const AudioSettings = () => {
     setMusicMutedIOS,
     sfxMutedIOS,
     setSfxMutedIOS,
-    playSound,
-  } = useSettingsData();
+  } = SettingsDataStore(
+    useShallow(
+      ({
+        musicVolume,
+        sfxVolume,
+        setMusicVolume,
+        setSfxVolume,
+        musicMutedIOS,
+        setMusicMutedIOS,
+        sfxMutedIOS,
+        setSfxMutedIOS,
+      }) => ({
+        musicVolume,
+        sfxVolume,
+        setMusicVolume,
+        setSfxVolume,
+        musicMutedIOS,
+        setMusicMutedIOS,
+        sfxMutedIOS,
+        setSfxMutedIOS,
+      })
+    )
+  );
 
   const os = useOs();
 

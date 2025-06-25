@@ -52,50 +52,56 @@ interface UpgradeBarTab {
   list: Upgrade[];
 }
 
-interface GameDataContextType {
+interface GameDataState {
   money: number;
-  upgrades: UpgradeListType;
   perSecond: number;
   perClick: number;
-  increment: (amount?: number) => void;
-  buyUpgrade: (upgrade: AutomaticUpgrade) => void;
-  countUpgrade: (upgrade: AutomaticUpgrade) => number;
-  currentCost: (upgrade: AutomaticUpgrade) => number;
+  upgrades: UpgradeListType;
+  setMoney: (money: number) => void;
+  setPerSecond: (perSecond: number) => void;
+  setPerClick: (perClick: number) => void;
+  setUpgrades: (upgrades: UpgradeListType) => void;
   saveGame: () => void;
-  resetGameData: () => void;
-  exportGameData: () => void;
-  importGameData: (data: File) => void;
+  resetGame: () => void;
 }
 
-interface SettingsDataContextType {
+interface SettingsDataState {
   musicVolume: number;
-  musicMutedIOS: boolean;
   sfxVolume: number;
+  musicMutedIOS: boolean;
   sfxMutedIOS: boolean;
-  setMusicVolume: React.Dispatch<React.SetStateAction<number>>;
-  setMusicMutedIOS: React.Dispatch<React.SetStateAction<boolean>>;
-  setSfxVolume: React.Dispatch<React.SetStateAction<number>>;
-  setSfxMutedIOS: React.Dispatch<React.SetStateAction<boolean>>;
-  saveSettings: () => void;
-  playSound: (audio: HTMLAudioElement) => void;
   TPS: number;
-  setTPS: React.Dispatch<React.SetStateAction<number>>;
+  setMusicVolume: (musicVolume: number) => void;
+  setSfxVolume: (sfxVolume: number) => void;
+  setMusicMutedIOS: (musicMutedIOS: boolean) => void;
+  setSfxMutedIOS: (sfxMutedIOS: boolean) => void;
+  setTPS: (TPS: number) => void;
+  saveSettings: () => void;
 }
 
-interface StatsDataContextType {
-  totalMoney: number;
+interface StatsDataState {
   totalClicks: number;
+  totalMoney: number;
   timeInGame: number;
   maxMoney: number;
-  setTotalClicks: React.Dispatch<React.SetStateAction<number>>;
+
+  setTotalClicks: (totalClicks: number) => void;
+  setTotalMoney: (totalMoney: number) => void;
+  setTimeInGame: (timeInGame: number) => void;
+  setMaxMoney: (maxMoney: number) => void;
+
   saveStats: () => void;
-  setTotalMoney: React.Dispatch<React.SetStateAction<number>>;
-  setTimeInGame: React.Dispatch<React.SetStateAction<number>>;
-  setMaxMoney: React.Dispatch<React.SetStateAction<number>>;
+  resetStats: () => void;
 }
 
-interface AchievementsDataContextType {
+interface AchievementsDataState {
   achievements: AchievementListType;
+  setAchievements: (achievements: AchievementListType) => void;
   saveAchievements: () => void;
-  setAchievements: React.Dispatch<React.SetStateAction<AchievementListType>>;
+  resetAchievements: () => void;
+}
+
+interface OutletContext {
+  asideOpened: boolean;
+  navbarOpened: boolean;
 }

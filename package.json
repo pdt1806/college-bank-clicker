@@ -1,6 +1,6 @@
 {
   "name": "college-bank-clicker",
-  "version": "0.6.6",
+  "version": "0.6.8",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -15,7 +15,8 @@
     "pretty-ms": "^9.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^7.6.0"
+    "react-router-dom": "^7.6.0",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@types/react": "^19.1.3",

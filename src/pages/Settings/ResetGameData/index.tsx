@@ -2,20 +2,25 @@ import { Button, Group, Modal, Stack, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconRefresh } from "@tabler/icons-react";
-import { useGameData } from "../../../GameProvider/Contexts/GameDataContext";
-import { useSettingsData } from "../../../GameProvider/Contexts/SettingsDataContext";
+import { playSound, resetAllGame } from "../../../GameProvider/GameActions";
 import { audio } from "../../../utils/audio";
 
 const ResetGameData = () => {
-  const { resetGameData } = useGameData();
-  const { playSound } = useSettingsData();
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <>
-      <Modal opened={opened} onClose={close} centered withCloseButton={false} radius="lg" c="cbc-purple.9">
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        withCloseButton={false}
+        radius="lg"
+        c="cbc-purple.9"
+      >
         <Text>
-          Are you sure you want to reset your game? This will permanently erase all progress and cannot be undone.
+          Are you sure you want to reset your game? This will permanently erase
+          all progress and cannot be undone.
         </Text>
         <Group mt="md" ml="auto" w="fit-content">
           <Button onClick={close} variant="transparent" c="cbc-purple.9">
@@ -25,11 +30,13 @@ const ResetGameData = () => {
             radius="md"
             color="red"
             onClick={() => {
-              resetGameData();
+              resetAllGame();
               playSound(audio.achievement);
               notifications.show({
                 radius: "lg",
-                styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
+                styles: {
+                  title: { color: "var(--mantine-color-cbc-purple-9)" },
+                },
                 title: "Game data reset!",
                 message: "Now you can relive the whole progress.",
                 color: "cbc-green",
@@ -48,7 +55,8 @@ const ResetGameData = () => {
           Reset game data
         </Title>
         <Text c="dimmed">
-          Reset your game data to start over. This will erase all progress, including achievements, upgrades, and money.
+          Reset your game data to start over. This will erase all progress,
+          including achievements, upgrades, and money.
         </Text>
         <Button
           size="lg"

@@ -1,26 +1,44 @@
-import { Box, Divider, NumberFormatter, Table, Text, Title } from "@mantine/core";
-import prettyMilliseconds from "pretty-ms";
+import { Box, Divider, Table, Text, Title } from "@mantine/core";
 import { memo } from "react";
 import PageWrapper from "../../components/PageWrapper";
-import { useAchievementsData } from "../../GameProvider/Contexts/AchievementsDataContext";
-import { useGameData } from "../../GameProvider/Contexts/GameDataContext";
-import { useStatsData } from "../../GameProvider/Contexts/StatsDataContext";
+import { AchievementsDataStore } from "../../GameProvider/Stores/AchievementsDataStore";
+import { GameDataStore } from "../../GameProvider/Stores/GameDataStore";
+import { StatsDataStore } from "../../GameProvider/Stores/StatsDataStore";
 import { allAchievements } from "../../utils/achievements";
 import { allUpgrades } from "../../utils/upgrades";
+import { StatsMaxMoney } from "./Values/MaxMoney";
+import { StatsTimeInGame } from "./Values/TimeInGame";
+import { StatsTotalMoney } from "./Values/TotalMoney";
 
 const Statistics = () => {
-  const { upgrades } = useGameData();
-  const { totalClicks, totalMoney, timeInGame, maxMoney } = useStatsData();
-  const { achievements } = useAchievementsData();
+  // const { totalMoney, maxMoney, timeInGame, totalClicks } = StatsDataStore(
+  //   useShallow(({ totalMoney, maxMoney, timeInGame, totalClicks }) => ({
+  //     totalMoney,
+  //     maxMoney,
+  //     timeInGame,
+  //     totalClicks,
+  //   }))
+  // );
+
+  const totalUpgradesPurchased = GameDataStore((state) =>
+    Object.values(state.upgrades).reduce((total, value) => total + value, 0)
+  );
+  const numberOfUpgradeTypes = GameDataStore(
+    (state) => Object.keys(state.upgrades).length
+  );
+  const achievementsCount = AchievementsDataStore(
+    (state) => Object.keys(state.achievements).length
+  );
+  const totalClicks = StatsDataStore.getState().totalClicks;
 
   const table = [
     {
       name: "Total money earned",
-      value: <NumberFormatter prefix="$" value={Math.trunc(totalMoney)} thousandSeparator decimalScale={0} />,
+      value: <StatsTotalMoney />,
     },
     {
       name: "Maximum money earned at some point",
-      value: <NumberFormatter prefix="$" value={Math.trunc(maxMoney)} thousandSeparator decimalScale={0} />,
+      value: <StatsMaxMoney />,
     },
     {
       name: "Total manual clicks",
@@ -28,21 +46,19 @@ const Statistics = () => {
     },
     {
       name: "Total upgrades purchased",
-      value: upgrades ? Object.values(upgrades).reduce((total, value) => total + value, 0) : 0,
+      value: totalUpgradesPurchased,
     },
     {
       name: "Number of different upgrades",
-      value: `${upgrades ? Object.keys(upgrades).length : 0} / ${allUpgrades.length}`,
+      value: `${numberOfUpgradeTypes} / ${allUpgrades.length}`,
     },
     {
       name: "Achievements earned",
-      value: `${Object.keys(achievements).length} / ${allAchievements.length}`,
+      value: `${achievementsCount} / ${allAchievements.length}`,
     },
     {
       name: "Total time in game",
-      value: prettyMilliseconds(timeInGame * 1000, {
-        secondsDecimalDigits: 0,
-      }),
+      value: <StatsTimeInGame />,
     },
   ];
 
@@ -56,14 +72,21 @@ const Statistics = () => {
           overflow: "hidden",
         }}
       >
-        <Table layout="fixed" verticalSpacing="lg" horizontalSpacing="lg" c="cbc-purple.9">
+        <Table
+          layout="fixed"
+          verticalSpacing="lg"
+          horizontalSpacing="lg"
+          c="cbc-purple.9"
+        >
           <Table.Tbody>
             {table.map((row, index) => (
               <Table.Tr
                 key={index}
                 style={{
                   backgroundColor:
-                    index % 2 === 0 ? "var(--mantine-color-cbc-bluegray-1)" : "var(--mantine-color-cbc-bluegray-2)",
+                    index % 2 === 0
+                      ? "var(--mantine-color-cbc-bluegray-1)"
+                      : "var(--mantine-color-cbc-bluegray-2)",
                 }}
               >
                 <Table.Th>
