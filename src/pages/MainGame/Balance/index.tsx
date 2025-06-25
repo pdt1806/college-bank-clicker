@@ -1,10 +1,17 @@
 import { Box, NumberFormatter, Text, Title } from "@mantine/core";
 import { memo } from "react";
-import { useGameData } from "../../../GameProvider/Contexts/GameDataContext";
+import { useShallow } from "zustand/shallow";
+import { GameDataStore } from "../../../GameProvider/Stores/GameDataStore";
 import classes from "./index.module.css";
 
 const MainGameBalance = () => {
-  const { money, perSecond, perClick } = useGameData();
+  const { money, perSecond, perClick } = GameDataStore(
+    useShallow(({ money, perSecond, perClick }) => ({
+      money,
+      perSecond,
+      perClick,
+    }))
+  );
 
   return (
     <Box ta="center" p="lg" className={classes.counter} c="white">

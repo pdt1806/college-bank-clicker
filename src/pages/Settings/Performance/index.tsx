@@ -1,9 +1,16 @@
 import { NumberInput, Stack, Table, Title } from "@mantine/core";
-import { useSettingsData } from "../../../GameProvider/Contexts/SettingsDataContext";
+import { useShallow } from "zustand/shallow";
+import { playSound } from "../../../GameProvider/GameActions";
+import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
 import { audio } from "../../../utils/audio";
 
 const SettingsPerformance = () => {
-  const { TPS, setTPS, playSound } = useSettingsData();
+  const { TPS, setTPS } = SettingsDataStore(
+    useShallow(({ TPS, setTPS }) => ({
+      TPS,
+      setTPS,
+    }))
+  );
 
   return (
     <Stack w="100%">

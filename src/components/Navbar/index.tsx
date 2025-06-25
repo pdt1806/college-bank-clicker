@@ -1,7 +1,13 @@
 import { Button, Image, Stack, Text, Title } from "@mantine/core";
-import { IconChartBar, IconClick, IconInfoCircle, IconSettings, IconStar } from "@tabler/icons-react";
+import {
+  IconChartBar,
+  IconClick,
+  IconInfoCircle,
+  IconSettings,
+  IconStar,
+} from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSettingsData } from "../../GameProvider/Contexts/SettingsDataContext";
+import { playSound } from "../../GameProvider/GameActions";
 import { audio } from "../../utils/audio";
 
 const links = [
@@ -12,15 +18,26 @@ const links = [
   { label: "About", icon: IconInfoCircle, to: "/about" },
 ];
 
-const Navbar = ({ navbarOpened, toggleNavbar }: { navbarOpened: boolean; toggleNavbar: () => void }) => {
+const Navbar = ({
+  navbarOpened,
+  toggleNavbar,
+}: {
+  navbarOpened: boolean;
+  toggleNavbar: () => void;
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { playSound } = useSettingsData();
-
   return (
     <Stack gap={0} justify="space-between" px="xs">
-      <Image src="/assets/cbc-logo.svg" alt="Logo" w="100%" maw={400} mx="auto" py="md" />
+      <Image
+        src="/assets/cbc-logo.svg"
+        alt="Logo"
+        w="100%"
+        maw={400}
+        mx="auto"
+        py="md"
+      />
       {links.map((link) => (
         <Button
           key={link.label}
@@ -30,7 +47,9 @@ const Navbar = ({ navbarOpened, toggleNavbar }: { navbarOpened: boolean; toggleN
             playSound(audio.pop3);
           }}
           variant={location.pathname === link.to ? "filled" : "subtle"}
-          color={location.pathname === link.to ? "cbc-bluegray.6" : "cbc-bluegray.0"}
+          color={
+            location.pathname === link.to ? "cbc-bluegray.6" : "cbc-bluegray.0"
+          }
           c="white"
           leftSection={<link.icon size={24} />}
           fullWidth

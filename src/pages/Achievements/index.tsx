@@ -1,10 +1,22 @@
-import { Box, Container, ScrollArea, SimpleGrid, Tabs, Text, Title } from "@mantine/core";
+import {
+  Box,
+  Container,
+  ScrollArea,
+  SimpleGrid,
+  Tabs,
+  Text,
+  Title,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconArrowUp, IconMoneybag, IconMouse } from "@tabler/icons-react";
 import AchievementBox from "../../components/AchievementBox";
-import { useAchievementsData } from "../../GameProvider/Contexts/AchievementsDataContext";
-import { useSettingsData } from "../../GameProvider/Contexts/SettingsDataContext";
-import { clickAchievementList, moneyAchievementList, upgradeAchievementList } from "../../utils/achievements";
+import { playSound } from "../../GameProvider/GameActions";
+import { AchievementsDataStore } from "../../GameProvider/Stores/AchievementsDataStore";
+import {
+  clickAchievementList,
+  moneyAchievementList,
+  upgradeAchievementList,
+} from "../../utils/achievements";
 import { audio } from "../../utils/audio";
 import { UNIFORMED_HEIGHT } from "../../utils/const";
 import classes from "./index.module.css";
@@ -30,8 +42,7 @@ const tabs = [
 const Achievements = () => {
   const isMobile = useMediaQuery("(max-width: 75em)");
 
-  const { playSound } = useSettingsData();
-  const { achievements } = useAchievementsData();
+  const achievements = AchievementsDataStore((state) => state.achievements);
 
   const generateContent = (tab: AchievementsTab) => {
     const sortedAchievementsWithDate = tab.list
@@ -43,7 +54,8 @@ const Achievements = () => {
         };
       })
       .sort((a, b) => {
-        if (a.date && b.date) return new Date(a.date).getTime() - new Date(b.date).getTime();
+        if (a.date && b.date)
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
         else if (a.date && !b.date) return -1;
         else if (!a.date && b.date) return 1;
         else return 0;
@@ -54,7 +66,12 @@ const Achievements = () => {
   };
 
   return (
-    <Container size="xl" py="xs" c="white" h={isMobile ? UNIFORMED_HEIGHT : "100vh"}>
+    <Container
+      size="xl"
+      py="xs"
+      c="white"
+      h={isMobile ? UNIFORMED_HEIGHT : "100vh"}
+    >
       <Title py="lg">Achievements</Title>
       <Tabs
         variant="default"
@@ -86,10 +103,17 @@ const Achievements = () => {
             <ScrollArea.Autosize scrollbarSize={8} h="100%">
               <Box pt="sm" pb="xl">
                 <Text mb="md">
-                  {tab.list.filter((achievement) => Object.keys(achievements).includes(achievement.id)).length} /{" "}
-                  {tab.list.length} achievements of this category earned
+                  {
+                    tab.list.filter((achievement) =>
+                      Object.keys(achievements).includes(achievement.id)
+                    ).length
+                  }{" "}
+                  / {tab.list.length} achievements of this category earned
                 </Text>
-                <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4, xl: 6 }} spacing={"md"}>
+                <SimpleGrid
+                  cols={{ base: 1, sm: 2, md: 3, lg: 4, xl: 6 }}
+                  spacing={"md"}
+                >
                   {generateContent(tab)}
                 </SimpleGrid>
               </Box>

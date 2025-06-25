@@ -1,9 +1,9 @@
 import { NumberFormatter, Text } from "@mantine/core";
 import { memo } from "react";
-import { useGameData } from "../../../GameProvider/Contexts/GameDataContext";
+import { GameDataStore } from "../../../GameProvider/Stores/GameDataStore";
 
 const UpgradeBarBalance = () => {
-  const { money } = useGameData();
+  const money = GameDataStore((state) => state.money);
   return (
     <Text
       p="xs"
@@ -15,7 +15,12 @@ const UpgradeBarBalance = () => {
     >
       Balance:{" "}
       <span>
-        <NumberFormatter prefix="$" value={Math.trunc(money)} thousandSeparator decimalScale={0} />
+        <NumberFormatter
+          prefix="$"
+          value={Math.trunc(money)}
+          thousandSeparator
+          decimalScale={0}
+        />
       </span>
     </Text>
   );

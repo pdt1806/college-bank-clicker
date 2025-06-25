@@ -1,13 +1,21 @@
-import { Box, Flex, Image, NumberFormatter, Stack, Table, Text } from "@mantine/core";
+import {
+  Box,
+  Flex,
+  Image,
+  NumberFormatter,
+  Stack,
+  Table,
+  Text,
+} from "@mantine/core";
 import { memo } from "react";
-import { useGameData } from "../../../GameProvider/Contexts/GameDataContext";
-import { useStatsData } from "../../../GameProvider/Contexts/StatsDataContext";
+import { countUpgrade, currentCost } from "../../../GameProvider/GameActions";
+import { GameDataStore } from "../../../GameProvider/Stores/GameDataStore";
+import { StatsDataStore } from "../../../GameProvider/Stores/StatsDataStore";
 
 const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
-  const { countUpgrade, currentCost } = useGameData();
-  const { maxMoney } = useStatsData();
+  const isReached = StatsDataStore((state) => state.maxMoney >= upgrade.cost);
 
-  const isReached = maxMoney >= upgrade.cost;
+  GameDataStore((state) => state.upgrades); // re-render on upgrades change
 
   return (
     <Box>
@@ -41,7 +49,9 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
           </Box>
         </Flex>
         <Text size="sm" c="cbc-purple.9">
-          {isReached ? upgrade.description : "Reach this upgrade to see what it really is (including its stats)!"}
+          {isReached
+            ? upgrade.description
+            : "Reach this upgrade to see what it really is (including its stats)!"}
         </Text>
         {isReached && (
           <Table c="cbc-purple.9">
@@ -56,7 +66,11 @@ const UpgradeInfo = ({ upgrade }: { upgrade: Upgrade }) => {
             <Table.Tbody>
               <Table.Tr key={upgrade.id}>
                 <Table.Td>
-                  <NumberFormatter prefix="$" value={currentCost(upgrade)} thousandSeparator />
+                  <NumberFormatter
+                    prefix="$"
+                    value={currentCost(upgrade)}
+                    thousandSeparator
+                  />
                 </Table.Td>
                 <Table.Td>+{upgrade.perSecond ?? upgrade.perClick}</Table.Td>
                 <Table.Td>{upgrade.costMultiplier}</Table.Td>

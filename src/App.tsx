@@ -2,10 +2,13 @@ import { createTheme, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
-import { createMemoryRouter, RouteObject, RouterProvider } from "react-router-dom";
+import {
+  createMemoryRouter,
+  RouteObject,
+  RouterProvider,
+} from "react-router-dom";
 import "./App.css";
 import Layout from "./components/Layout";
-import { GameProvider } from "./GameProvider/GameProvider";
 import About from "./pages/About";
 import Achievements from "./pages/Achievements";
 import MainGame from "./pages/MainGame";
@@ -55,11 +58,9 @@ const router = createMemoryRouter(routes, {
 
 export default function App() {
   return (
-    <GameProvider>
-      <MantineProvider theme={theme}>
-        <Notifications />
-        <RouterProvider router={router} />
-      </MantineProvider>
-    </GameProvider>
+    <MantineProvider theme={theme}>
+      <Notifications />
+      <RouterProvider router={router} />
+    </MantineProvider>
   );
 }
