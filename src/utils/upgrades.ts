@@ -96,7 +96,7 @@ export const manualUpgradeList: ManualUpgrade[] = [
     name: "Automatic Grading for AP Exams",
     cost: 2000,
     costMultiplier: 1.3,
-    perClick: 20,
+    perClick: 12,
     description:
       "All AP exams are now automatically graded. No more waiting until July for scores. (not really, we just added this for fun)",
   },

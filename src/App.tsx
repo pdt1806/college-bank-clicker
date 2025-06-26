@@ -2,12 +2,7 @@ import { createTheme, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
-import {
-  createMemoryRouter,
-  RouteObject,
-  RouterProvider,
-} from "react-router-dom";
-import "./App.css";
+import { createMemoryRouter, RouteObject, RouterProvider } from "react-router-dom";
 import Layout from "./components/Layout";
 import About from "./pages/About";
 import Achievements from "./pages/Achievements";

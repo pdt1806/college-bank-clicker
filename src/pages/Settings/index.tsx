@@ -2,6 +2,7 @@ import { Divider, SimpleGrid, Title } from "@mantine/core";
 import PageWrapper from "../../components/PageWrapper";
 import AudioSettings from "./AudioSettings";
 
+import { CustomCursorsSettings } from "./CustomCursors";
 import ExportImportGameData from "./ExportImportGameData";
 import TPSSettings from "./Performance";
 import ResetGameData from "./ResetGameData";
@@ -13,6 +14,7 @@ const Settings = () => {
       <Divider my="xl" />
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xl">
         <AudioSettings />
+        <CustomCursorsSettings />
         <TPSSettings />
         <ExportImportGameData />
         <ResetGameData />

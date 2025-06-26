@@ -6,7 +6,6 @@ import { useShallow } from "zustand/shallow";
 import { playSound } from "../../../GameProvider/GameActions";
 import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
 import { audio } from "../../../utils/audio";
-import classes from "./index.module.css";
 
 const AudioSettings = () => {
   const {
@@ -90,8 +89,8 @@ const AudioSettings = () => {
                     size="xl"
                     onChangeEnd={item.onChangeEnd}
                     classNames={{
-                      trackContainer: classes.cursorPointer,
-                      thumb: classes.cursorPointer,
+                      trackContainer: "cursor-pointer",
+                      thumb: "cursor-pointer",
                     }}
                   />
                 ) : (

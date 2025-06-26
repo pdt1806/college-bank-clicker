@@ -1,9 +1,6 @@
 import { notifications } from "@mantine/notifications";
-import {
-  IconExclamationCircleFilled,
-  IconStar,
-  IconUpload,
-} from "@tabler/icons-react";
+import { IconExclamationCircleFilled, IconStar, IconUpload } from "@tabler/icons-react";
+import { readAndCompressImage } from "browser-image-resizer";
 import { allAchievements } from "../utils/achievements";
 import { audio } from "../utils/audio";
 import { AchievementsDataStore } from "./Stores/AchievementsDataStore";
@@ -16,8 +13,7 @@ export const increment = () => {
   setMoney(money + perClick);
   saveGame();
 
-  const { totalClicks, totalMoney, setTotalMoney, setTotalClicks } =
-    StatsDataStore.getState();
+  const { totalClicks, totalMoney, setTotalMoney, setTotalClicks } = StatsDataStore.getState();
   setTotalMoney(totalMoney + perClick);
   setTotalClicks(totalClicks + 1);
 
@@ -25,17 +21,8 @@ export const increment = () => {
 };
 
 export const buyUpgrade = (upgrade: Upgrade) => {
-  const {
-    money,
-    perSecond,
-    perClick,
-    setMoney,
-    setPerSecond,
-    setPerClick,
-    upgrades,
-    setUpgrades,
-    saveGame,
-  } = GameDataStore.getState();
+  const { money, perSecond, perClick, setMoney, setPerSecond, setPerClick, upgrades, setUpgrades, saveGame } =
+    GameDataStore.getState();
 
   const { saveStats } = StatsDataStore.getState();
 
@@ -67,9 +54,7 @@ export const countUpgrade = (upgrade: Upgrade) => {
 
 export const currentCost = (upgrade: Upgrade) => {
   if (upgrade.costMultiplier === undefined) return upgrade.cost;
-  return Math.floor(
-    upgrade.cost * Math.pow(upgrade.costMultiplier ?? 1, countUpgrade(upgrade))
-  );
+  return Math.floor(upgrade.cost * Math.pow(upgrade.costMultiplier ?? 1, countUpgrade(upgrade)));
 };
 
 export const resetAllGame = () => {
@@ -103,8 +88,7 @@ export const exportAllGame = () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download =
-    "college-bank-clicker-export-" + new Date().toISOString() + ".json";
+  a.download = "college-bank-clicker-export-" + new Date().toISOString() + ".json";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -132,19 +116,11 @@ const checkGameDataAuthenticity = (data: any) => {
 export const importAllGame = (file: File | null) => {
   if (!file) return;
 
-  const { setMoney, setPerSecond, setPerClick, setUpgrades, saveGame } =
-    GameDataStore.getState();
+  const { setMoney, setPerSecond, setPerClick, setUpgrades, saveGame } = GameDataStore.getState();
 
-  const {
-    setTotalClicks,
-    setTotalMoney,
-    setTimeInGame,
-    setMaxMoney,
-    saveStats,
-  } = StatsDataStore.getState();
+  const { setTotalClicks, setTotalMoney, setTimeInGame, setMaxMoney, saveStats } = StatsDataStore.getState();
 
-  const { setAchievements, saveAchievements } =
-    AchievementsDataStore.getState();
+  const { setAchievements, saveAchievements } = AchievementsDataStore.getState();
 
   const reader = new FileReader();
   reader.onload = (event) => {
@@ -154,17 +130,13 @@ export const importAllGame = (file: File | null) => {
       const invalid = checkGameDataAuthenticity(data);
       if (invalid) throw new Error(invalid);
 
-      const { money, perSecond, perClick, upgrades } = JSON.parse(
-        data.gameData
-      );
+      const { money, perSecond, perClick, upgrades } = JSON.parse(data.gameData);
       setMoney(money);
       setPerSecond(perSecond);
       setUpgrades(upgrades);
       setPerClick(perClick);
 
-      const { totalClicks, totalMoney, timeInGame, maxMoney } = JSON.parse(
-        data.statsData
-      );
+      const { totalClicks, totalMoney, timeInGame, maxMoney } = JSON.parse(data.statsData);
       setTotalClicks(totalClicks);
       setTotalMoney(totalMoney);
       setTimeInGame(timeInGame);
@@ -191,8 +163,7 @@ export const importAllGame = (file: File | null) => {
         radius: "lg",
         styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
         title: "Import Failed",
-        message:
-          error.message ?? "An error occurred while importing game data.",
+        message: error.message ?? "An error occurred while importing game data.",
         color: "red",
         autoClose: 5000,
         icon: <IconExclamationCircleFilled size={24} />,
@@ -203,13 +174,10 @@ export const importAllGame = (file: File | null) => {
 };
 
 export const addAchievement = (achievement: Achievement | string) => {
-  const { achievements, setAchievements, saveAchievements } =
-    AchievementsDataStore.getState();
+  const { achievements, setAchievements, saveAchievements } = AchievementsDataStore.getState();
 
   if (typeof achievement === "string") {
-    const foundAchievement = allAchievements.find(
-      (ach) => ach.id === achievement
-    );
+    const foundAchievement = allAchievements.find((ach) => ach.id === achievement);
     if (!foundAchievement) {
       console.warn(`Achievement with id "${achievement}" not found.`);
       return;
@@ -247,4 +215,101 @@ export const playSound = (audio: HTMLAudioElement) => {
   sound.play().catch((error) => {
     console.error("Error playing audio:", error);
   });
+};
+
+export const updateCursor = (type: string, file: File): Promise<string | undefined> => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("college-bank-clicker-indexed-db", 1);
+
+    request.onupgradeneeded = (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+      if (!db.objectStoreNames.contains("images")) {
+        db.createObjectStore("images");
+      }
+    };
+
+    request.onsuccess = async (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+
+      try {
+        const resizedBlob = await readAndCompressImage(file, {
+          quality: 1,
+          maxWidth: 32,
+          maxHeight: 32,
+          debug: false,
+          mimeType: "image/png",
+        });
+
+        const cursorURL = URL.createObjectURL(resizedBlob);
+
+        const transaction = db.transaction("images", "readwrite");
+        const store = transaction.objectStore("images");
+        store.put(resizedBlob, "cursor-" + type);
+
+        transaction.oncomplete = () => {
+          console.log("Cursor updated successfully for type: " + type);
+
+          if (type === "default") injectCursorsToDOM({ defaultURL: cursorURL });
+          else if (type === "pointer") injectCursorsToDOM({ pointerURL: cursorURL });
+          else console.warn("Unknown cursor type: " + type);
+
+          resolve(cursorURL); // return the result here
+        };
+
+        transaction.onerror = () => {
+          reject(transaction.error);
+        };
+      } catch (err) {
+        reject(err);
+      }
+    };
+
+    request.onerror = (event) => {
+      reject((event.target as IDBOpenDBRequest).error);
+    };
+  });
+};
+
+export const injectCursorsToDOM = ({
+  defaultURL,
+  pointerURL,
+}: {
+  defaultURL?: string;
+  pointerURL?: string;
+} = {}) => {
+  if (defaultURL) {
+    const defaultId = "cursor-default-style";
+    const existingStyle = document.getElementById(defaultId);
+    if (existingStyle) existingStyle.remove();
+    const style = document.createElement("style");
+    style.id = defaultId;
+    style.innerHTML = `
+      html,
+      body,
+      #root {
+        cursor: url("${defaultURL}"), auto;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+  if (pointerURL) {
+    const pointerId = "cursor-pointer-style";
+    const existingStyle = document.getElementById(pointerId);
+    if (existingStyle) existingStyle.remove();
+    const style = document.createElement("style");
+    style.id = pointerId;
+    style.innerHTML = `
+      button,
+      [role="button"],
+      a, .cursor-pointer {
+        cursor: url("${pointerURL}"), auto !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+};
+
+export const resetCursor = (type: string) => {
+  console.log("Resetting cursor for type: " + type);
+  // Logic to reset the cursor to default
 };
