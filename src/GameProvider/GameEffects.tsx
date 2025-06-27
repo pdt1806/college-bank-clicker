@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { clickAchievementList, moneyAchievementList, totalUpgradeAchievementList } from "../utils/achievements";
 import { audio } from "../utils/audio";
+import { GAME_CURSORS, INDEXED_DB_NAME } from "../utils/const";
 import { automaticUpgradeList, manualUpgradeList } from "../utils/upgrades";
 import { addAchievement, countUpgrade, injectCursorsToDOM } from "./GameActions";
 import { GameDataStore } from "./Stores/GameDataStore";
@@ -132,15 +133,65 @@ export const GameEffects = () => {
     return unsub;
   }, []);
 
-  // Set custom cursors on load
-  useEffect(
-    () =>
+  // Load custom cursors from iDB if there are, then inject them into the DOM
+  useEffect(() => {
+    const dbReq = indexedDB.open(INDEXED_DB_NAME, 1);
+
+    dbReq.onsuccess = (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+      const tx = db.transaction("images", "readonly");
+      const store = tx.objectStore("images");
+
+      const defaultCursorReq = store.get("cursor-default");
+      const pointerCursorReq = store.get("cursor-pointer");
+
+      defaultCursorReq.onsuccess = () => {
+        const defaultCursor = defaultCursorReq.result as Blob | undefined;
+        if (defaultCursor)
+          injectCursorsToDOM({
+            defaultURL: URL.createObjectURL(defaultCursor),
+          });
+        else
+          injectCursorsToDOM({
+            defaultURL: GAME_CURSORS.default,
+          });
+      };
+
+      defaultCursorReq.onerror = (event) => {
+        injectCursorsToDOM({
+          defaultURL: GAME_CURSORS.default,
+        });
+        console.error("Error fetching default cursor:", (event.target as IDBRequest).error);
+      };
+
+      pointerCursorReq.onsuccess = () => {
+        const pointerCursor = pointerCursorReq.result as Blob | undefined;
+        if (pointerCursor)
+          injectCursorsToDOM({
+            pointerURL: URL.createObjectURL(pointerCursor),
+          });
+        else
+          injectCursorsToDOM({
+            pointerURL: GAME_CURSORS.pointer,
+          });
+      };
+
+      pointerCursorReq.onerror = (event) => {
+        injectCursorsToDOM({
+          pointerURL: GAME_CURSORS.pointer,
+        });
+        console.error("Error fetching pointer cursor:", (event.target as IDBRequest).error);
+      };
+    };
+
+    dbReq.onerror = (event) => {
       injectCursorsToDOM({
-        defaultURL: "/assets/cursors/default.png",
-        pointerURL: "/assets/cursors/pointer.png",
-      }),
-    []
-  );
+        defaultURL: GAME_CURSORS.default,
+        pointerURL: GAME_CURSORS.pointer,
+      });
+      console.error("Error opening IndexedDB:", (event.target as IDBOpenDBRequest).error);
+    };
+  }, []);
 
   return null;
 };

@@ -1,21 +1,36 @@
-import { FileButton, Group, Image, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
+import { Button, FileButton, Group, Image, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
 import { useState } from "react";
-import { updateCursor } from "../../../GameProvider/GameActions";
+import { playSound, resetCursor, updateCursor } from "../../../GameProvider/GameActions";
+import { audio } from "../../../utils/audio";
+import { GAME_CURSORS } from "../../../utils/const";
+
+interface CursorItem {
+  label: string;
+  type: "default" | "pointer";
+  image: string;
+  setState: (value: string) => void;
+}
 
 export const CustomCursorsSettings = () => {
-  const [defaultCursor, setDefaultCursor] = useState<string>("/assets/cursors/default.png");
-  const [pointerCursor, setPointerCursor] = useState<string>("/assets/cursors/pointer.png");
+  const [defaultCursor, setDefaultCursor] = useState<string>(
+    sessionStorage.getItem("defaultCursorURL") || GAME_CURSORS.default
+  );
+  const [pointerCursor, setPointerCursor] = useState<string>(
+    sessionStorage.getItem("pointerCursorURL") || GAME_CURSORS.pointer
+  );
 
-  const data = [
+  const data: CursorItem[] = [
     {
       label: "Default",
       type: "default",
       image: defaultCursor,
+      setState: setDefaultCursor,
     },
     {
       label: "Pointer",
       type: "pointer",
       image: pointerCursor,
+      setState: setPointerCursor,
     },
   ];
 
@@ -40,18 +55,11 @@ export const CustomCursorsSettings = () => {
                     onChange={async (file) => {
                       if (!file) return;
 
-                      const blob = await updateCursor(item.type, file);
-                      console.log(blob);
-                      if (!blob) return;
+                      const url = await updateCursor(item.type, file);
+                      if (!url) return;
+                      item.setState(url);
 
-                      switch (item.type) {
-                        case "default":
-                          setDefaultCursor(blob);
-                          break;
-                        case "pointer":
-                          setPointerCursor(blob);
-                          break;
-                      }
+                      playSound(audio.pop);
                     }}
                     accept="image/png,image/jpeg"
                     multiple={false}
@@ -68,9 +76,17 @@ export const CustomCursorsSettings = () => {
                       </Tooltip>
                     )}
                   </FileButton>
-                  {/* <Button disabled radius="xl">
+                  <Button
+                    display={item.image === GAME_CURSORS[item.type] ? "none" : "block"}
+                    radius="xl"
+                    onClick={() => {
+                      resetCursor(item.type);
+                      item.setState(GAME_CURSORS[item.type]);
+                      playSound(audio.pop);
+                    }}
+                  >
                     Reset to default
-                  </Button> */}
+                  </Button>
                 </Group>
               </Table.Td>
             </Table.Tr>

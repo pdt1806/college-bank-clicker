@@ -3,6 +3,7 @@ import { IconExclamationCircleFilled, IconStar, IconUpload } from "@tabler/icons
 import { readAndCompressImage } from "browser-image-resizer";
 import { allAchievements } from "../utils/achievements";
 import { audio } from "../utils/audio";
+import { GAME_CURSORS, INDEXED_DB_NAME } from "../utils/const";
 import { AchievementsDataStore } from "./Stores/AchievementsDataStore";
 import { GameDataStore } from "./Stores/GameDataStore";
 import { SettingsDataStore } from "./Stores/SettingsDataStore";
@@ -219,7 +220,7 @@ export const playSound = (audio: HTMLAudioElement) => {
 
 export const updateCursor = (type: string, file: File): Promise<string | undefined> => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("college-bank-clicker-indexed-db", 1);
+    const request = indexedDB.open(INDEXED_DB_NAME, 1);
 
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
@@ -270,6 +271,40 @@ export const updateCursor = (type: string, file: File): Promise<string | undefin
   });
 };
 
+export const resetCursor = (type: string) => {
+  console.log("Resetting cursor for type: " + type);
+
+  const request = indexedDB.open(INDEXED_DB_NAME, 1);
+
+  request.onsuccess = (event) => {
+    const db = (event.target as IDBOpenDBRequest).result;
+    const transaction = db.transaction("images", "readwrite");
+    const store = transaction.objectStore("images");
+    store.delete("cursor-" + type);
+
+    transaction.oncomplete = () => {
+      switch (type) {
+        case "default":
+          injectCursorsToDOM({ defaultURL: GAME_CURSORS.default });
+          break;
+        case "pointer":
+          injectCursorsToDOM({ pointerURL: GAME_CURSORS.pointer });
+          break;
+        default:
+          console.warn("Unknown cursor type for reset: " + type);
+      }
+    };
+
+    transaction.onerror = () => {
+      console.error("Failed to reset cursor for type:", type, transaction.error);
+    };
+  };
+
+  request.onerror = (event) => {
+    console.error("IndexedDB error while resetting cursor:", (event.target as IDBOpenDBRequest).error);
+  };
+};
+
 export const injectCursorsToDOM = ({
   defaultURL,
   pointerURL,
@@ -291,6 +326,7 @@ export const injectCursorsToDOM = ({
       }
     `;
     document.head.appendChild(style);
+    sessionStorage.setItem("defaultCursorURL", defaultURL);
   }
   if (pointerURL) {
     const pointerId = "cursor-pointer-style";
@@ -306,10 +342,6 @@ export const injectCursorsToDOM = ({
       }
     `;
     document.head.appendChild(style);
+    sessionStorage.setItem("pointerCursorURL", pointerURL);
   }
-};
-
-export const resetCursor = (type: string) => {
-  console.log("Resetting cursor for type: " + type);
-  // Logic to reset the cursor to default
 };
