@@ -16,8 +16,6 @@
 
   position: absolute;
 
-  cursor: url("/assets/cursors/pointer.png"), pointer !important;
-
   border-radius: 50%;
   transition: transform 0.1s;
   will-change: transform;

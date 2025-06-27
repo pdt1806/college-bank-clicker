@@ -3,7 +3,7 @@ import { create } from "zustand";
 const settingsData = localStorage.getItem("settingsData");
 const parsedSettingsData = settingsData ? JSON.parse(settingsData) : {};
 
-export const SettingsDataStore = create<SettingsDataState>((set) => ({
+export const SettingsDataStore = create<SettingsDataState>()((set) => ({
   musicVolume: parsedSettingsData.musicVolume ?? 50,
   sfxVolume: parsedSettingsData.sfxVolume ?? 50,
   musicMutedIOS: parsedSettingsData.musicMutedIOS ?? false,

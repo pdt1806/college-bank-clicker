@@ -6,7 +6,6 @@ const UpgradeBarBalance = ({ asideOpened }: { asideOpened: boolean }) => {
   const [money, setMoney] = useState(() => GameDataStore.getState().money);
 
   useEffect(() => {
-    console.log(asideOpened);
     if (!asideOpened) return;
 
     const unsub = GameDataStore.subscribe((state) => {
@@ -29,12 +28,7 @@ const UpgradeBarBalance = ({ asideOpened }: { asideOpened: boolean }) => {
     >
       Balance:{" "}
       <span>
-        <NumberFormatter
-          prefix="$"
-          value={Math.trunc(money)}
-          thousandSeparator
-          decimalScale={0}
-        />
+        <NumberFormatter prefix="$" value={Math.trunc(money)} thousandSeparator decimalScale={0} />
       </span>
     </Text>
   );

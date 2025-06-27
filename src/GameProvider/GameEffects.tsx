@@ -1,12 +1,9 @@
 import { useEffect } from "react";
-import {
-  clickAchievementList,
-  moneyAchievementList,
-  totalUpgradeAchievementList,
-} from "../utils/achievements";
+import { clickAchievementList, moneyAchievementList, totalUpgradeAchievementList } from "../utils/achievements";
 import { audio } from "../utils/audio";
+import { GAME_CURSORS, INDEXED_DB_NAME } from "../utils/const";
 import { automaticUpgradeList, manualUpgradeList } from "../utils/upgrades";
-import { addAchievement, countUpgrade } from "./GameActions";
+import { addAchievement, countUpgrade, injectCursorsToDOM } from "./GameActions";
 import { GameDataStore } from "./Stores/GameDataStore";
 import { SettingsDataStore } from "./Stores/SettingsDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
@@ -78,8 +75,7 @@ export const GameEffects = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       const { saveGame } = GameDataStore.getState();
-      const { setTimeInGame, timeInGame, saveStats } =
-        StatsDataStore.getState();
+      const { setTimeInGame, timeInGame, saveStats } = StatsDataStore.getState();
 
       saveGame();
       setTimeInGame(timeInGame + 1);
@@ -95,23 +91,15 @@ export const GameEffects = () => {
       const { upgrades } = state;
 
       totalUpgradeAchievementList.forEach((achievement) => {
-        if (
-          Object.values(upgrades).reduce((total, value) => total + value, 0) >=
-          achievement.value!
-        )
+        if (Object.values(upgrades).reduce((total, value) => total + value, 0) >= achievement.value!)
           addAchievement(achievement);
       });
 
-      const allManualUpgrades = manualUpgradeList.every(
-        (upgrade) => countUpgrade(upgrade) > 0
-      );
+      const allManualUpgrades = manualUpgradeList.every((upgrade) => countUpgrade(upgrade) > 0);
       if (allManualUpgrades) addAchievement("achievement-upgrade-manual");
 
-      const allAutomaticUpgrades = automaticUpgradeList.every(
-        (upgrade) => countUpgrade(upgrade) > 0
-      );
-      if (allAutomaticUpgrades)
-        addAchievement("achievement-upgrade-automation");
+      const allAutomaticUpgrades = automaticUpgradeList.every((upgrade) => countUpgrade(upgrade) > 0);
+      if (allAutomaticUpgrades) addAchievement("achievement-upgrade-automation");
     });
 
     return unsub;
@@ -143,6 +131,78 @@ export const GameEffects = () => {
     });
 
     return unsub;
+  }, []);
+
+  // Load custom cursors from iDB if there are, then inject them into the DOM
+  useEffect(() => {
+    const dbReq = indexedDB.open(INDEXED_DB_NAME, 1);
+
+    dbReq.onupgradeneeded = (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+      if (!db.objectStoreNames.contains("images")) {
+        db.createObjectStore("images");
+        injectCursorsToDOM({
+          defaultURL: GAME_CURSORS.default,
+          pointerURL: GAME_CURSORS.pointer,
+        });
+        return;
+      }
+    };
+
+    dbReq.onsuccess = (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+      const tx = db.transaction("images", "readonly");
+      const store = tx.objectStore("images");
+
+      const defaultCursorReq = store.get("cursor-default");
+      const pointerCursorReq = store.get("cursor-pointer");
+
+      defaultCursorReq.onsuccess = () => {
+        const defaultCursor = defaultCursorReq.result as Blob | undefined;
+        if (defaultCursor)
+          injectCursorsToDOM({
+            defaultURL: URL.createObjectURL(defaultCursor),
+          });
+        else
+          injectCursorsToDOM({
+            defaultURL: GAME_CURSORS.default,
+          });
+      };
+
+      defaultCursorReq.onerror = (event) => {
+        injectCursorsToDOM({
+          defaultURL: GAME_CURSORS.default,
+        });
+        console.error("Error fetching default cursor:", (event.target as IDBRequest).error);
+      };
+
+      pointerCursorReq.onsuccess = () => {
+        const pointerCursor = pointerCursorReq.result as Blob | undefined;
+        if (pointerCursor)
+          injectCursorsToDOM({
+            pointerURL: URL.createObjectURL(pointerCursor),
+          });
+        else
+          injectCursorsToDOM({
+            pointerURL: GAME_CURSORS.pointer,
+          });
+      };
+
+      pointerCursorReq.onerror = (event) => {
+        injectCursorsToDOM({
+          pointerURL: GAME_CURSORS.pointer,
+        });
+        console.error("Error fetching pointer cursor:", (event.target as IDBRequest).error);
+      };
+    };
+
+    dbReq.onerror = (event) => {
+      injectCursorsToDOM({
+        defaultURL: GAME_CURSORS.default,
+        pointerURL: GAME_CURSORS.pointer,
+      });
+      console.error("Error opening IndexedDB:", (event.target as IDBOpenDBRequest).error);
+    };
   }, []);
 
   return null;

@@ -33,7 +33,7 @@ const MainGameButton = () => {
             animate(e);
             increment();
           }}
-          className={classes.image}
+          className={`${classes.image} cursor-pointer`}
           alt="Money Button"
         />
         {floatingTexts.map((text) => (

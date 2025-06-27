@@ -1,6 +1,6 @@
 {
   "name": "college-bank-clicker",
-  "version": "0.6.8",
+  "version": "0.7.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -12,6 +12,7 @@
     "@mantine/hooks": "8.1.0",
     "@mantine/notifications": "^8.1.0",
     "@tabler/icons-react": "^3.33.0",
+    "browser-image-resizer": "^2.4.1",
     "pretty-ms": "^9.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

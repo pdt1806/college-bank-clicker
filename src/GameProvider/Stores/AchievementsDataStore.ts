@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 const achievementsData = localStorage.getItem("achievementsData");
 
-export const AchievementsDataStore = create<AchievementsDataState>((set) => ({
+export const AchievementsDataStore = create<AchievementsDataState>()((set) => ({
   achievements: achievementsData ? JSON.parse(achievementsData) : {},
 
   setAchievements: (achievements: AchievementListType) => set({ achievements }),

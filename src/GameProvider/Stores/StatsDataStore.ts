@@ -3,7 +3,7 @@ import { create } from "zustand";
 const statsData = localStorage.getItem("statsData");
 const parsedStatsData = statsData ? JSON.parse(statsData) : {};
 
-export const StatsDataStore = create<StatsDataState>((set) => ({
+export const StatsDataStore = create<StatsDataState>()((set) => ({
   totalClicks: parsedStatsData?.totalClicks ?? 0,
   totalMoney: parsedStatsData?.totalMoney ?? 0,
   timeInGame: parsedStatsData?.timeInGame ?? 0,

@@ -3,7 +3,7 @@ import { create } from "zustand";
 const savedGame = localStorage.getItem("gameData");
 const parsedGameData = savedGame ? JSON.parse(savedGame) : {};
 
-export const GameDataStore = create<GameDataState>((set) => ({
+export const GameDataStore = create<GameDataState>()((set) => ({
   money: parsedGameData.money ?? 0,
   perSecond: parsedGameData.perSecond ?? 0.0,
   perClick: parsedGameData.perClick ?? 1,
