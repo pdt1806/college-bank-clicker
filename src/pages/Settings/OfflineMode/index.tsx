@@ -24,6 +24,9 @@ export const OfflineModeSettings = () => {
           setOfflineMode(!offlineMode);
         }}
         classNames={{
+          labelWrapper: "cursor-default",
+          label: "cursor-default",
+          body: "cursor-default",
           track: "cursor-pointer",
         }}
         styles={{

@@ -321,7 +321,7 @@ export const injectCursorsToDOM = ({
     style.innerHTML = `
       html,
       body,
-      #root {
+      #root, .cursor-default {
         cursor: url("${defaultURL}"), auto;
       }
     `;
