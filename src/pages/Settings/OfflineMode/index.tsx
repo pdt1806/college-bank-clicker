@@ -1,11 +1,16 @@
-import { Stack, Switch, Text, Title } from "@mantine/core";
-import { playSound } from "../../../GameProvider/GameActions";
+import { Group, Stack, Switch, Text, Title } from "@mantine/core";
+import useSound from "use-sound";
 import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
 import { audio } from "../../../utils/audio";
 
 export const OfflineModeSettings = () => {
-  const { setOfflineMode } = SettingsDataStore.getState();
+  const { setOfflineMode, sfxVolume, sfxMutedIOS } = SettingsDataStore.getState();
   const offlineMode = SettingsDataStore((state) => state.offlineMode);
+
+  const [playSound] = useSound(audio.pop, {
+    volume: sfxVolume / 100,
+    soundEnabled: !sfxMutedIOS,
+  });
 
   return (
     <Stack w="100%">
@@ -16,35 +21,25 @@ export const OfflineModeSettings = () => {
         Offline Mode lets you earn resources while the game is closed. It helps you progress without playing, but
         doesn't allow playing without internet.
       </Text>
-      <Switch
-        checked={offlineMode}
-        size="xl"
-        onClick={() => {
-          playSound(audio.pop);
-          setOfflineMode(!offlineMode);
-        }}
-        classNames={{
-          labelWrapper: "cursor-default",
-          label: "cursor-default",
-          body: "cursor-default",
-          track: "cursor-pointer",
-        }}
-        styles={{
-          labelWrapper: {
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            marginRight: "var(--mantine-spacing-xl)",
-          },
-        }}
-        withThumbIndicator={false}
-        label={
-          <Title order={4} fw={400}>
-            Toggle Offline Mode
-          </Title>
-        }
-        labelPosition="left"
-      />
+      <Group gap="xl">
+        <Title order={4} fw={400}>
+          Toggle Offline Mode
+        </Title>
+        <Switch
+          checked={offlineMode}
+          size="xl"
+          onClick={() => {
+            playSound();
+            setOfflineMode(!offlineMode);
+          }}
+          classNames={{
+            track: "cursor-pointer",
+          }}
+          withThumbIndicator={false}
+          labelPosition="left"
+          w="max-content"
+        />
+      </Group>
     </Stack>
   );
 };

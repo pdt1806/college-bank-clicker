@@ -1,31 +1,33 @@
 import { Box, Button, Flex, Image, Indicator, NumberFormatter, Text } from "@mantine/core";
-import { memo, useEffect, useRef, useState } from "react";
-import { buyUpgrade, countUpgrade, currentCost, playSound } from "../../../GameProvider/GameActions";
+import { memo, useEffect, useState } from "react";
+import useSound from "use-sound";
+import { buyUpgrade, countUpgrade, currentCost } from "../../../GameProvider/GameActions";
 import { GameDataStore } from "../../../GameProvider/Stores/GameDataStore";
+import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
 import { StatsDataStore } from "../../../GameProvider/Stores/StatsDataStore";
 import { audio } from "../../../utils/audio";
 import classes from "./index.module.css";
 
 const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
   const [element, setElement] = useState<HTMLButtonElement | null>(null);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const isReached = StatsDataStore((state) => state.maxMoney >= upgrade.cost);
-
   const disabled = GameDataStore((state) => currentCost(upgrade) > state.money);
 
   const [displayedCost, setDisplayedCost] = useState<number>(currentCost(upgrade));
 
-  useEffect(() => {
-    if (buttonRef.current) {
-      setElement(buttonRef.current);
-    }
-  }, []);
+  const { sfxVolume } = SettingsDataStore.getState();
+  const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
+
+  const [playSound] = useSound(audio.isReached, {
+    volume: sfxVolume / 100,
+    soundEnabled: !sfxMutedIOS,
+  });
 
   useEffect(() => {
     if (!element) return;
     if (!disabled) {
-      playSound(audio.isReached);
+      playSound();
       element.classList.add(classes.pop);
       setTimeout(() => {
         element.classList.remove(classes.pop);
@@ -50,7 +52,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
         setDisplayedCost(currentCost(upgrade));
       }}
       radius="xl"
-      ref={buttonRef}
+      ref={setElement}
       style={{
         border: `4px solid ${
           upgrade.perClick ? "var(--mantine-color-cbc-yellow-9)" : "var(--mantine-color-cbc-bluegreen-9)"

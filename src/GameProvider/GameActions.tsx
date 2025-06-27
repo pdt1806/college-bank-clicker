@@ -10,15 +10,12 @@ import { SettingsDataStore } from "./Stores/SettingsDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
 
 export const increment = () => {
-  const { money, setMoney, perClick, saveGame } = GameDataStore.getState();
+  const { money, setMoney, perClick } = GameDataStore.getState();
   setMoney(money + perClick);
-  saveGame();
 
   const { totalClicks, totalMoney, setTotalMoney, setTotalClicks } = StatsDataStore.getState();
   setTotalMoney(totalMoney + perClick);
   setTotalClicks(totalClicks + 1);
-
-  playSound(audio.pop2);
 };
 
 export const buyUpgrade = (upgrade: Upgrade) => {
@@ -207,10 +204,10 @@ export const addAchievement = (achievement: Achievement | string) => {
   }
 };
 
-export const playSound = (audio: HTMLAudioElement) => {
+const playSound = (audio: string) => {
   const { sfxMutedIOS, sfxVolume } = SettingsDataStore.getState();
 
-  const sound = new Audio(audio.src);
+  const sound = new Audio(audio);
   sound.muted = sfxMutedIOS;
   sound.volume = sfxVolume / 100;
   sound.play().catch((error) => {
@@ -221,13 +218,6 @@ export const playSound = (audio: HTMLAudioElement) => {
 export const updateCursor = (type: string, file: File): Promise<string | undefined> => {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(INDEXED_DB_NAME, 1);
-
-    request.onupgradeneeded = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
-      if (!db.objectStoreNames.contains("images")) {
-        db.createObjectStore("images");
-      }
-    };
 
     request.onsuccess = async (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
@@ -305,13 +295,7 @@ export const resetCursor = (type: string) => {
   };
 };
 
-export const injectCursorsToDOM = ({
-  defaultURL,
-  pointerURL,
-}: {
-  defaultURL?: string;
-  pointerURL?: string;
-} = {}) => {
+export const injectCursorsToDOM = ({ defaultURL, pointerURL }: { defaultURL?: string; pointerURL?: string } = {}) => {
   if (defaultURL) {
     const defaultId = "cursor-default-style";
     const existingStyle = document.getElementById(defaultId);

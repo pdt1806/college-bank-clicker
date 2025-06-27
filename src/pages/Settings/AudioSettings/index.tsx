@@ -2,8 +2,8 @@ import { ActionIcon, Slider, Stack, Table, Title } from "@mantine/core";
 import { useOs } from "@mantine/hooks";
 import { IconVolume, IconVolumeOff } from "@tabler/icons-react";
 import { useEffect } from "react";
+import useSound from "use-sound";
 import { useShallow } from "zustand/shallow";
-import { playSound } from "../../../GameProvider/GameActions";
 import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
 import { audio } from "../../../utils/audio";
 
@@ -43,6 +43,11 @@ const AudioSettings = () => {
 
   const os = useOs();
 
+  const [playSound] = useSound(audio.pop, {
+    volume: sfxVolume / 100,
+    soundEnabled: !sfxMutedIOS,
+  });
+
   const data = [
     {
       label: "Music",
@@ -58,12 +63,12 @@ const AudioSettings = () => {
       onChange: setSfxVolume,
       mutedIOS: sfxMutedIOS,
       setMutedIOS: setSfxMutedIOS,
-      onChangeEnd: () => playSound(audio.pop),
+      onChangeEnd: () => playSound(),
     },
   ];
 
   useEffect(() => {
-    os == "ios" && playSound(audio.pop);
+    os == "ios" && playSound();
   }, [sfxMutedIOS]);
 
   return (

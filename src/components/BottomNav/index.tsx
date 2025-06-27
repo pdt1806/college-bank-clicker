@@ -1,6 +1,7 @@
 import { Box, Button, Flex, Stack, Text } from "@mantine/core";
 import { IconMenu2, IconShoppingCart } from "@tabler/icons-react";
-import { playSound } from "../../GameProvider/GameActions";
+import useSound from "use-sound";
+import { SettingsDataStore } from "../../GameProvider/Stores/SettingsDataStore";
 import { audio } from "../../utils/audio";
 
 const BottomNav = ({
@@ -33,13 +34,16 @@ const BottomNav = ({
     },
   ];
 
+  const { sfxVolume } = SettingsDataStore.getState();
+  const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
+
+  const [playSound] = useSound(audio.pop, {
+    volume: sfxVolume / 100,
+    soundEnabled: !sfxMutedIOS,
+  });
+
   return (
-    <Box
-      w="100vw"
-      h={60}
-      bg="cbc-bluegray.9"
-      style={{ position: "fixed", bottom: 0, zIndex: 2 }}
-    >
+    <Box w="100vw" h={60} bg="cbc-bluegray.9" style={{ position: "fixed", bottom: 0, zIndex: 2 }}>
       <Flex align="center" h="100%">
         {links.map((link) => (
           <Button
@@ -49,7 +53,7 @@ const BottomNav = ({
             color="white"
             onClick={() => {
               link.action();
-              playSound(audio.pop);
+              playSound();
             }}
             radius="0"
             key={link.label}

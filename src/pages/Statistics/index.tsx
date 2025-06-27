@@ -50,13 +50,13 @@ const Statistics = () => {
     },
     {
       name: "First access to the game",
-      value: new Date(firstAccess).toString(),
+      value: new Date(firstAccess).toString().split(" GMT")[0],
     },
     {
       name: "Last time in game",
       value: (() => {
         const lastAccess = sessionStorage.getItem("lastAccess");
-        return lastAccess ? new Date(lastAccess).toString() : "N/A";
+        return lastAccess ? new Date(lastAccess).toString().split(" GMT")[0] : "N/A";
       })(),
     },
   ];

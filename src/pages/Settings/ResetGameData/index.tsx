@@ -2,25 +2,32 @@ import { Button, Group, Modal, Stack, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconRefresh } from "@tabler/icons-react";
-import { playSound, resetAllGame } from "../../../GameProvider/GameActions";
+import useSound from "use-sound";
+import { resetAllGame } from "../../../GameProvider/GameActions";
+import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
 import { audio } from "../../../utils/audio";
 
 const ResetGameData = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
+  const { sfxVolume } = SettingsDataStore.getState();
+  const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
+
+  const [playSoundAchievement] = useSound(audio.achievement, {
+    volume: sfxVolume / 100,
+    soundEnabled: !sfxMutedIOS,
+  });
+
+  const [playSoundPop] = useSound(audio.pop, {
+    volume: sfxVolume / 100,
+    soundEnabled: !sfxMutedIOS,
+  });
+
   return (
     <>
-      <Modal
-        opened={opened}
-        onClose={close}
-        centered
-        withCloseButton={false}
-        radius="lg"
-        c="cbc-purple.9"
-      >
+      <Modal opened={opened} onClose={close} centered withCloseButton={false} radius="lg" c="cbc-purple.9">
         <Text>
-          Are you sure you want to reset your game? This will permanently erase
-          all progress and cannot be undone.
+          Are you sure you want to reset your game? This will permanently erase all progress and cannot be undone.
         </Text>
         <Group mt="md" ml="auto" w="fit-content">
           <Button onClick={close} variant="transparent" c="cbc-purple.9">
@@ -31,7 +38,7 @@ const ResetGameData = () => {
             color="red"
             onClick={() => {
               resetAllGame();
-              playSound(audio.achievement);
+              playSoundAchievement();
               notifications.show({
                 radius: "lg",
                 styles: {
@@ -55,15 +62,14 @@ const ResetGameData = () => {
           Reset game data
         </Title>
         <Text c="dimmed">
-          Reset your game data to start over. This will erase all progress,
-          including achievements, upgrades, and money.
+          Reset your game data to start over. This will erase all progress, including achievements, upgrades, and money.
         </Text>
         <Button
           size="lg"
           color="red"
           onClick={() => {
             open();
-            playSound(audio.pop);
+            playSoundPop();
           }}
           radius="xl"
         >

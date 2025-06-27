@@ -1,3 +1,4 @@
+import reactScan from "@react-scan/vite-plugin-react-scan";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
@@ -7,6 +8,9 @@ import packageJson from "./package.json";
 export default defineConfig({
   plugins: [
     react(),
+    reactScan({
+      enable: false,
+    }),
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],

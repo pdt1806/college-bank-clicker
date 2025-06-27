@@ -1,6 +1,8 @@
 import { Button, FileButton, Group, Image, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
 import { useState } from "react";
-import { playSound, resetCursor, updateCursor } from "../../../GameProvider/GameActions";
+import useSound from "use-sound";
+import { resetCursor, updateCursor } from "../../../GameProvider/GameActions";
+import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
 import { audio } from "../../../utils/audio";
 import { GAME_CURSORS } from "../../../utils/const";
 
@@ -34,6 +36,14 @@ export const CustomCursorsSettings = () => {
     },
   ];
 
+  const { sfxVolume } = SettingsDataStore.getState();
+  const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
+
+  const [playSound] = useSound(audio.pop, {
+    volume: sfxVolume / 100,
+    soundEnabled: !sfxMutedIOS,
+  });
+
   return (
     <Stack w="100%">
       <Title order={2} fw={500}>
@@ -54,12 +64,10 @@ export const CustomCursorsSettings = () => {
                   <FileButton
                     onChange={async (file) => {
                       if (!file) return;
-
                       const url = await updateCursor(item.type, file);
                       if (!url) return;
                       item.setState(url);
-
-                      playSound(audio.pop);
+                      playSound();
                     }}
                     accept="image/png,image/jpeg"
                     multiple={false}
@@ -82,7 +90,7 @@ export const CustomCursorsSettings = () => {
                     onClick={() => {
                       resetCursor(item.type);
                       item.setState(GAME_CURSORS[item.type]);
-                      playSound(audio.pop);
+                      playSound();
                     }}
                   >
                     Reset to default

@@ -16,6 +16,9 @@
 
   position: absolute;
 
+  background-image: url("/assets/money-button.svg");
+  background-size: cover;
+
   border-radius: 50%;
   transition: transform 0.1s;
   will-change: transform;
@@ -32,22 +35,22 @@
   }
 }
 
-@keyframes glow {
-  0% {
-    box-shadow: 0 0 48px var(--mantine-color-cbc-bluegreen-8);
-  }
-  100% {
-    box-shadow: 0 0 64px var(--mantine-color-cbc-bluegreen-8);
-  }
-}
-
 @media (hover: none) and (pointer: coarse) {
   .image:hover {
     transform: none;
   }
 
   .image:active {
-    transform: scale(0.9);
+    transform: scale(0.95);
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 48px var(--mantine-color-cbc-bluegreen-8);
+  }
+  100% {
+    box-shadow: 0 0 64px var(--mantine-color-cbc-bluegreen-8);
   }
 }
 
@@ -58,6 +61,17 @@
   pointer-events: none;
   user-select: none;
   z-index: 2;
+  font-family: "Oxanium", sans-serif;
+  font-size: 1.5rem;
+
+  color: var(--mantine-color-cbc-green-9);
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+  will-change: transform, opacity;
+  white-space: nowrap;
+  text-align: center;
 }
 
 @keyframes floatUp {

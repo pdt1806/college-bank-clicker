@@ -12,7 +12,7 @@ export const GameEffects = () => {
   // --------------------
   // BGM & SFX Logic
 
-  const bgm = audio.bgm;
+  const bgm = new Audio(audio.bgm);
   bgm.loop = true;
 
   useEffect(() => {

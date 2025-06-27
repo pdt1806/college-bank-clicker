@@ -1,5 +1,6 @@
 .sidebarWrapper {
-  transition: all 0.1s, height 0ms;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), height 0s;
+  will-change: transform;
   background: transparent;
 }
 

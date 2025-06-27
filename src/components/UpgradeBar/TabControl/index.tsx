@@ -1,10 +1,19 @@
 import { Accordion, Group, HoverCard, Text, Title } from "@mantine/core";
-import { playSound } from "../../../GameProvider/GameActions";
+import useSound from "use-sound";
+import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
 import { audio } from "../../../utils/audio";
 
 export const UpgradeBarTabControl = ({ tab }: { tab: UpgradeBarTab }) => {
+  const { sfxVolume } = SettingsDataStore.getState();
+  const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
+
+  const [playSound] = useSound(audio.dropdown, {
+    volume: sfxVolume / 100,
+    soundEnabled: !sfxMutedIOS,
+  });
+
   return (
-    <Accordion.Control onClick={() => playSound(audio.dropdown)}>
+    <Accordion.Control onClick={() => playSound()}>
       <Group gap="xs">
         <HoverCard openDelay={300}>
           <HoverCard.Target>

@@ -1,6 +1,6 @@
 import { NumberInput, Stack, Table, Title } from "@mantine/core";
+import useSound from "use-sound";
 import { useShallow } from "zustand/shallow";
-import { playSound } from "../../../GameProvider/GameActions";
 import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
 import { audio } from "../../../utils/audio";
 
@@ -11,6 +11,14 @@ const SettingsPerformance = () => {
       setTPS,
     }))
   );
+
+  const { sfxVolume } = SettingsDataStore.getState();
+  const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
+
+  const [playSound] = useSound(audio.pop, {
+    volume: sfxVolume / 100,
+    soundEnabled: !sfxMutedIOS,
+  });
 
   return (
     <Stack w="100%">
@@ -35,7 +43,7 @@ const SettingsPerformance = () => {
                 onChange={(value) => {
                   if (typeof value == "number") {
                     setTPS(value);
-                    playSound(audio.pop);
+                    playSound();
                   }
                 }}
                 min={10}

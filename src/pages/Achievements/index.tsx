@@ -1,22 +1,11 @@
-import {
-  Box,
-  Container,
-  ScrollArea,
-  SimpleGrid,
-  Tabs,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Box, Container, ScrollArea, SimpleGrid, Tabs, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconArrowUp, IconMoneybag, IconMouse } from "@tabler/icons-react";
+import useSound from "use-sound";
 import AchievementBox from "../../components/AchievementBox";
-import { playSound } from "../../GameProvider/GameActions";
 import { AchievementsDataStore } from "../../GameProvider/Stores/AchievementsDataStore";
-import {
-  clickAchievementList,
-  moneyAchievementList,
-  upgradeAchievementList,
-} from "../../utils/achievements";
+import { SettingsDataStore } from "../../GameProvider/Stores/SettingsDataStore";
+import { clickAchievementList, moneyAchievementList, upgradeAchievementList } from "../../utils/achievements";
 import { audio } from "../../utils/audio";
 import { UNIFORMED_HEIGHT } from "../../utils/const";
 import classes from "./index.module.css";
@@ -54,8 +43,7 @@ const Achievements = () => {
         };
       })
       .sort((a, b) => {
-        if (a.date && b.date)
-          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        if (a.date && b.date) return new Date(a.date).getTime() - new Date(b.date).getTime();
         else if (a.date && !b.date) return -1;
         else if (!a.date && b.date) return 1;
         else return 0;
@@ -65,13 +53,16 @@ const Achievements = () => {
     });
   };
 
+  const { sfxVolume } = SettingsDataStore.getState();
+  const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
+
+  const [playSound] = useSound(audio.pop3, {
+    volume: sfxVolume / 100,
+    soundEnabled: !sfxMutedIOS,
+  });
+
   return (
-    <Container
-      size="xl"
-      py="xs"
-      c="white"
-      h={isMobile ? UNIFORMED_HEIGHT : "100vh"}
-    >
+    <Container size="xl" py="xs" c="white" h={isMobile ? UNIFORMED_HEIGHT : "100vh"}>
       <Title py="lg">Achievements</Title>
       <Tabs
         variant="default"
@@ -90,7 +81,7 @@ const Achievements = () => {
                 value={tab.name}
                 leftSection={<tab.icon size={24} />}
                 className={classes.tab}
-                onClick={() => playSound(audio.pop3)}
+                onClick={() => playSound()}
               >
                 <Text>{tab.name}</Text>
               </Tabs.Tab>
@@ -103,17 +94,10 @@ const Achievements = () => {
             <ScrollArea.Autosize scrollbarSize={8} h="100%">
               <Box pt="sm" pb="xl">
                 <Text mb="md">
-                  {
-                    tab.list.filter((achievement) =>
-                      Object.keys(achievements).includes(achievement.id)
-                    ).length
-                  }{" "}
-                  / {tab.list.length} achievements of this category earned
+                  {tab.list.filter((achievement) => Object.keys(achievements).includes(achievement.id)).length} /{" "}
+                  {tab.list.length} achievements of this category earned
                 </Text>
-                <SimpleGrid
-                  cols={{ base: 1, sm: 2, md: 3, lg: 4, xl: 6 }}
-                  spacing={"md"}
-                >
+                <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4, xl: 6 }} spacing={"md"}>
                   {generateContent(tab)}
                 </SimpleGrid>
               </Box>
