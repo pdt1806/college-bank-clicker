@@ -1,19 +1,6 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Image,
-  Indicator,
-  NumberFormatter,
-  Text,
-} from "@mantine/core";
+import { Box, Button, Flex, Image, Indicator, NumberFormatter, Text } from "@mantine/core";
 import { memo, useEffect, useRef, useState } from "react";
-import {
-  buyUpgrade,
-  countUpgrade,
-  currentCost,
-  playSound,
-} from "../../../GameProvider/GameActions";
+import { buyUpgrade, countUpgrade, currentCost, playSound } from "../../../GameProvider/GameActions";
 import { GameDataStore } from "../../../GameProvider/Stores/GameDataStore";
 import { StatsDataStore } from "../../../GameProvider/Stores/StatsDataStore";
 import { audio } from "../../../utils/audio";
@@ -27,9 +14,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
 
   const disabled = GameDataStore((state) => currentCost(upgrade) > state.money);
 
-  const [displayedCost, setDisplayedCost] = useState<number>(
-    currentCost(upgrade)
-  );
+  const [displayedCost, setDisplayedCost] = useState<number>(currentCost(upgrade));
 
   useEffect(() => {
     if (buttonRef.current) {
@@ -48,12 +33,6 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
     }
   }, [disabled]);
 
-  const handleClick = () => {
-    if (disabled) return;
-    buyUpgrade(upgrade);
-    setDisplayedCost(currentCost(upgrade));
-  };
-
   return (
     <Button
       color="cbc-bluegreen.0"
@@ -66,14 +45,15 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
       disabled={disabled}
       bg="cbc-bluegreen.0"
       className={classes.button}
-      onClick={handleClick}
+      onClick={() => {
+        buyUpgrade(upgrade);
+        setDisplayedCost(currentCost(upgrade));
+      }}
       radius="xl"
       ref={buttonRef}
       style={{
         border: `4px solid ${
-          upgrade.perClick
-            ? "var(--mantine-color-cbc-yellow-9)"
-            : "var(--mantine-color-cbc-bluegreen-9)"
+          upgrade.perClick ? "var(--mantine-color-cbc-yellow-9)" : "var(--mantine-color-cbc-bluegreen-9)"
         }`,
       }}
     >
@@ -112,11 +92,7 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
           </Text>
           <Box>
             <Text size="xl" fw="bold">
-              <NumberFormatter
-                prefix="$"
-                value={displayedCost}
-                thousandSeparator
-              />
+              <NumberFormatter prefix="$" value={displayedCost} thousandSeparator />
             </Text>
             {upgrade.perSecond && isReached && (
               <Text size="sm" c="dimmed">

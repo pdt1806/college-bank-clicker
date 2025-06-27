@@ -5,6 +5,7 @@ import AudioSettings from "./AudioSettings";
 import { useOs } from "@mantine/hooks";
 import { CustomCursorsSettings } from "./CustomCursors";
 import ExportImportGameData from "./ExportImportGameData";
+import { OfflineModeSettings } from "./OfflineMode";
 import TPSSettings from "./Performance";
 import ResetGameData from "./ResetGameData";
 
@@ -21,6 +22,7 @@ const Settings = () => {
         <AudioSettings />
         {isNotMobile && <CustomCursorsSettings />}
         <TPSSettings />
+        <OfflineModeSettings />
         <ExportImportGameData />
         <ResetGameData />
       </SimpleGrid>

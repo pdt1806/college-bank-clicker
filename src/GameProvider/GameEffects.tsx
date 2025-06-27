@@ -39,6 +39,27 @@ export const GameEffects = () => {
     return unsub;
   }, []);
 
+  // Offline mode logic
+  // Add money
+  useEffect(() => {
+    const { offlineMode } = SettingsDataStore.getState();
+    const { money, setMoney, perSecond } = GameDataStore.getState();
+    const { totalMoney, setTotalMoney } = StatsDataStore.getState();
+
+    if (!offlineMode || perSecond == 0) return;
+    const lastAccess = sessionStorage.getItem("lastAccess");
+    if (!lastAccess) return;
+
+    const lastAccessDate = new Date(lastAccess);
+    const currentTime = new Date();
+    const timeDiff = Math.floor((currentTime.getTime() - lastAccessDate.getTime()) / 1000); // in seconds
+    if (timeDiff > 0 && perSecond > 0) {
+      const earned = perSecond * timeDiff;
+      setMoney(money + earned);
+      setTotalMoney(totalMoney + earned);
+    }
+  }, []);
+
   // Increment money logic
   // using RAF + TPS for smooth updates & saving battery
 
@@ -75,10 +96,12 @@ export const GameEffects = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       const { saveGame } = GameDataStore.getState();
-      const { setTimeInGame, timeInGame, saveStats } = StatsDataStore.getState();
+      const { setTimeInGame, timeInGame, saveStats, setLastAccess } = StatsDataStore.getState();
 
       saveGame();
+      setLastAccess(new Date());
       setTimeInGame(timeInGame + 1);
+
       saveStats();
     }, 1000);
 

@@ -11,25 +11,13 @@ import { StatsTimeInGame } from "./Values/TimeInGame";
 import { StatsTotalMoney } from "./Values/TotalMoney";
 
 const Statistics = () => {
-  // const { totalMoney, maxMoney, timeInGame, totalClicks } = StatsDataStore(
-  //   useShallow(({ totalMoney, maxMoney, timeInGame, totalClicks }) => ({
-  //     totalMoney,
-  //     maxMoney,
-  //     timeInGame,
-  //     totalClicks,
-  //   }))
-  // );
-
   const totalUpgradesPurchased = GameDataStore((state) =>
     Object.values(state.upgrades).reduce((total, value) => total + value, 0)
   );
-  const numberOfUpgradeTypes = GameDataStore(
-    (state) => Object.keys(state.upgrades).length
-  );
-  const achievementsCount = AchievementsDataStore(
-    (state) => Object.keys(state.achievements).length
-  );
+  const numberOfUpgradeTypes = GameDataStore((state) => Object.keys(state.upgrades).length);
+  const achievementsCount = AchievementsDataStore((state) => Object.keys(state.achievements).length);
   const totalClicks = StatsDataStore.getState().totalClicks;
+  const { firstAccess } = StatsDataStore.getState();
 
   const table = [
     {
@@ -60,6 +48,17 @@ const Statistics = () => {
       name: "Total time in game",
       value: <StatsTimeInGame />,
     },
+    {
+      name: "First access to the game",
+      value: new Date(firstAccess).toString(),
+    },
+    {
+      name: "Last time in game",
+      value: (() => {
+        const lastAccess = sessionStorage.getItem("lastAccess");
+        return lastAccess ? new Date(lastAccess).toString() : "N/A";
+      })(),
+    },
   ];
 
   return (
@@ -72,21 +71,14 @@ const Statistics = () => {
           overflow: "hidden",
         }}
       >
-        <Table
-          layout="fixed"
-          verticalSpacing="lg"
-          horizontalSpacing="lg"
-          c="cbc-purple.9"
-        >
+        <Table layout="fixed" verticalSpacing="lg" horizontalSpacing="lg" c="cbc-purple.9">
           <Table.Tbody>
             {table.map((row, index) => (
               <Table.Tr
                 key={index}
                 style={{
                   backgroundColor:
-                    index % 2 === 0
-                      ? "var(--mantine-color-cbc-bluegray-1)"
-                      : "var(--mantine-color-cbc-bluegray-2)",
+                    index % 2 === 0 ? "var(--mantine-color-cbc-bluegray-1)" : "var(--mantine-color-cbc-bluegray-2)",
                 }}
               >
                 <Table.Th>

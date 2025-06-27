@@ -71,11 +71,13 @@ interface SettingsDataState {
   musicMutedIOS: boolean;
   sfxMutedIOS: boolean;
   TPS: number;
+  offlineMode: boolean;
   setMusicVolume: (musicVolume: number) => void;
   setSfxVolume: (sfxVolume: number) => void;
   setMusicMutedIOS: (musicMutedIOS: boolean) => void;
   setSfxMutedIOS: (sfxMutedIOS: boolean) => void;
   setTPS: (TPS: number) => void;
+  setOfflineMode: (offlineMode: boolean) => void;
   saveSettings: () => void;
 }
 
@@ -84,11 +86,15 @@ interface StatsDataState {
   totalMoney: number;
   timeInGame: number;
   maxMoney: number;
+  firstAccess: Date;
+  lastAccess: Date;
 
   setTotalClicks: (totalClicks: number) => void;
   setTotalMoney: (totalMoney: number) => void;
   setTimeInGame: (timeInGame: number) => void;
   setMaxMoney: (maxMoney: number) => void;
+  setFirstAccess: (firstAccess: Date) => void;
+  setLastAccess: (lastAccess: Date) => void;
 
   saveStats: () => void;
   resetStats: () => void;
