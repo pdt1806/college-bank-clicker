@@ -137,6 +137,18 @@ export const GameEffects = () => {
   useEffect(() => {
     const dbReq = indexedDB.open(INDEXED_DB_NAME, 1);
 
+    dbReq.onupgradeneeded = (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+      if (!db.objectStoreNames.contains("images")) {
+        db.createObjectStore("images");
+        injectCursorsToDOM({
+          defaultURL: GAME_CURSORS.default,
+          pointerURL: GAME_CURSORS.pointer,
+        });
+        return;
+      }
+    };
+
     dbReq.onsuccess = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
       const tx = db.transaction("images", "readonly");
