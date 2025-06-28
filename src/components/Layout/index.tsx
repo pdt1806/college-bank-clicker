@@ -1,8 +1,6 @@
 import { AppShell, Box, ScrollArea } from "@mantine/core";
 import { useMediaQuery, useOs } from "@mantine/hooks";
 import { Outlet, useLocation } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { useShallow } from "zustand/shallow";
 import { GameEffects } from "../../GameProvider/GameEffects";
 import { useGlobalSounds } from "../../GameProvider/SoundManager";
 import { SidebarsStore } from "../../GameProvider/Stores/SidebarsStore";
@@ -14,8 +12,8 @@ import classes from "./index.module.css";
 
 const Layout = () => {
   const { toggleAside, closeAside, toggleNavbar, closeNavbar } = SidebarsStore.getState();
-  const asideOpened = SidebarsStore(useShallow((state) => state.asideOpened));
-  const navbarOpened = SidebarsStore(useShallow((state) => state.navbarOpened));
+  const asideOpened = SidebarsStore((state) => state.asideOpened);
+  const navbarOpened = SidebarsStore((state) => state.navbarOpened);
 
   const location = useLocation();
 
@@ -26,11 +24,6 @@ const Layout = () => {
   const adjustedHeight = isIOS ? "100%" : UNIFORMED_HEIGHT;
 
   useGlobalSounds(); // Initialize global sounds
-
-  useEffect(() => {
-    sessionStorage.setItem("asideOpened", asideOpened.toString());
-    sessionStorage.setItem("navbarOpened", navbarOpened.toString());
-  }, [asideOpened, navbarOpened]);
 
   return (
     <>
