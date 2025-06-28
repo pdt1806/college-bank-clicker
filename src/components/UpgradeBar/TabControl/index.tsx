@@ -1,4 +1,4 @@
-import { Accordion, Group, HoverCard, Text, Title } from "@mantine/core";
+import { Accordion, Group, HoverCard, Text } from "@mantine/core";
 import { playSound } from "../../../GameProvider/SoundManager";
 
 export const UpgradeBarTabControl = ({ tab }: { tab: UpgradeBarTab }) => {
@@ -9,9 +9,9 @@ export const UpgradeBarTabControl = ({ tab }: { tab: UpgradeBarTab }) => {
           <HoverCard.Target>
             <Group gap="xs">
               <tab.icon size={24} color="white" />
-              <Title order={3} c="white" w="max-content" fw={500}>
+              <Text size="xl" c="white" fw={500}>
                 {tab.name}
-              </Title>
+              </Text>
             </Group>
           </HoverCard.Target>
           <HoverCard.Dropdown maw={400} p="xs">

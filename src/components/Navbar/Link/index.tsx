@@ -12,6 +12,7 @@ export const NavbarLink = ({
   toggleNavbar: () => void;
 }) => {
   const location = useLocation();
+  const isActive = location.pathname === link.to;
 
   return (
     <Link to={link.to} style={{ textDecoration: "none", width: "100%" }}>
@@ -20,8 +21,8 @@ export const NavbarLink = ({
           navbarOpened && toggleNavbar();
           playSound("pop3");
         }}
-        variant={location.pathname === link.to ? "filled" : "subtle"}
-        color={location.pathname === link.to ? "cbc-bluegray.6" : "cbc-bluegray.0"}
+        variant={isActive ? "filled" : "subtle"}
+        color={isActive ? "cbc-bluegray.7" : "cbc-bluegray.0"}
         c="white"
         leftSection={<link.icon size={24} />}
         fullWidth
@@ -31,9 +32,9 @@ export const NavbarLink = ({
         py="md"
         px="xs"
         h="auto"
-        {...(location.pathname === link.to ? { bg: "cbc-bluegray.6" } : {})}
+        {...(isActive ? { bg: "cbc-bluegray.7" } : {})}
       >
-        <Title order={4} fw={400}>
+        <Title order={4} fw={isActive ? 600 : 400}>
           {link.label}
         </Title>
       </Button>

@@ -13,7 +13,9 @@ export default defineConfig({
       autoCodeSplitting: true,
     }),
     react(),
-    reactScan(),
+    reactScan({
+      enable: false,
+    }),
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],

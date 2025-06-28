@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { clickAchievementList, moneyAchievementList, totalUpgradeAchievementList } from "../utils/achievements";
 import { GAME_CURSORS, INDEXED_DB_NAME } from "../utils/const";
 import { automaticUpgradeList, manualUpgradeList } from "../utils/upgrades";
@@ -9,28 +9,35 @@ import { SettingsDataStore } from "./Stores/SettingsDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
 
 export const GameEffects = () => {
+  const bgmRef = useRef<HTMLAudioElement | null>(null);
   // --------------------
   // BGM & SFX Logic
 
-  const bgm = new Audio(audio.bgm);
-  bgm.loop = true;
-
   useEffect(() => {
+    if (!bgmRef.current) {
+      bgmRef.current = new Audio(audio.bgm);
+      bgmRef.current.loop = true;
+    }
+
+    const bgm = bgmRef.current;
     const { musicVolume, musicMutedIOS } = SettingsDataStore.getState();
     bgm.muted = musicMutedIOS;
     bgm.volume = musicVolume / 100;
 
-    bgm.volume = musicVolume / 100;
-    bgm.muted = musicMutedIOS;
-
     document.body.addEventListener("click", () => {
       bgm.play().catch((err) => console.error("Playback failed:", err));
     });
+
+    return () => {
+      bgm.pause();
+    };
   }, []);
 
   useEffect(() => {
     const unsub = SettingsDataStore.subscribe((state) => {
       const { musicVolume, musicMutedIOS, saveSettings } = state;
+      const bgm = bgmRef.current;
+      if (!bgm) return;
       bgm.volume = musicVolume / 100;
       bgm.muted = musicMutedIOS;
       saveSettings();
