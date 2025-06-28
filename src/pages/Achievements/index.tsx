@@ -1,6 +1,7 @@
 import { Box, Container, ScrollArea, SimpleGrid, Tabs, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconArrowUp, IconMoneybag, IconMouse } from "@tabler/icons-react";
+import { memo } from "react";
 import AchievementBox from "../../components/AchievementBox";
 import { playSound } from "../../GameProvider/SoundManager";
 import { AchievementsDataStore } from "../../GameProvider/Stores/AchievementsDataStore";
@@ -99,4 +100,4 @@ const Achievements = () => {
   );
 };
 
-export default Achievements;
+export default memo(Achievements);

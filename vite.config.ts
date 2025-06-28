@@ -1,4 +1,5 @@
 import reactScan from "@react-scan/vite-plugin-react-scan";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
@@ -7,10 +8,12 @@ import packageJson from "./package.json";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
-    reactScan({
-      enable: false,
+    tanstackRouter({
+      target: "react",
+      autoCodeSplitting: true,
     }),
+    react(),
+    reactScan(),
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],

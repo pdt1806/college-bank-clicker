@@ -81,6 +81,15 @@ interface SettingsDataState {
   saveSettings: () => void;
 }
 
+interface SidebarsState {
+  asideOpened: boolean;
+  navbarOpened: boolean;
+  toggleAside: () => void;
+  closeAside: () => void;
+  toggleNavbar: () => void;
+  closeNavbar: () => void;
+}
+
 interface StatsDataState {
   totalClicks: number;
   totalMoney: number;
@@ -110,4 +119,10 @@ interface AchievementsDataState {
 interface OutletContext {
   asideOpened: boolean;
   navbarOpened: boolean;
+}
+
+interface NavbarLink {
+  label: string;
+  icon: React.ComponentType<{ size?: number; color?: string }>;
+  to: string;
 }

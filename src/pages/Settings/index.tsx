@@ -3,6 +3,7 @@ import PageWrapper from "../../components/PageWrapper";
 import AudioSettings from "./AudioSettings";
 
 import { useOs } from "@mantine/hooks";
+import { memo } from "react";
 import { CustomCursorsSettings } from "./CustomCursors";
 import ExportImportGameData from "./ExportImportGameData";
 import { OfflineModeSettings } from "./OfflineMode";
@@ -30,4 +31,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default memo(Settings);

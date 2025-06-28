@@ -1,4 +1,5 @@
 import { Flex, Text } from "@mantine/core";
+import { memo } from "react";
 import { UNIFORMED_HEIGHT } from "../../utils/const";
 import MainGameBalance from "./Balance";
 import MainGameButton from "./Button";
@@ -15,4 +16,4 @@ const MainGame = () => {
   );
 };
 
-export default MainGame;
+export default memo(MainGame);

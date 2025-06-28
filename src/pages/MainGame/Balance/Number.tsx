@@ -1,14 +1,25 @@
 import { NumberFormatter } from "@mantine/core";
-import { useOutletContext } from "react-router-dom";
-import { useShallow } from "zustand/shallow";
+import { useEffect, useState } from "react";
 import { GameDataStore } from "../../../GameProvider/Stores/GameDataStore";
+import { SidebarsStore } from "../../../GameProvider/Stores/SidebarsStore";
 
 export const MainGameBalanceNumber = () => {
-  const { asideOpened, navbarOpened } = useOutletContext<OutletContext>();
+  const asideOpened = SidebarsStore((state) => state.asideOpened);
+  const navbarOpened = SidebarsStore((state) => state.navbarOpened);
 
-  const money = !(asideOpened || navbarOpened)
-    ? GameDataStore(useShallow((state) => Math.trunc(state.money)))
-    : GameDataStore.getState().money;
+  const [money, setMoney] = useState(GameDataStore.getState().money);
+
+  useEffect(() => {
+    if (asideOpened || navbarOpened) {
+      setMoney(GameDataStore.getState().money);
+      return;
+    }
+
+    const unsub = GameDataStore.subscribe((state) => {
+      setMoney(Math.trunc(state.money));
+    });
+    return () => unsub();
+  }, [asideOpened, navbarOpened]);
 
   return <NumberFormatter prefix="$ " value={money} thousandSeparator decimalScale={0} />;
 };

@@ -1,6 +1,7 @@
 import { Avatar, Box, Divider, Group, Image, Stack, Text, Title } from "@mantine/core";
 import { IconBrandGithub, IconLink } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
+import { memo } from "react";
 import PageWrapper from "../../components/PageWrapper";
 
 const sammie = {
@@ -160,4 +161,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default memo(About);

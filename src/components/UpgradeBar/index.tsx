@@ -7,10 +7,7 @@ import UpgradeBarBalance from "./Balance";
 import { UpgradeBarTabControl } from "./TabControl";
 
 const UpgradeBar = ({ asideOpened }: { asideOpened: boolean }) => {
-  const [value, setValue] = useState<string[]>([
-    "Manual Upgrades",
-    "Automatic Upgrades",
-  ]);
+  const [value, setValue] = useState<string[]>(["Manual Upgrades", "Automatic Upgrades"]);
 
   const tabs: UpgradeBarTab[] = [
     {
@@ -42,12 +39,7 @@ const UpgradeBar = ({ asideOpened }: { asideOpened: boolean }) => {
       >
         <Box>
           {tabs.map((tab) => (
-            <Accordion.Item
-              key={tab.name}
-              value={tab.name}
-              bg="transparent"
-              style={{ border: "none" }}
-            >
+            <Accordion.Item key={tab.name} value={tab.name} bg="transparent" style={{ border: "none" }}>
               <UpgradeBarTabControl tab={tab} />
               <Accordion.Panel>
                 <Stack gap="md">

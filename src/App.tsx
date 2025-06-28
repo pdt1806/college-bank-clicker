@@ -2,13 +2,8 @@ import { createTheme, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
-import { createMemoryRouter, RouteObject, RouterProvider } from "react-router-dom";
-import Layout from "./components/Layout";
-import About from "./pages/About";
-import Achievements from "./pages/Achievements";
-import MainGame from "./pages/MainGame";
-import Settings from "./pages/Settings";
-import Statistics from "./pages/Statistics";
+import { createMemoryHistory, createRouter, RouterProvider } from "@tanstack/react-router";
+import { routeTree } from "./routes";
 import { colors } from "./utils/colors";
 
 export const theme = createTheme({
@@ -18,38 +13,17 @@ export const theme = createTheme({
   primaryColor: "cbc-purple",
 });
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        path: "/",
-        element: <MainGame />,
-      },
-      {
-        path: "settings",
-        element: <Settings />,
-      },
-      {
-        path: "about",
-        element: <About />,
-      },
-      {
-        path: "achievements",
-        element: <Achievements />,
-      },
-      {
-        path: "statistics",
-        element: <Statistics />,
-      },
-    ],
-  },
-];
-
-const router = createMemoryRouter(routes, {
+const memoryHistory = createMemoryHistory({
   initialEntries: ["/"],
 });
+
+const router = createRouter({ routeTree, history: memoryHistory });
+
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 export default function App() {
   return (

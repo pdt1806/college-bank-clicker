@@ -9,8 +9,9 @@ import { GameDataStore } from "./Stores/GameDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
 
 export const increment = () => {
-  const { money, setMoney, perClick } = GameDataStore.getState();
+  const { money, setMoney, perClick, saveGame } = GameDataStore.getState();
   setMoney(money + perClick);
+  saveGame();
 
   const { totalClicks, totalMoney, setTotalMoney, setTotalClicks } = StatsDataStore.getState();
   setTotalMoney(totalMoney + perClick);
