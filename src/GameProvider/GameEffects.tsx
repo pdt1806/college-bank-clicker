@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { clickAchievementList, moneyAchievementList, totalUpgradeAchievementList } from "../utils/achievements";
-import { audio } from "../utils/audio";
 import { GAME_CURSORS, INDEXED_DB_NAME } from "../utils/const";
 import { automaticUpgradeList, manualUpgradeList } from "../utils/upgrades";
 import { addAchievement, countUpgrade, injectCursorsToDOM } from "./GameActions";
+import { audio } from "./SoundManager";
 import { GameDataStore } from "./Stores/GameDataStore";
 import { SettingsDataStore } from "./Stores/SettingsDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";

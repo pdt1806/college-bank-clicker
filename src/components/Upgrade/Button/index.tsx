@@ -1,11 +1,9 @@
 import { Box, Button, Flex, Image, Indicator, NumberFormatter, Text } from "@mantine/core";
 import { memo, useEffect, useState } from "react";
-import useSound from "use-sound";
 import { buyUpgrade, countUpgrade, currentCost } from "../../../GameProvider/GameActions";
+import { playSound } from "../../../GameProvider/SoundManager";
 import { GameDataStore } from "../../../GameProvider/Stores/GameDataStore";
-import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
 import { StatsDataStore } from "../../../GameProvider/Stores/StatsDataStore";
-import { audio } from "../../../utils/audio";
 import classes from "./index.module.css";
 
 const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
@@ -16,18 +14,10 @@ const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {
 
   const [displayedCost, setDisplayedCost] = useState<number>(currentCost(upgrade));
 
-  const { sfxVolume } = SettingsDataStore.getState();
-  const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
-
-  const [playSound] = useSound(audio.isReached, {
-    volume: sfxVolume / 100,
-    soundEnabled: !sfxMutedIOS,
-  });
-
   useEffect(() => {
     if (!element) return;
     if (!disabled) {
-      playSound();
+      playSound("isReached");
       element.classList.add(classes.pop);
       setTimeout(() => {
         element.classList.remove(classes.pop);

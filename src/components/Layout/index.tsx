@@ -2,6 +2,7 @@ import { AppShell, Box, ScrollArea } from "@mantine/core";
 import { useDisclosure, useMediaQuery, useOs } from "@mantine/hooks";
 import { Outlet, useLocation } from "react-router-dom";
 import { GameEffects } from "../../GameProvider/GameEffects";
+import { useGlobalSounds } from "../../GameProvider/SoundManager";
 import { TOP_OFFSET, UNIFORMED_HEIGHT } from "../../utils/const";
 import BottomNav from "../BottomNav";
 import Navbar from "../Navbar";
@@ -9,10 +10,8 @@ import UpgradeBar from "../UpgradeBar";
 import classes from "./index.module.css";
 
 const Layout = () => {
-  const [asideOpened, { toggle: toggleAside, close: closeAside }] =
-    useDisclosure();
-  const [navbarOpened, { toggle: toggleNavbar, close: closeNavbar }] =
-    useDisclosure();
+  const [asideOpened, { toggle: toggleAside, close: closeAside }] = useDisclosure();
+  const [navbarOpened, { toggle: toggleNavbar, close: closeNavbar }] = useDisclosure();
 
   const location = useLocation();
 
@@ -21,6 +20,8 @@ const Layout = () => {
 
   const isIOS = os === "ios";
   const adjustedHeight = isIOS ? "100%" : UNIFORMED_HEIGHT;
+
+  useGlobalSounds(); // Initialize global sounds
 
   return (
     <>

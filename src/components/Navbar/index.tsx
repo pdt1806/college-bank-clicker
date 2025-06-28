@@ -1,9 +1,7 @@
 import { Button, Image, Stack, Text, Title } from "@mantine/core";
 import { IconChartBar, IconClick, IconInfoCircle, IconSettings, IconStar } from "@tabler/icons-react";
 import { Link, useLocation } from "react-router-dom";
-import useSound from "use-sound";
-import { SettingsDataStore } from "../../GameProvider/Stores/SettingsDataStore";
-import { audio } from "../../utils/audio";
+import { playSound } from "../../GameProvider/SoundManager";
 
 const links = [
   { label: "Game", icon: IconClick, to: "/" },
@@ -17,14 +15,6 @@ const Navbar = ({ navbarOpened, toggleNavbar }: { navbarOpened: boolean; toggleN
   // const navigate = useNavigate();
   const location = useLocation();
 
-  const { sfxVolume } = SettingsDataStore.getState();
-  const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
-
-  const [playSound] = useSound(audio.pop3, {
-    volume: sfxVolume / 100,
-    soundEnabled: !sfxMutedIOS,
-  });
-
   return (
     <Stack gap={0} justify="space-between" px="xs">
       <Image src="/assets/cbc-logo.svg" alt="Logo" w="100%" maw={400} mx="auto" py="md" />
@@ -33,7 +23,7 @@ const Navbar = ({ navbarOpened, toggleNavbar }: { navbarOpened: boolean; toggleN
           <Button
             onClick={() => {
               navbarOpened && toggleNavbar();
-              playSound();
+              playSound("pop3");
             }}
             variant={location.pathname === link.to ? "filled" : "subtle"}
             color={location.pathname === link.to ? "cbc-bluegray.6" : "cbc-bluegray.0"}

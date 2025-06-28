@@ -1,12 +1,10 @@
 import { Box, Container, ScrollArea, SimpleGrid, Tabs, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconArrowUp, IconMoneybag, IconMouse } from "@tabler/icons-react";
-import useSound from "use-sound";
 import AchievementBox from "../../components/AchievementBox";
+import { playSound } from "../../GameProvider/SoundManager";
 import { AchievementsDataStore } from "../../GameProvider/Stores/AchievementsDataStore";
-import { SettingsDataStore } from "../../GameProvider/Stores/SettingsDataStore";
 import { clickAchievementList, moneyAchievementList, upgradeAchievementList } from "../../utils/achievements";
-import { audio } from "../../utils/audio";
 import { UNIFORMED_HEIGHT } from "../../utils/const";
 import classes from "./index.module.css";
 
@@ -53,14 +51,6 @@ const Achievements = () => {
     });
   };
 
-  const { sfxVolume } = SettingsDataStore.getState();
-  const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
-
-  const [playSound] = useSound(audio.pop3, {
-    volume: sfxVolume / 100,
-    soundEnabled: !sfxMutedIOS,
-  });
-
   return (
     <Container size="xl" py="xs" c="white" h={isMobile ? UNIFORMED_HEIGHT : "100vh"}>
       <Title py="lg">Achievements</Title>
@@ -81,7 +71,7 @@ const Achievements = () => {
                 value={tab.name}
                 leftSection={<tab.icon size={24} />}
                 className={classes.tab}
-                onClick={() => playSound()}
+                onClick={() => playSound("pop3")}
               >
                 <Text>{tab.name}</Text>
               </Tabs.Tab>

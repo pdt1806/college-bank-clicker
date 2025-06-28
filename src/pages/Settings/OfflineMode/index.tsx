@@ -1,16 +1,10 @@
 import { Group, Stack, Switch, Text, Title } from "@mantine/core";
-import useSound from "use-sound";
+import { playSound } from "../../../GameProvider/SoundManager";
 import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
-import { audio } from "../../../utils/audio";
 
 export const OfflineModeSettings = () => {
-  const { setOfflineMode, sfxVolume, sfxMutedIOS } = SettingsDataStore.getState();
+  const { setOfflineMode } = SettingsDataStore.getState();
   const offlineMode = SettingsDataStore((state) => state.offlineMode);
-
-  const [playSound] = useSound(audio.pop, {
-    volume: sfxVolume / 100,
-    soundEnabled: !sfxMutedIOS,
-  });
 
   return (
     <Stack w="100%">
@@ -29,7 +23,7 @@ export const OfflineModeSettings = () => {
           checked={offlineMode}
           size="xl"
           onClick={() => {
-            playSound();
+            playSound("pop");
             setOfflineMode(!offlineMode);
           }}
           classNames={{

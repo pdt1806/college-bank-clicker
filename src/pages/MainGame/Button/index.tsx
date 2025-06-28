@@ -1,10 +1,8 @@
 import { Box, Center } from "@mantine/core";
 import { memo, useRef } from "react";
-import useSound from "use-sound";
 import { increment } from "../../../GameProvider/GameActions";
+import { playSound } from "../../../GameProvider/SoundManager";
 import { GameDataStore } from "../../../GameProvider/Stores/GameDataStore";
-import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
-import { audio } from "../../../utils/audio";
 import classes from "./index.module.css";
 
 const MainGameButton = () => {
@@ -30,14 +28,6 @@ const MainGameButton = () => {
     }, 1000);
   };
 
-  const { sfxVolume } = SettingsDataStore.getState();
-  const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
-
-  const [playSound] = useSound(audio.pop, {
-    volume: sfxVolume / 100,
-    soundEnabled: !sfxMutedIOS,
-  });
-
   return (
     <Center h="100%" w="100%">
       <Box className={classes.wrapper} ref={containerRef}>
@@ -45,7 +35,7 @@ const MainGameButton = () => {
           onClick={(e) => {
             animate(e);
             increment();
-            playSound();
+            playSound("pop2");
           }}
           className={`${classes.image} cursor-pointer`}
         />

@@ -2,11 +2,10 @@ import { notifications } from "@mantine/notifications";
 import { IconExclamationCircleFilled, IconStar, IconUpload } from "@tabler/icons-react";
 import { readAndCompressImage } from "browser-image-resizer";
 import { allAchievements } from "../utils/achievements";
-import { audio } from "../utils/audio";
 import { GAME_CURSORS, INDEXED_DB_NAME } from "../utils/const";
+import { playSound } from "./SoundManager";
 import { AchievementsDataStore } from "./Stores/AchievementsDataStore";
 import { GameDataStore } from "./Stores/GameDataStore";
-import { SettingsDataStore } from "./Stores/SettingsDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
 
 export const increment = () => {
@@ -34,7 +33,7 @@ export const buyUpgrade = (upgrade: Upgrade) => {
   };
 
   if (money >= currentCost(upgrade)) {
-    playSound(audio.upgrade);
+    playSound("upgrade");
     setMoney(money - currentCost(upgrade));
     upgrade.perSecond && setPerSecond(perSecond + (upgrade.perSecond ?? 0));
     upgrade.perClick && setPerClick(perClick + (upgrade.perClick ?? 0));
@@ -190,7 +189,7 @@ export const addAchievement = (achievement: Achievement | string) => {
     } as AchievementListType;
     setAchievements(newAchievements);
     saveAchievements();
-    playSound(audio.achievement);
+    playSound("achievement");
     notifications.show({
       radius: "lg",
       styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
@@ -204,16 +203,16 @@ export const addAchievement = (achievement: Achievement | string) => {
   }
 };
 
-const playSound = (audio: string) => {
-  const { sfxMutedIOS, sfxVolume } = SettingsDataStore.getState();
+// const playSound = (audio: string) => {
+//   const { sfxMutedIOS, sfxVolume } = SettingsDataStore.getState();
 
-  const sound = new Audio(audio);
-  sound.muted = sfxMutedIOS;
-  sound.volume = sfxVolume / 100;
-  sound.play().catch((error) => {
-    console.error("Error playing audio:", error);
-  });
-};
+//   const sound = new Audio(audio);
+//   sound.muted = sfxMutedIOS;
+//   sound.volume = sfxVolume / 100;
+//   sound.play().catch((error) => {
+//     console.error("Error playing audio:", error);
+//   });
+// };
 
 export const updateCursor = (type: string, file: File): Promise<string | undefined> => {
   return new Promise((resolve, reject) => {

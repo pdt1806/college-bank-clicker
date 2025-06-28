@@ -2,26 +2,11 @@ import { Button, Group, Modal, Stack, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconRefresh } from "@tabler/icons-react";
-import useSound from "use-sound";
 import { resetAllGame } from "../../../GameProvider/GameActions";
-import { SettingsDataStore } from "../../../GameProvider/Stores/SettingsDataStore";
-import { audio } from "../../../utils/audio";
+import { playSound } from "../../../GameProvider/SoundManager";
 
 const ResetGameData = () => {
   const [opened, { open, close }] = useDisclosure(false);
-
-  const { sfxVolume } = SettingsDataStore.getState();
-  const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
-
-  const [playSoundAchievement] = useSound(audio.achievement, {
-    volume: sfxVolume / 100,
-    soundEnabled: !sfxMutedIOS,
-  });
-
-  const [playSoundPop] = useSound(audio.pop, {
-    volume: sfxVolume / 100,
-    soundEnabled: !sfxMutedIOS,
-  });
 
   return (
     <>
@@ -38,7 +23,7 @@ const ResetGameData = () => {
             color="red"
             onClick={() => {
               resetAllGame();
-              playSoundAchievement();
+              playSound("achievement");
               notifications.show({
                 radius: "lg",
                 styles: {
@@ -69,7 +54,7 @@ const ResetGameData = () => {
           color="red"
           onClick={() => {
             open();
-            playSoundPop();
+            playSound("pop");
           }}
           radius="xl"
         >
