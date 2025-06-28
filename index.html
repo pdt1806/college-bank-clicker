@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <script type="application/ld+json">
@@ -75,17 +75,20 @@
         width: 100vw;
         overflow: hidden;
       }
-
       body {
         position: fixed;
         inset: 0;
         overflow: hidden;
       }
-
       :disabled,
       [aria-disabled="true"],
       .m-disabled {
         cursor: not-allowed !important;
+      }
+      img {
+        pointer-events: none;
+        user-select: none;
+        -webkit-user-drag: none;
       }
     </style>
   </head>
