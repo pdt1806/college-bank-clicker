@@ -1,0 +1,51 @@
+export const inventoryItems: InventoryItem[] = [
+  {
+    id: "item-click-100x",
+    name: "Mechanical Pencil of Destiny",
+    description: "You have a 1% chance to get 1000x money from a click.",
+    method: "Collect this by clicking 1000 times.",
+    image: "",
+  },
+  {
+    id: "item-double-next-20-every-200",
+    name: "Giant Barron's Book",
+    description: "Every 200 clicks boosts next 20 clicks by 2x.",
+    method: "Collect this by upgrading each manual upgrade to level 20.",
+    image: "",
+  },
+  {
+    id: "item-0.3-percent-chance-triple-30-secs",
+    name: "Leaked Group Chat",
+    description: "You have a 0.3% chance to triple your money for 30 seconds.",
+    method: "Collect this by upgrading each automatic upgrade to level 30.",
+    image: "",
+  },
+  {
+    id: "item-offline-earning-1",
+    name: "College Board Stress Ball",
+    description: "You earn 10% of your accumulated per-second money while offline.",
+    method: "Collect this by upgrading each upgrade to level 10.",
+    image: "",
+  },
+  {
+    id: "item-offline-earning-2",
+    name: "Sleep-Deprived Flashcards",
+    description: "You earn 25% of your accumulated per-second money while offline.",
+    method: "Collect this by upgrading each upgrade to level 25.",
+    image: "",
+  },
+  {
+    id: "item-offline-earning-3",
+    name: "Coffee-Stained TI-84",
+    description: "You earn 50% of your accumulated per-second money while offline.",
+    method: "Collect this by upgrading each upgrade to level 50.",
+    image: "",
+  },
+  {
+    id: "item-offline-earning-4",
+    name: "5 Score Shrine",
+    description: "You earn 100% of your accumulated per-second money while offline.",
+    method: "Collect this by upgrading each upgrade to level 100.",
+    image: "",
+  },
+];

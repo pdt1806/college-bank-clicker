@@ -9,14 +9,14 @@ export const SettingsDataStore = create<SettingsDataState>()((set) => ({
   musicMutedIOS: parsedSettingsData.musicMutedIOS ?? false,
   sfxMutedIOS: parsedSettingsData.sfxMutedIOS ?? false,
   TPS: parsedSettingsData.TPS ?? 25,
-  offlineMode: parsedSettingsData.offlineMode ?? true,
+  // offlineMode: parsedSettingsData.offlineMode ?? true,
 
   setMusicVolume: (musicVolume: number) => set({ musicVolume }),
   setSfxVolume: (sfxVolume: number) => set({ sfxVolume }),
   setMusicMutedIOS: (musicMutedIOS: boolean) => set({ musicMutedIOS }),
   setSfxMutedIOS: (sfxMutedIOS: boolean) => set({ sfxMutedIOS }),
   setTPS: (TPS: number) => set({ TPS }),
-  setOfflineMode: (offlineMode: boolean) => set({ offlineMode }),
+  // setOfflineMode: (offlineMode: boolean) => set({ offlineMode }),
 
   saveSettings: () => {
     const state = SettingsDataStore.getState();
@@ -28,7 +28,7 @@ export const SettingsDataStore = create<SettingsDataState>()((set) => ({
         musicMutedIOS: state.musicMutedIOS,
         sfxMutedIOS: state.sfxMutedIOS,
         TPS: state.TPS,
-        offlineMode: state.offlineMode,
+        // offlineMode: state.offlineMode,
       })
     );
   },

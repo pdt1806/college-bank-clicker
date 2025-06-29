@@ -2,6 +2,7 @@ import { createRootRoute, createRoute } from "@tanstack/react-router";
 import Layout from "./components/Layout";
 import About from "./pages/About";
 import Achievements from "./pages/Achievements";
+import { Inventory } from "./pages/Inventory";
 import MainGame from "./pages/MainGame";
 import Settings from "./pages/Settings";
 import Statistics from "./pages/Statistics";
@@ -40,10 +41,17 @@ const statisticsRoute = createRoute({
   component: Statistics,
 });
 
+const inventoryRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/inventory",
+  component: Inventory,
+});
+
 export const routeTree = rootRoute.addChildren([
   mainRoute,
   settingsRoute,
   aboutRoute,
   achievementsRoute,
   statisticsRoute,
+  inventoryRoute,
 ]);

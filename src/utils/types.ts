@@ -24,6 +24,7 @@ type Achievement = {
   id: string;
   name: string;
   description: string;
+  message: string;
   value?: number;
   date?: Date;
 };
@@ -35,6 +36,10 @@ type AchievementsTab = {
 };
 
 type AchievementListType = {
+  [key: string]: Date;
+};
+
+type InventoryListType = {
   [key: string]: Date;
 };
 
@@ -71,13 +76,13 @@ interface SettingsDataState {
   musicMutedIOS: boolean;
   sfxMutedIOS: boolean;
   TPS: number;
-  offlineMode: boolean;
+  // offlineMode: boolean;
   setMusicVolume: (musicVolume: number) => void;
   setSfxVolume: (sfxVolume: number) => void;
   setMusicMutedIOS: (musicMutedIOS: boolean) => void;
   setSfxMutedIOS: (sfxMutedIOS: boolean) => void;
   setTPS: (TPS: number) => void;
-  setOfflineMode: (offlineMode: boolean) => void;
+  // setOfflineMode: (offlineMode: boolean) => void;
   saveSettings: () => void;
 }
 
@@ -116,6 +121,13 @@ interface AchievementsDataState {
   resetAchievements: () => void;
 }
 
+interface InventoryDataState {
+  inventory: InventoryListType;
+  setInventory: (inventory: InventoryListType) => void;
+  saveInventory: () => void;
+  resetInventory: () => void;
+}
+
 interface OutletContext {
   asideOpened: boolean;
   navbarOpened: boolean;
@@ -125,4 +137,13 @@ interface NavbarLink {
   label: string;
   icon: React.ComponentType<{ size?: number; color?: string }>;
   to: string;
+}
+
+interface InventoryItem {
+  id: string;
+  name: string;
+  description: string;
+  method: string;
+  image: string;
+  date?: Date;
 }

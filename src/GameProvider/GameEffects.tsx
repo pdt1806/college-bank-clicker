@@ -1,8 +1,6 @@
 import { useEffect, useRef } from "react";
-import { clickAchievementList, moneyAchievementList, totalUpgradeAchievementList } from "../utils/achievements";
 import { GAME_CURSORS, INDEXED_DB_NAME } from "../utils/const";
-import { automaticUpgradeList, manualUpgradeList } from "../utils/upgrades";
-import { addAchievement, countUpgrade, injectCursorsToDOM } from "./GameActions";
+import { injectCursorsToDOM } from "./GameActions";
 import { audio } from "./SoundManager";
 import { GameDataStore } from "./Stores/GameDataStore";
 import { SettingsDataStore } from "./Stores/SettingsDataStore";
@@ -48,24 +46,24 @@ export const GameEffects = () => {
 
   // Offline mode logic
   // Add money
-  useEffect(() => {
-    const { offlineMode } = SettingsDataStore.getState();
-    const { money, setMoney, perSecond } = GameDataStore.getState();
-    const { totalMoney, setTotalMoney } = StatsDataStore.getState();
+  // useEffect(() => {
+  //   const { offlineMode } = SettingsDataStore.getState();
+  //   const { money, setMoney, perSecond } = GameDataStore.getState();
+  //   const { totalMoney, setTotalMoney } = StatsDataStore.getState();
 
-    if (!offlineMode || perSecond == 0) return;
-    const lastAccess = sessionStorage.getItem("lastAccess");
-    if (!lastAccess) return;
+  //   if (!offlineMode || perSecond == 0) return;
+  //   const lastAccess = sessionStorage.getItem("lastAccess");
+  //   if (!lastAccess) return;
 
-    const lastAccessDate = new Date(lastAccess);
-    const currentTime = new Date();
-    const timeDiff = Math.floor((currentTime.getTime() - lastAccessDate.getTime()) / 1000); // in seconds
-    if (timeDiff > 0 && perSecond > 0) {
-      const earned = perSecond * timeDiff;
-      setMoney(money + earned);
-      setTotalMoney(totalMoney + earned);
-    }
-  }, []);
+  //   const lastAccessDate = new Date(lastAccess);
+  //   const currentTime = new Date();
+  //   const timeDiff = Math.floor((currentTime.getTime() - lastAccessDate.getTime()) / 1000); // in seconds
+  //   if (timeDiff > 0 && perSecond > 0) {
+  //     const earned = perSecond * timeDiff;
+  //     setMoney(money + earned);
+  //     setTotalMoney(totalMoney + earned);
+  //   }
+  // }, []);
 
   // Increment money logic
   // using RAF + TPS for smooth updates & saving battery
@@ -113,54 +111,6 @@ export const GameEffects = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
-
-  // Check achievements based on upgrades
-  useEffect(() => {
-    const unsub = GameDataStore.subscribe((state) => {
-      const { upgrades } = state;
-
-      totalUpgradeAchievementList.forEach((achievement) => {
-        if (Object.values(upgrades).reduce((total, value) => total + value, 0) >= achievement.value!)
-          addAchievement(achievement);
-      });
-
-      const allManualUpgrades = manualUpgradeList.every((upgrade) => countUpgrade(upgrade) > 0);
-      if (allManualUpgrades) addAchievement("achievement-upgrade-manual");
-
-      const allAutomaticUpgrades = automaticUpgradeList.every((upgrade) => countUpgrade(upgrade) > 0);
-      if (allAutomaticUpgrades) addAchievement("achievement-upgrade-automation");
-    });
-
-    return unsub;
-  }, []);
-
-  // Check achievements based on money
-  useEffect(() => {
-    const unsub = GameDataStore.subscribe((state) => {
-      const { maxMoney, setMaxMoney } = StatsDataStore.getState();
-
-      const currentMoney = state.money;
-      moneyAchievementList.forEach((achievement) => {
-        if (currentMoney >= achievement.value!) addAchievement(achievement);
-      });
-
-      if (currentMoney > maxMoney) setMaxMoney(currentMoney);
-    });
-
-    return unsub;
-  }, []);
-
-  // Check achievements based on total clicks
-  useEffect(() => {
-    const unsub = StatsDataStore.subscribe((state) => {
-      const totalClicks = state.totalClicks;
-      clickAchievementList.forEach((achievement) => {
-        if (totalClicks >= achievement.value!) addAchievement(achievement);
-      });
-    });
-
-    return unsub;
   }, []);
 
   // Load custom cursors from iDB if there are, then inject them into the DOM

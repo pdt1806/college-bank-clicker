@@ -1,11 +1,13 @@
 import { notifications } from "@mantine/notifications";
-import { IconExclamationCircleFilled, IconStar, IconUpload } from "@tabler/icons-react";
+import { Icon, IconBackpack, IconExclamationCircleFilled, IconProps, IconStar, IconUpload } from "@tabler/icons-react";
 import { readAndCompressImage } from "browser-image-resizer";
 import { allAchievements } from "../utils/achievements";
 import { GAME_CURSORS, INDEXED_DB_NAME } from "../utils/const";
+import { inventoryItems } from "../utils/inventory";
 import { playSound } from "./SoundManager";
 import { AchievementsDataStore } from "./Stores/AchievementsDataStore";
 import { GameDataStore } from "./Stores/GameDataStore";
+import { InventoryDataStore } from "./Stores/InventoryDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
 
 export const increment = () => {
@@ -79,6 +81,7 @@ export const exportAllGame = () => {
     gameData: localStorage.getItem("gameData"),
     statsData: localStorage.getItem("statsData"),
     achievementsData: localStorage.getItem("achievementsData"),
+    inventoryData: localStorage.getItem("inventoryData"),
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], {
     type: "application/json",
@@ -99,14 +102,14 @@ const checkGameDataAuthenticity = (data: any) => {
   try {
     JSON.parse(data.gameData);
     JSON.parse(data.statsData);
-    JSON.parse(data.achievementsData);
+    JSON.parse(data.achievementsData || "{}");
+    JSON.parse(data.inventoryData || "{}");
   } catch (error) {
     return "Invalid game data structure. Please ensure the file is a valid game data file.";
   }
 
   if (!data.gameData) return "Game data is missing.";
   if (!data.statsData) return "Stats data is missing.";
-  if (!data.achievementsData) return "Achievements data is missing.";
 
   return null; // Data is valid
 };
@@ -119,6 +122,8 @@ export const importAllGame = (file: File | null) => {
   const { setTotalClicks, setTotalMoney, setTimeInGame, setMaxMoney, saveStats } = StatsDataStore.getState();
 
   const { setAchievements, saveAchievements } = AchievementsDataStore.getState();
+
+  const { setInventory, saveInventory } = InventoryDataStore.getState();
 
   const reader = new FileReader();
   reader.onload = (event) => {
@@ -140,12 +145,16 @@ export const importAllGame = (file: File | null) => {
       setTimeInGame(timeInGame);
       setMaxMoney(maxMoney);
 
-      const achievements = JSON.parse(data.achievementsData);
+      const achievements = JSON.parse(data.achievementsData || "{}");
       setAchievements(achievements);
+
+      const inventory = JSON.parse(data.inventoryData || "{}");
+      setInventory(inventory);
 
       saveGame();
       saveStats();
       saveAchievements();
+      saveInventory();
 
       notifications.show({
         radius: "lg",
@@ -170,50 +179,6 @@ export const importAllGame = (file: File | null) => {
   };
   reader.readAsText(file);
 };
-
-export const addAchievement = (achievement: Achievement | string) => {
-  const { achievements, setAchievements, saveAchievements } = AchievementsDataStore.getState();
-
-  if (typeof achievement === "string") {
-    const foundAchievement = allAchievements.find((ach) => ach.id === achievement);
-    if (!foundAchievement) {
-      console.warn(`Achievement with id "${achievement}" not found.`);
-      return;
-    }
-    achievement = foundAchievement;
-  }
-
-  if (!achievements[achievement.id]) {
-    const newAchievements = {
-      ...achievements,
-      [achievement.id]: achievement.date ?? new Date(),
-    } as AchievementListType;
-    setAchievements(newAchievements);
-    saveAchievements();
-    playSound("achievement");
-    notifications.show({
-      radius: "lg",
-      styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
-      title: "Achievement Unlocked!",
-      message: achievement.name,
-      color: "cbc-green",
-      autoClose: 5000,
-      position: "top-right",
-      icon: <IconStar size={24} />,
-    });
-  }
-};
-
-// const playSound = (audio: string) => {
-//   const { sfxMutedIOS, sfxVolume } = SettingsDataStore.getState();
-
-//   const sound = new Audio(audio);
-//   sound.muted = sfxMutedIOS;
-//   sound.volume = sfxVolume / 100;
-//   sound.play().catch((error) => {
-//     console.error("Error playing audio:", error);
-//   });
-// };
 
 export const updateCursor = (type: string, file: File): Promise<string | undefined> => {
   return new Promise((resolve, reject) => {
@@ -329,3 +294,98 @@ export const injectCursorsToDOM = ({ defaultURL, pointerURL }: { defaultURL?: st
     sessionStorage.setItem("pointerCursorURL", pointerURL);
   }
 };
+
+// -- Add an entry to achievements or inventory
+
+type AddEntryOptions<T extends { id: string; name: string; date?: Date }> = {
+  entry: T | string;
+  allEntries: T[];
+  store: {
+    getState: () => {
+      data: Record<string, Date>;
+      setData: (newData: Record<string, Date>) => void;
+      saveData: () => void;
+    };
+  };
+  typeLabel: string;
+  icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>;
+  color: string;
+  soundId: string;
+};
+
+const addEntry = <T extends { id: string; name: string; date?: Date }>(options: AddEntryOptions<T>) => {
+  const { entry, allEntries, store, typeLabel, icon, color, soundId } = options;
+  const { data, setData, saveData } = store.getState();
+
+  let actualEntry = typeof entry === "string" ? allEntries.find((e) => e.id === entry) : entry;
+
+  if (!actualEntry) {
+    console.warn(`${typeLabel} with id "${entry}" not found.`);
+    return;
+  }
+
+  if (!data[actualEntry.id]) {
+    const newData = {
+      ...data,
+      [actualEntry.id]: actualEntry.date ?? new Date(),
+    };
+    setData(newData);
+    saveData();
+    playSound(soundId);
+    const NotiIcon = icon;
+    notifications.show({
+      radius: "lg",
+      styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
+      title: `${typeLabel} Unlocked!`,
+      message: actualEntry.name,
+      color: color,
+      autoClose: 5000,
+      position: "top-right",
+      icon: <NotiIcon size={24} />,
+    });
+  }
+};
+
+export const addAchievement = (achievement: Achievement | string) => {
+  addEntry({
+    entry: achievement,
+    allEntries: allAchievements,
+    store: {
+      getState: () => {
+        const { achievements, setAchievements, saveAchievements } = AchievementsDataStore.getState();
+        return {
+          data: achievements,
+          setData: setAchievements,
+          saveData: saveAchievements,
+        };
+      },
+    },
+    icon: IconStar,
+    color: "cbc-green",
+    soundId: "achievement",
+    typeLabel: "Achievement",
+  });
+};
+
+export const addInventoryItem = (item: InventoryItem | string) => {
+  addEntry({
+    entry: item,
+    allEntries: inventoryItems,
+    store: {
+      getState: () => {
+        const { inventory, setInventory, saveInventory } = InventoryDataStore.getState();
+        return {
+          data: inventory,
+          setData: setInventory,
+          saveData: saveInventory,
+        };
+      },
+    },
+    icon: IconBackpack,
+    color: "cbc-yellow",
+    soundId: "achievement",
+    typeLabel: "Inventory Item",
+  });
+};
+
+// ------

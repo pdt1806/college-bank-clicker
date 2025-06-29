@@ -1,11 +1,12 @@
 import { Image, Stack, Text } from "@mantine/core";
-import { IconChartBar, IconClick, IconInfoCircle, IconSettings, IconStar } from "@tabler/icons-react";
+import { IconBackpack, IconChartBar, IconClick, IconInfoCircle, IconSettings, IconStar } from "@tabler/icons-react";
 import { memo } from "react";
 import { NavbarLink } from "./Link";
 
 const links: NavbarLink[] = [
   { label: "Game", icon: IconClick, to: "/" },
   { label: "Achievements", icon: IconStar, to: "/achievements" },
+  { label: "Inventory", icon: IconBackpack, to: "/inventory" },
   { label: "Statistics", icon: IconChartBar, to: "/statistics" },
   { label: "Settings", icon: IconSettings, to: "/settings" },
   { label: "About", icon: IconInfoCircle, to: "/about" },

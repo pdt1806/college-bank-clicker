@@ -40,10 +40,10 @@ const AchievementBox = ({ achievement }: { achievement: Achievement }) => {
               lineHeight: 1.5,
             }}
           >
-            {achievement.date ? achievement.name : "???"}
+            {achievement.date ? achievement.name : `???`}
           </Text>
           <Text size="sm" c="dimmed" mt="xs">
-            {achievement.date ? achievement.description : "Try to achieve this!"}
+            {achievement.date ? achievement.message : achievement.description}
           </Text>
           {achievement.date && (
             <Text size="sm" c="dimmed" mt="xs">
