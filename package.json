@@ -1,6 +1,6 @@
 {
   "name": "college-bank-clicker",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -15,10 +15,10 @@
     "@tanstack/react-router": "^1.122.0",
     "@tanstack/react-router-devtools": "^1.122.0",
     "browser-image-resizer": "^2.4.1",
+    "preact": "^10.26.9",
     "pretty-ms": "^9.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^7.6.0",
     "use-sound": "^5.0.0",
     "zustand": "^5.0.5"
   },
@@ -32,8 +32,10 @@
     "postcss-preset-mantine": "1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "react-scan": "^0.3.4",
+    "rollup-plugin-visualizer": "^6.0.3",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
+    "vite-plugin-auto-preload": "^0.1.1",
     "vite-plugin-pwa": "^1.0.0"
   }
 }
