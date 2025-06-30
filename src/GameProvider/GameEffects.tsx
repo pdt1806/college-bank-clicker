@@ -1,8 +1,10 @@
+import { useIdle } from "@mantine/hooks";
 import { useEffect, useRef } from "react";
 import { GAME_CURSORS, INDEXED_DB_NAME } from "../utils/const";
 import { injectCursorsToDOM } from "./GameActions";
 import { audio } from "./SoundManager";
 import { GameDataStore } from "./Stores/GameDataStore";
+import { InventoryDataStore } from "./Stores/InventoryDataStore";
 import { SettingsDataStore } from "./Stores/SettingsDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
 
@@ -44,26 +46,39 @@ export const GameEffects = () => {
     return unsub;
   }, []);
 
-  // Offline mode logic
+  // Offline mode logic (item required)
   // Add money
-  // useEffect(() => {
-  //   const { offlineMode } = SettingsDataStore.getState();
-  //   const { money, setMoney, perSecond } = GameDataStore.getState();
-  //   const { totalMoney, setTotalMoney } = StatsDataStore.getState();
+  useEffect(() => {
+    const { inventory } = InventoryDataStore.getState();
+    const { money, setMoney, perSecond } = GameDataStore.getState();
+    const { totalMoney, setTotalMoney } = StatsDataStore.getState();
 
-  //   if (!offlineMode || perSecond == 0) return;
-  //   const lastAccess = sessionStorage.getItem("lastAccess");
-  //   if (!lastAccess) return;
+    const offlineMode = Object.keys(inventory).includes("item-offline-earning-upgrade-50");
 
-  //   const lastAccessDate = new Date(lastAccess);
-  //   const currentTime = new Date();
-  //   const timeDiff = Math.floor((currentTime.getTime() - lastAccessDate.getTime()) / 1000); // in seconds
-  //   if (timeDiff > 0 && perSecond > 0) {
-  //     const earned = perSecond * timeDiff;
-  //     setMoney(money + earned);
-  //     setTotalMoney(totalMoney + earned);
-  //   }
-  // }, []);
+    if (!offlineMode || perSecond == 0) return;
+    const lastAccess = sessionStorage.getItem("lastAccess");
+    if (!lastAccess) return;
+
+    const lastAccessDate = new Date(lastAccess);
+    const currentTime = new Date();
+    const timeDiff = Math.floor((currentTime.getTime() - lastAccessDate.getTime()) / 1000); // in seconds
+    if (timeDiff > 0 && perSecond > 0) {
+      const earned = perSecond * timeDiff;
+      setMoney(money + earned);
+      setTotalMoney(totalMoney + earned);
+    }
+  }, []);
+
+  // Double per second when idle logic
+  const idle = useIdle(5 * 60 * 1000); // 5 minutes in milliseconds;
+  useEffect(() => {
+    const inventoryList = Object.keys(InventoryDataStore.getState().inventory);
+    if (!inventoryList.includes("item-double-per-second-when-idle")) return;
+
+    const { setSecondMultiplier } = GameDataStore.getState();
+    if (idle) setSecondMultiplier(2);
+    else setSecondMultiplier(1);
+  }, [idle]);
 
   // Increment money logic
   // using RAF + TPS for smooth updates & saving battery
@@ -72,7 +87,7 @@ export const GameEffects = () => {
     let lastFrameTime = performance.now();
 
     const tick = (now: number) => {
-      const { perSecond, incrementMoney } = GameDataStore.getState();
+      const { perSecond, incrementMoney, secondMultiplier } = GameDataStore.getState();
       const { incrementTotalMoney } = StatsDataStore.getState();
       const { TPS } = SettingsDataStore.getState();
 
@@ -83,7 +98,7 @@ export const GameEffects = () => {
         lastFrameTime = now;
 
         const deltaSeconds = delta / 1000;
-        const earned = perSecond * deltaSeconds;
+        const earned = perSecond * deltaSeconds * secondMultiplier;
 
         incrementMoney(earned);
         incrementTotalMoney(earned);

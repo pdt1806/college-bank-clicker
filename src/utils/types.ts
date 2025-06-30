@@ -68,10 +68,16 @@ interface GameDataState {
   perSecond: number;
   perClick: number;
   upgrades: UpgradeListType;
+  boostedClicks: number;
+  clickMultiplier: number;
+  secondMultiplier: number;
   setMoney: (money: number) => void;
   setPerSecond: (perSecond: number) => void;
   setPerClick: (perClick: number) => void;
   setUpgrades: (upgrades: UpgradeListType) => void;
+  setBoostedClicks: (boostedClicks: number) => void;
+  setClickMultiplier: (clickMultiplier: number) => void;
+  setSecondMultiplier: (secondMultiplier: number) => void;
   incrementMoney: (amount: number) => void;
   decrementMoney: (amount: number) => void;
   incrementPerClick: (amount: number) => void;

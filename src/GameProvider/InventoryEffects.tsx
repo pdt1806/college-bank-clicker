@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { allUpgrades, automaticUpgradeList, manualUpgradeList } from "../utils/upgrades";
 import { addInventoryItem, countUpgrade } from "./GameActions";
 import { AchievementsDataStore } from "./Stores/AchievementsDataStore";
 import { GameDataStore } from "./Stores/GameDataStore";
+import { InventoryDataStore } from "./Stores/InventoryDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
 
 export const InventoryEffects = () => {
@@ -20,7 +21,7 @@ export const InventoryEffects = () => {
       if (eachUpgradeLevel50) addInventoryItem("item-offline-earning-upgrade-50");
 
       ["upgrade-ap-physics-1", "upgrade-ap-chemistry", "upgrade-ap-us-history"].forEach((upgrade) => {
-        if (countUpgrade(upgrade) >= 13) addInventoryItem("item-boost-2-for-5-mins");
+        if (countUpgrade(upgrade) >= 13) addInventoryItem("item-boost-2-for-50-clicks");
       });
 
       // ---
@@ -56,6 +57,25 @@ export const InventoryEffects = () => {
 
     return unsub;
   }, []);
+
+  // --------------------------------
+
+  // Check items collected, and what it does to the game (to those applicable)
+
+  const totalClicksFor20Every200 = StatsDataStore((state) => state.totalClicks);
+  const [clicksBefore200, setClicksBefore200] = useState(0);
+  useEffect(() => {
+    const hasThisItem = Object.keys(InventoryDataStore.getState().inventory).includes("item-double-next-20-every-200");
+    if (!hasThisItem) return;
+
+    const { boostedClicks, setBoostedClicks, setClickMultiplier } = GameDataStore.getState();
+    if (boostedClicks == 0) setClicksBefore200((prev) => prev + 1);
+    if (clicksBefore200 == 200) {
+      setBoostedClicks(20);
+      setClickMultiplier(2);
+      setClicksBefore200(0);
+    }
+  }, [totalClicksFor20Every200]);
 
   return null;
 };

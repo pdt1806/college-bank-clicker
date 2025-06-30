@@ -10,13 +10,70 @@ import { GameDataStore } from "./Stores/GameDataStore";
 import { InventoryDataStore } from "./Stores/InventoryDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
 
+const determineEarned = ({
+  perClick,
+  clickMultiplier,
+  setBoostedClicks,
+  setClickMultiplier,
+  setSecondMultiplier,
+  inventoryList,
+}: {
+  perClick: number;
+  clickMultiplier: number;
+  setBoostedClicks: (value: number) => void;
+  setClickMultiplier: (value: number) => void;
+  setSecondMultiplier: (value: number) => void;
+  inventoryList: string[];
+}) => {
+  let earned = perClick * clickMultiplier;
+
+  if (inventoryList.includes("item-spike-3x-random") && Math.random() < 3 / 100) earned *= 3;
+  if (inventoryList.includes("item-click-100x") && Math.random() < 1 / 1000) earned *= 100;
+  if (inventoryList.includes("item-boost-2-for-50-clicks") && Math.random() < 1 / 1000) {
+    setBoostedClicks(50);
+    setClickMultiplier(2);
+  }
+  if (inventoryList.includes("item-0.3-percent-chance-triple-30-secs") && Math.random() < 0.3 / 100) {
+    setSecondMultiplier(3);
+    setTimeout(() => {
+      setSecondMultiplier(1);
+    }, 30 * 1000); // Reset multiplier after 30 seconds
+  }
+
+  return earned;
+};
+
 export const increment = () => {
-  const { incrementMoney, perClick, saveGame } = GameDataStore.getState();
-  incrementMoney(perClick);
+  const {
+    incrementMoney,
+    perClick,
+    saveGame,
+    setBoostedClicks,
+    boostedClicks,
+    clickMultiplier,
+    setClickMultiplier,
+    setSecondMultiplier,
+  } = GameDataStore.getState();
+
+  const inventoryList = Object.keys(InventoryDataStore.getState().inventory);
+
+  if (boostedClicks > 0) setBoostedClicks(boostedClicks - 1);
+  if (boostedClicks == 0) setClickMultiplier(1);
+
+  const earned = determineEarned({
+    perClick,
+    clickMultiplier,
+    setBoostedClicks,
+    setClickMultiplier,
+    setSecondMultiplier,
+    inventoryList,
+  });
+
+  incrementMoney(earned);
   saveGame();
 
   const { incrementTotalMoney, incrementTotalClicks } = StatsDataStore.getState();
-  incrementTotalMoney(perClick);
+  incrementTotalMoney(earned);
   incrementTotalClicks(1);
 };
 
@@ -322,7 +379,7 @@ type AddEntryOptions<T extends { id: string; name: string; date?: Date; reward?:
 
 const addEntry = <T extends { id: string; name: string; date?: Date; reward?: AchievementReward }>(
   options: AddEntryOptions<T>
-) => {
+): boolean => {
   const { entry, allEntries, store, typeLabel, icon, color, soundId } = options;
   const { data, setData, saveData } = store.getState();
 
@@ -330,7 +387,7 @@ const addEntry = <T extends { id: string; name: string; date?: Date; reward?: Ac
 
   if (!actualEntry) {
     console.warn(`${typeLabel} with id "${entry}" not found.`);
-    return;
+    return false;
   }
 
   if (!data[actualEntry.id]) {
@@ -361,7 +418,7 @@ const addEntry = <T extends { id: string; name: string; date?: Date; reward?: Ac
           break;
         default:
           console.warn(`Unknown reward type: ${actualEntry.reward.type}`);
-          return;
+          return false;
       }
     }
 
@@ -380,7 +437,10 @@ const addEntry = <T extends { id: string; name: string; date?: Date; reward?: Ac
       position: "top-right",
       icon: <NotiIcon size={24} />,
     });
+    return true;
   }
+
+  return false; // Entry already exists
 };
 
 export const addAchievement = (achievement: Achievement | string) => {
@@ -405,7 +465,7 @@ export const addAchievement = (achievement: Achievement | string) => {
 };
 
 export const addInventoryItem = (item: InventoryItem | string) => {
-  addEntry({
+  const addedSuccessfully = addEntry({
     entry: item,
     allEntries: inventoryItems,
     store: {
@@ -423,6 +483,12 @@ export const addInventoryItem = (item: InventoryItem | string) => {
     soundId: "achievement",
     typeLabel: "Inventory Item",
   });
+  if (addedSuccessfully) {
+    const { setAchievementRewardMultiplier } = AchievementsDataStore.getState();
+    if (item === "item-achievements-5") setAchievementRewardMultiplier(1.2);
+    if (item === "item-achievements-10") setAchievementRewardMultiplier(1.5);
+    if (item === "item-achievements-20") setAchievementRewardMultiplier(2);
+  }
 };
 
 // ------
