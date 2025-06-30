@@ -13,7 +13,6 @@ import UpgradeBar from "../UpgradeBar";
 import classes from "./index.module.css";
 
 const Layout = () => {
-  const { toggleAside, closeAside, toggleNavbar, closeNavbar } = SidebarsStore.getState();
   const asideOpened = SidebarsStore((state) => state.asideOpened);
   const navbarOpened = SidebarsStore((state) => state.navbarOpened);
 
@@ -29,9 +28,9 @@ const Layout = () => {
 
   return (
     <>
-      <AchievementsEffect />
       <InventoryEffects />
       <GameEffects />
+      <AchievementsEffect />
       <AppShell
         aside={{
           width: 400,
@@ -62,7 +61,7 @@ const Layout = () => {
             className={classes.sidebar + " " + classes.navBar}
             pt={TOP_OFFSET}
           >
-            <Navbar navbarOpened={navbarOpened} toggleNavbar={toggleNavbar} />
+            <Navbar />
           </ScrollArea.Autosize>
         </AppShell.Navbar>
 
@@ -77,17 +76,12 @@ const Layout = () => {
             className={classes.sidebar + " " + classes.upgradeBar}
             pt={TOP_OFFSET}
           >
-            <UpgradeBar asideOpened={asideOpened} />
+            <UpgradeBar />
           </ScrollArea.Autosize>
         </AppShell.Aside>
 
         <AppShell.Footer h={60}>
-          <BottomNav
-            toggleAside={toggleAside}
-            toggleNavbar={toggleNavbar}
-            closeAside={closeAside}
-            closeNavbar={closeNavbar}
-          />
+          <BottomNav />
         </AppShell.Footer>
       </AppShell>
     </>

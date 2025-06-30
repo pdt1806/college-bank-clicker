@@ -8,3 +8,9 @@ export const GAME_CURSORS: Record<string, string> = {
   default: "/assets/cursors/default.png",
   pointer: "/assets/cursors/pointer.png",
 };
+
+export const REWARD_MESSAGE = {
+  money: "+$[VALUE]",
+  perClick: "+[VALUE] per click",
+  perSecond: "+[VALUE] per second",
+};

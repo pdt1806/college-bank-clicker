@@ -26,8 +26,13 @@ type Achievement = {
   description: string;
   message: string;
   value?: number;
-  award?: number; // Optional award for the achievement
+  reward: AchievementReward;
   date?: Date;
+};
+
+type AchievementReward = {
+  value: number;
+  type: "money" | "perClick" | "perSecond";
 };
 
 type AchievementsTab = {
@@ -69,6 +74,8 @@ interface GameDataState {
   setUpgrades: (upgrades: UpgradeListType) => void;
   incrementMoney: (amount: number) => void;
   decrementMoney: (amount: number) => void;
+  incrementPerClick: (amount: number) => void;
+  incrementPerSecond: (amount: number) => void;
   saveGame: () => void;
   resetGame: () => void;
 }
@@ -123,7 +130,9 @@ interface StatsDataState {
 
 interface AchievementsDataState {
   achievements: AchievementListType;
+  achievementRewardMultiplier: number;
   setAchievements: (achievements: AchievementListType) => void;
+  setAchievementRewardMultiplier: (multiplier: number) => void;
   saveAchievements: () => void;
   resetAchievements: () => void;
 }

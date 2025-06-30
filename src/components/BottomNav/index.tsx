@@ -1,18 +1,11 @@
 import { Box, Button, Flex, Stack, Text } from "@mantine/core";
 import { IconMenu2, IconShoppingCart } from "@tabler/icons-react";
 import { playSound } from "../../GameProvider/SoundManager";
+import { SidebarsStore } from "../../GameProvider/Stores/SidebarsStore";
 
-const BottomNav = ({
-  toggleAside,
-  toggleNavbar,
-  closeAside,
-  closeNavbar,
-}: {
-  toggleAside: () => void;
-  toggleNavbar: () => void;
-  closeAside: () => void;
-  closeNavbar: () => void;
-}) => {
+const BottomNav = () => {
+  const { toggleAside, toggleNavbar, closeAside, closeNavbar } = SidebarsStore.getState();
+
   const links = [
     {
       label: "Menu",

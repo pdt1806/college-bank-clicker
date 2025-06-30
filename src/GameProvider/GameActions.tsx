@@ -2,7 +2,7 @@ import { notifications } from "@mantine/notifications";
 import { Icon, IconBackpack, IconExclamationCircleFilled, IconProps, IconStar, IconUpload } from "@tabler/icons-react";
 import { readAndCompressImage } from "browser-image-resizer";
 import { allAchievements } from "../utils/achievements";
-import { GAME_CURSORS, INDEXED_DB_NAME } from "../utils/const";
+import { GAME_CURSORS, INDEXED_DB_NAME, REWARD_MESSAGE } from "../utils/const";
 import { inventoryItems } from "../utils/inventory";
 import { playSound } from "./SoundManager";
 import { AchievementsDataStore } from "./Stores/AchievementsDataStore";
@@ -21,7 +21,7 @@ export const increment = () => {
 };
 
 export const buyUpgrade = (upgrade: Upgrade) => {
-  const { money, perSecond, perClick, decrementMoney, setPerSecond, setPerClick, upgrades, setUpgrades, saveGame } =
+  const { money, decrementMoney, incrementPerSecond, incrementPerClick, upgrades, setUpgrades, saveGame } =
     GameDataStore.getState();
 
   const { saveStats } = StatsDataStore.getState();
@@ -41,12 +41,12 @@ export const buyUpgrade = (upgrade: Upgrade) => {
   if (money >= currentUpgradeCost) {
     playSound("upgrade");
     decrementMoney(currentUpgradeCost);
-    upgrade.perSecond && setPerSecond(perSecond + (upgrade.perSecond ?? 0));
-    upgrade.perClick && setPerClick(perClick + (upgrade.perClick ?? 0));
+    upgrade.perSecond && incrementPerSecond(upgrade.perSecond ?? 0);
+    upgrade.perClick && incrementPerClick(upgrade.perClick ?? 0);
     updateUpgrades();
+    saveGame();
+    saveStats();
   }
-  saveGame();
-  saveStats();
 };
 
 export const countUpgrade = (upgrade: Upgrade | string) => {
@@ -304,7 +304,7 @@ export const injectCursorsToDOM = ({ defaultURL, pointerURL }: { defaultURL?: st
 
 // -- Add an entry to achievements or inventory
 
-type AddEntryOptions<T extends { id: string; name: string; date?: Date }> = {
+type AddEntryOptions<T extends { id: string; name: string; date?: Date; reward?: AchievementReward }> = {
   entry: T | string;
   allEntries: T[];
   store: {
@@ -320,7 +320,9 @@ type AddEntryOptions<T extends { id: string; name: string; date?: Date }> = {
   soundId: string;
 };
 
-const addEntry = <T extends { id: string; name: string; date?: Date }>(options: AddEntryOptions<T>) => {
+const addEntry = <T extends { id: string; name: string; date?: Date; reward?: AchievementReward }>(
+  options: AddEntryOptions<T>
+) => {
   const { entry, allEntries, store, typeLabel, icon, color, soundId } = options;
   const { data, setData, saveData } = store.getState();
 
@@ -339,14 +341,42 @@ const addEntry = <T extends { id: string; name: string; date?: Date }>(options: 
     setData(newData);
     saveData();
     playSound(soundId);
+
+    const rewardMultiplier = AchievementsDataStore.getState().achievementRewardMultiplier;
+
+    if (actualEntry.reward) {
+      const { incrementMoney, incrementPerClick, incrementPerSecond } = GameDataStore.getState();
+      const { incrementTotalMoney } = StatsDataStore.getState();
+
+      switch (actualEntry.reward.type) {
+        case "money":
+          incrementMoney(actualEntry.reward.value * rewardMultiplier);
+          incrementTotalMoney(actualEntry.reward.value * rewardMultiplier);
+          break;
+        case "perClick":
+          incrementPerClick(actualEntry.reward.value * rewardMultiplier);
+          break;
+        case "perSecond":
+          incrementPerSecond(actualEntry.reward.value * rewardMultiplier);
+          break;
+        default:
+          console.warn(`Unknown reward type: ${actualEntry.reward.type}`);
+          return;
+      }
+    }
+
     const NotiIcon = icon;
     notifications.show({
       radius: "lg",
       styles: { title: { color: "var(--mantine-color-cbc-purple-9)" } },
       title: `${typeLabel} Unlocked!`,
-      message: actualEntry.name,
+      message:
+        actualEntry.name +
+        (actualEntry.reward
+          ? ` - Reward: ${REWARD_MESSAGE[actualEntry.reward.type].replace("[VALUE]", actualEntry.reward.value.toString())}`
+          : ""),
       color: color,
-      autoClose: 5000,
+      autoClose: 10000,
       position: "top-right",
       icon: <NotiIcon size={24} />,
     });

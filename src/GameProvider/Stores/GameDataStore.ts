@@ -17,6 +17,9 @@ export const GameDataStore = create<GameDataState>()((set) => ({
   incrementMoney: (amount: number) => set((state) => ({ money: state.money + amount })),
   decrementMoney: (amount: number) => set((state) => ({ money: Math.max(0, state.money - amount) })),
 
+  incrementPerClick: (amount: number) => set((state) => ({ perClick: state.perClick + amount })),
+  incrementPerSecond: (amount: number) => set((state) => ({ perSecond: state.perSecond + amount })),
+
   saveGame: () => {
     const state = GameDataStore.getState();
     localStorage.setItem(
