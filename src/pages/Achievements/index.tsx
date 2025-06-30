@@ -88,7 +88,7 @@ const Achievements = () => {
                   {tab.list.filter((achievement) => Object.keys(achievements).includes(achievement.id)).length} /{" "}
                   {tab.list.length} achievements of this category earned
                 </Text>
-                <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4, xl: 6 }} spacing={"md"}>
+                <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 5, xl: 6 }} spacing={"md"}>
                   {generateContent(tab)}
                 </SimpleGrid>
               </Box>

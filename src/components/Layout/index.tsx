@@ -20,8 +20,8 @@ const Layout = () => {
   const location = useLocation();
 
   const isMobile = useMediaQuery("(max-width: 75em)");
-  const os = useOs();
 
+  const os = useOs();
   const isIOS = os === "ios";
   const adjustedHeight = isIOS ? "100%" : UNIFORMED_HEIGHT;
 

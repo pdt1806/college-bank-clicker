@@ -21,6 +21,10 @@ export const StatsDataStore = create<StatsDataState>()((set) => ({
   setFirstAccess: (firstAccess: Date) => set({ firstAccess }),
   setLastAccess: (lastAccess: Date) => set({ lastAccess }),
 
+  incrementTotalClicks: (number: number) => set((state) => ({ totalClicks: state.totalClicks + number })),
+  incrementTotalMoney: (number: number) => set((state) => ({ totalMoney: state.totalMoney + number })),
+  incrementTimeInGame: (number: number) => set((state) => ({ timeInGame: state.timeInGame + number })),
+
   saveStats: () => {
     const state = StatsDataStore.getState();
     localStorage.setItem(

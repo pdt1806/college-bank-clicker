@@ -17,32 +17,33 @@ export const InventoryModal = () => {
   );
 
   const element = useMemo(() => {
-    if (!item) return null;
-
     return (
       <Modal opened={opened} onClose={close} centered radius="lg" c="cbc-purple.9" withCloseButton={false} size="xl">
-        <Stack>
-          <Group>
-            <Image
-              src={item.image || "/assets/pearto.webp"}
-              alt={item.name}
-              h={135}
-              w={135}
-              style={{ borderRadius: "var(--mantine-radius-lg)" }}
-            />
-            <Stack>
-              <Title order={3} fw={500} mt="xs">
-                {item.date ? item.name : "???"}
-              </Title>
-              <Text c="dimmed">{item.date ? item.description : "Unlock to see what this item does."}</Text>
-              <Text c="dimmed">{item.method}</Text>
-              {item.date && <Text c="dimmed">Date collected: {new Date(item.date).toLocaleDateString()}</Text>}
-            </Stack>
-          </Group>
-          <Button radius="md" color="cbc-purple" onClick={close} mt="md" w="fit-content" ml="auto">
-            Close
-          </Button>
-        </Stack>
+        {item && (
+          <Stack>
+            <Group>
+              <Image
+                src={`/assets/inventory/${item.id}.svg`}
+                alt={item.name}
+                h={135}
+                w={135}
+                style={{ borderRadius: "var(--mantine-radius-lg)" }}
+                fallbackSrc="/assets/pearto.webp"
+              />
+              <Stack>
+                <Title order={3} fw={500} mt="xs">
+                  {item.date ? item.name : "???"}
+                </Title>
+                <Text c="dimmed">{item.date ? item.description : "Unlock to see what this item does."}</Text>
+                <Text c="dimmed">{item.method}</Text>
+                {item.date && <Text c="dimmed">Date collected: {new Date(item.date).toLocaleDateString()}</Text>}
+              </Stack>
+            </Group>
+            <Button radius="md" color="cbc-purple" onClick={close} mt="md" w="fit-content" ml="auto">
+              Close
+            </Button>
+          </Stack>
+        )}
       </Modal>
     );
   }, [item, opened, close]);

@@ -11,17 +11,17 @@ import { InventoryDataStore } from "./Stores/InventoryDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
 
 export const increment = () => {
-  const { money, setMoney, perClick, saveGame } = GameDataStore.getState();
-  setMoney(money + perClick);
+  const { incrementMoney, perClick, saveGame } = GameDataStore.getState();
+  incrementMoney(perClick);
   saveGame();
 
-  const { totalClicks, totalMoney, setTotalMoney, setTotalClicks } = StatsDataStore.getState();
-  setTotalMoney(totalMoney + perClick);
-  setTotalClicks(totalClicks + 1);
+  const { incrementTotalMoney, incrementTotalClicks } = StatsDataStore.getState();
+  incrementTotalMoney(perClick);
+  incrementTotalClicks(1);
 };
 
 export const buyUpgrade = (upgrade: Upgrade) => {
-  const { money, perSecond, perClick, setMoney, setPerSecond, setPerClick, upgrades, setUpgrades, saveGame } =
+  const { money, perSecond, perClick, decrementMoney, setPerSecond, setPerClick, upgrades, setUpgrades, saveGame } =
     GameDataStore.getState();
 
   const { saveStats } = StatsDataStore.getState();
@@ -35,21 +35,24 @@ export const buyUpgrade = (upgrade: Upgrade) => {
     setUpgrades(newUpgrades);
   };
 
-  if (money >= currentCost(upgrade)) {
+  // ---
+
+  const currentUpgradeCost = currentCost(upgrade);
+  if (money >= currentUpgradeCost) {
     playSound("upgrade");
-    setMoney(money - currentCost(upgrade));
+    decrementMoney(currentUpgradeCost);
     upgrade.perSecond && setPerSecond(perSecond + (upgrade.perSecond ?? 0));
     upgrade.perClick && setPerClick(perClick + (upgrade.perClick ?? 0));
     updateUpgrades();
   }
-
   saveGame();
   saveStats();
 };
 
-export const countUpgrade = (upgrade: Upgrade) => {
+export const countUpgrade = (upgrade: Upgrade | string) => {
+  const id = typeof upgrade === "string" ? upgrade : upgrade.id;
   const { upgrades } = GameDataStore.getState();
-  return upgrades[upgrade.id] ?? 0;
+  return upgrades[id] ?? 0;
 };
 
 export const currentCost = (upgrade: Upgrade) => {
@@ -61,18 +64,22 @@ export const resetAllGame = () => {
   const { resetGame } = GameDataStore.getState();
   const { resetAchievements } = AchievementsDataStore.getState();
   const { resetStats } = StatsDataStore.getState();
+  const { resetInventory } = InventoryDataStore.getState();
   resetGame();
   resetAchievements();
   resetStats();
+  resetInventory();
 };
 
 const saveAllGame = () => {
   const { saveGame } = GameDataStore.getState();
   const { saveStats } = StatsDataStore.getState();
   const { saveAchievements } = AchievementsDataStore.getState();
+  const { saveInventory } = InventoryDataStore.getState();
   saveGame();
   saveStats();
   saveAchievements();
+  saveInventory();
 };
 
 export const exportAllGame = () => {

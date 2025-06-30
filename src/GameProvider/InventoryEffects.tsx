@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { allUpgrades, automaticUpgradeList, manualUpgradeList } from "../utils/upgrades";
 import { addInventoryItem, countUpgrade } from "./GameActions";
+import { AchievementsDataStore } from "./Stores/AchievementsDataStore";
 import { GameDataStore } from "./Stores/GameDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
 
 export const InventoryEffects = () => {
-  // Check items based on upgrades
   useEffect(() => {
     const unsub = GameDataStore.subscribe((_) => {
-      // const { upgrades } = state;
+      // Check items based on upgrades
 
       const eachManualUpgradeLevel20 = manualUpgradeList.every((upgrade) => countUpgrade(upgrade) >= 20);
       if (eachManualUpgradeLevel20) addInventoryItem("item-double-next-20-every-200");
@@ -16,44 +16,42 @@ export const InventoryEffects = () => {
       const eachAutomaticUpgradeLevel30 = automaticUpgradeList.every((upgrade) => countUpgrade(upgrade) >= 30);
       if (eachAutomaticUpgradeLevel30) addInventoryItem("item-0.3-percent-chance-triple-30-secs");
 
-      const eachUpgradeLevel10 = allUpgrades.every((upgrade) => countUpgrade(upgrade) >= 10);
-      if (eachUpgradeLevel10) addInventoryItem("item-offline-earning-1");
-
-      const eachUpgradeLevel25 = allUpgrades.every((upgrade) => countUpgrade(upgrade) >= 25);
-      if (eachUpgradeLevel25) addInventoryItem("item-offline-earning-2");
-
       const eachUpgradeLevel50 = allUpgrades.every((upgrade) => countUpgrade(upgrade) >= 50);
-      if (eachUpgradeLevel50) addInventoryItem("item-offline-earning-3");
+      if (eachUpgradeLevel50) addInventoryItem("item-offline-earning-upgrade-50");
 
-      const eachUpgradeLevel100 = allUpgrades.every((upgrade) => countUpgrade(upgrade) >= 100);
-      if (eachUpgradeLevel100) addInventoryItem("item-offline-earning-4");
+      ["upgrade-ap-physics-1", "upgrade-ap-chemistry", "upgrade-ap-us-history"].forEach((upgrade) => {
+        if (countUpgrade(upgrade) >= 13) addInventoryItem("item-boost-2-for-5-mins");
+      });
+
+      // ---
     });
 
     return unsub;
   }, []);
 
-  // Check items based on money
-  // useEffect(() => {
-  //   const unsub = GameDataStore.subscribe((state) => {
-  //     const { maxMoney, setMaxMoney } = StatsDataStore.getState();
-
-  //     const currentMoney = state.money;
-  //     moneyAchievementList.forEach((achievement) => {
-  //       if (currentMoney >= achievement.value!) addAchievement(achievement);
-  //     });
-
-  //     if (currentMoney > maxMoney) setMaxMoney(currentMoney);
-  //   });
-
-  //   return unsub;
-  // }, []);
-
-  // Check items based on total clicks
   useEffect(() => {
     const unsub = StatsDataStore.subscribe((state) => {
-      const totalClicks = state.totalClicks;
+      // Check items based on total money
+      const totalMoney = state.totalMoney;
+      if (totalMoney >= 1000000) addInventoryItem("item-spike-3x-random");
+      if (totalMoney >= 10000000) addInventoryItem("item-double-per-second-when-idle");
 
+      // Check items based on total clicks
+      const totalClicks = state.totalClicks;
       if (totalClicks >= 1000) addInventoryItem("item-click-100x");
+    });
+
+    return unsub;
+  }, []);
+
+  // Check items based on achievements
+  useEffect(() => {
+    const unsub = AchievementsDataStore.subscribe((state) => {
+      const achievementsCount = Object.keys(state.achievements).length;
+
+      if (achievementsCount >= 5) addInventoryItem("item-achievements-5");
+      if (achievementsCount >= 10) addInventoryItem("item-achievements-10");
+      if (achievementsCount >= 20) addInventoryItem("item-achievements-20");
     });
 
     return unsub;

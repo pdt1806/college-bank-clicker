@@ -1,59 +1,59 @@
 export const automaticUpgradeList: AutomaticUpgrade[] = [
   {
-    id: "upgrade-ap-bio",
-    name: "Make AP Biology Exam Date Sooner",
-    cost: 10,
+    id: "upgrade-ap-psychology",
+    name: "Crash the Server during AP Psychology Exam",
+    cost: 10, // from index 0
     costMultiplier: 1.1,
     perSecond: 0.1,
-    description: "Surprise! The AP Bio exam is now even earlier in the year.",
-  },
-  {
-    id: "upgrade-ap-us-history",
-    name: "Add More Content to AP U.S. History",
-    cost: 20,
-    costMultiplier: 1.2,
-    perSecond: 0.2,
-    description: "Because 500 years of history wasn't enough, here's more to memorize.",
+    description: "A psychological experiment gone wrong. The server crashes during the exam.",
   },
   {
     id: "upgrade-ap-spanish",
     name: "Make AP Spanish Language Audio Quieter",
-    cost: 50,
+    cost: 20, // from index 1
+    costMultiplier: 1.2,
+    perSecond: 0.2,
+    description: "Because who needs to hear the audio clearly during the exam? Not you.",
+  },
+  {
+    id: "upgrade-ap-precalc",
+    name: "Ban College Credit for AP Precalculus",
+    cost: 50, // from index 2
     costMultiplier: 1.2,
     perSecond: 0.5,
-    description: "Because who needs to hear the audio clearly during the exam? Not you.",
+    description: "No more college credit for AP Precalculus. Sorry, students.",
   },
   {
     id: "upgrade-ap-comp-sci-a",
     name: "Cut Exam Time for AP Computer Science A",
-    cost: 100,
+    cost: 100, // from index 3
     costMultiplier: 1.2,
     perSecond: 1.0,
     description: "Less time to code, more time to panic. The exam just got shorter.",
   },
   {
-    id: "upgrade-ap-physics",
-    name: "Lower AP Physics Pass Rate",
-    cost: 200,
+    id: "upgrade-ap-bio",
+    name: "Make AP Biology Exam Date Sooner",
+    cost: 200, // from index 4
     costMultiplier: 1.3,
     perSecond: 2.0,
-    description: "The class with the lowest overall pass rate of any AP exam is getting worse...",
+    description: "Surprise! The AP Bio exam is now even earlier in the year.",
   },
   {
-    id: "upgrade-ap-precalc",
-    name: "Ban College Credit for AP Precalculus",
-    cost: 500,
+    id: "upgrade-ap-us-history",
+    name: "Add More Content to AP U.S. History",
+    cost: 500, // from index 5
     costMultiplier: 1.3,
     perSecond: 5.0,
-    description: "No more college credit for AP Precalculus. Sorry, students.",
+    description: "Because 500 years of history wasn't enough, here's more to memorize.",
   },
   {
-    id: "upgrade-ap-psychology",
-    name: "Crash the Server during AP Psychology Exam",
-    cost: 1000,
+    id: "upgrade-ap-physics",
+    name: "Lower AP Physics Pass Rate",
+    cost: 1000, // from index 6
     costMultiplier: 1.3,
     perSecond: 10.0,
-    description: "A psychological experiment gone wrong. The server crashes during the exam.",
+    description: "The class with the lowest overall pass rate of any AP exam is getting worse...",
   },
   // {
   //   id: "upgrade-steal-other-peoples-work",

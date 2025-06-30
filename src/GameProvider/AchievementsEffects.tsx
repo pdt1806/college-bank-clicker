@@ -20,7 +20,7 @@ export const AchievementsEffect = () => {
       if (allManualUpgrades) addAchievement("achievement-upgrade-manual");
 
       const allAutomaticUpgrades = automaticUpgradeList.every((upgrade) => countUpgrade(upgrade) > 0);
-      if (allAutomaticUpgrades) addAchievement("achievement-upgrade-automation");
+      if (allAutomaticUpgrades) addAchievement("achievement-upgrade-automatic");
     });
 
     return unsub;

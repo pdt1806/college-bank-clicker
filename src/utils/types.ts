@@ -26,6 +26,7 @@ type Achievement = {
   description: string;
   message: string;
   value?: number;
+  award?: number; // Optional award for the achievement
   date?: Date;
 };
 
@@ -66,6 +67,8 @@ interface GameDataState {
   setPerSecond: (perSecond: number) => void;
   setPerClick: (perClick: number) => void;
   setUpgrades: (upgrades: UpgradeListType) => void;
+  incrementMoney: (amount: number) => void;
+  decrementMoney: (amount: number) => void;
   saveGame: () => void;
   resetGame: () => void;
 }
@@ -110,6 +113,10 @@ interface StatsDataState {
   setFirstAccess: (firstAccess: Date) => void;
   setLastAccess: (lastAccess: Date) => void;
 
+  incrementTotalClicks: (number: number) => void;
+  incrementTotalMoney: (number: number) => void;
+  incrementTimeInGame: (number: number) => void;
+
   saveStats: () => void;
   resetStats: () => void;
 }
@@ -144,6 +151,5 @@ interface InventoryItem {
   name: string;
   description: string;
   method: string;
-  image: string;
   date?: Date;
 }

@@ -2,6 +2,12 @@
   &:hover {
     background-color: var(--mantine-color-cbc-purple-8);
   }
+
+  @media (max-width: $mantine-breakpoint-lg) {
+    &:hover {
+      background-color: transparent;
+    }
+  }
 }
 
 .tabList {

@@ -1,6 +1,6 @@
 {
   "name": "college-bank-clicker",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -39,6 +39,7 @@
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "vite-plugin-auto-preload": "^0.1.1",
+    "vite-plugin-html": "^3.2.2",
     "vite-plugin-pwa": "^1.0.0"
   }
 }

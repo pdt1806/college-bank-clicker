@@ -72,8 +72,8 @@ export const GameEffects = () => {
     let lastFrameTime = performance.now();
 
     const tick = (now: number) => {
-      const { money, perSecond, setMoney } = GameDataStore.getState();
-      const { totalMoney, setTotalMoney } = StatsDataStore.getState();
+      const { perSecond, incrementMoney } = GameDataStore.getState();
+      const { incrementTotalMoney } = StatsDataStore.getState();
       const { TPS } = SettingsDataStore.getState();
 
       const frameDuration = 1000 / TPS;
@@ -85,8 +85,8 @@ export const GameEffects = () => {
         const deltaSeconds = delta / 1000;
         const earned = perSecond * deltaSeconds;
 
-        setMoney(money + earned);
-        setTotalMoney(totalMoney + earned);
+        incrementMoney(earned);
+        incrementTotalMoney(earned);
       }
 
       animationFrameId = requestAnimationFrame(tick);
@@ -101,16 +101,28 @@ export const GameEffects = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       const { saveGame } = GameDataStore.getState();
-      const { setTimeInGame, timeInGame, saveStats, setLastAccess } = StatsDataStore.getState();
+      const { incrementTimeInGame, saveStats, setLastAccess } = StatsDataStore.getState();
 
       saveGame();
       setLastAccess(new Date());
-      setTimeInGame(timeInGame + 1);
+      incrementTimeInGame(1);
 
       saveStats();
     }, 1000);
 
     return () => clearInterval(interval);
+  }, []);
+
+  // Set max money
+  useEffect(() => {
+    const unsub = GameDataStore.subscribe((state) => {
+      const { maxMoney, setMaxMoney } = StatsDataStore.getState();
+
+      const currentMoney = state.money;
+      if (currentMoney > maxMoney) setMaxMoney(currentMoney);
+    });
+
+    return unsub;
   }, []);
 
   // Load custom cursors from iDB if there are, then inject them into the DOM
