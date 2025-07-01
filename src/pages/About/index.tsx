@@ -215,6 +215,21 @@ const About = () => {
           .
         </Text>
         <Text size="lg">
+          Money Bag image from{" "}
+          <Text
+            span
+            c="cbc-teal"
+            inherit
+            component="a"
+            href="https://www.svgrepo.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            SVG Repo
+          </Text>
+          .
+        </Text>
+        <Text size="lg">
           CSS background patterns from{" "}
           <Text
             span
