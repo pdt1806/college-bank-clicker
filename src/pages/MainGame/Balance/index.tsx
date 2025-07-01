@@ -6,10 +6,12 @@ import classes from "./index.module.css";
 import { MainGameBalanceNumber } from "./Number";
 
 const MainGameBalance = () => {
-  const { perSecond, perClick } = GameDataStore(
-    useShallow(({ perSecond, perClick }) => ({
+  const { perSecond, perClick, secondMultiplier, clickMultiplier } = GameDataStore(
+    useShallow(({ perSecond, perClick, secondMultiplier, clickMultiplier }) => ({
       perSecond,
       perClick,
+      secondMultiplier,
+      clickMultiplier,
     }))
   );
 
@@ -21,8 +23,8 @@ const MainGameBalance = () => {
       <Title order={1} size="2.5rem" className={classes.balance}>
         <MainGameBalanceNumber />
       </Title>
-      <Text size="md">per second: {perSecond.toFixed(1)}</Text>
-      <Text size="md">per click: {perClick}</Text>
+      <Text size="md">per second: {(perSecond * secondMultiplier).toFixed(1)}</Text>
+      <Text size="md">per click: {perClick * clickMultiplier}</Text>
     </Box>
   );
 };

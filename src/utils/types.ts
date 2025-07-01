@@ -24,8 +24,15 @@ type Achievement = {
   id: string;
   name: string;
   description: string;
+  message: string;
   value?: number;
+  reward: AchievementReward;
   date?: Date;
+};
+
+type AchievementReward = {
+  value: number;
+  type: "money" | "perClick" | "perSecond";
 };
 
 type AchievementsTab = {
@@ -35,6 +42,10 @@ type AchievementsTab = {
 };
 
 type AchievementListType = {
+  [key: string]: Date;
+};
+
+type InventoryListType = {
   [key: string]: Date;
 };
 
@@ -57,10 +68,20 @@ interface GameDataState {
   perSecond: number;
   perClick: number;
   upgrades: UpgradeListType;
+  boostedClicks: number;
+  clickMultiplier: number;
+  secondMultiplier: number;
   setMoney: (money: number) => void;
   setPerSecond: (perSecond: number) => void;
   setPerClick: (perClick: number) => void;
   setUpgrades: (upgrades: UpgradeListType) => void;
+  setBoostedClicks: (boostedClicks: number) => void;
+  setClickMultiplier: (clickMultiplier: number) => void;
+  setSecondMultiplier: (secondMultiplier: number) => void;
+  incrementMoney: (amount: number) => void;
+  decrementMoney: (amount: number) => void;
+  incrementPerClick: (amount: number) => void;
+  incrementPerSecond: (amount: number) => void;
   saveGame: () => void;
   resetGame: () => void;
 }
@@ -71,13 +92,13 @@ interface SettingsDataState {
   musicMutedIOS: boolean;
   sfxMutedIOS: boolean;
   TPS: number;
-  offlineMode: boolean;
+  // offlineMode: boolean;
   setMusicVolume: (musicVolume: number) => void;
   setSfxVolume: (sfxVolume: number) => void;
   setMusicMutedIOS: (musicMutedIOS: boolean) => void;
   setSfxMutedIOS: (sfxMutedIOS: boolean) => void;
   setTPS: (TPS: number) => void;
-  setOfflineMode: (offlineMode: boolean) => void;
+  // setOfflineMode: (offlineMode: boolean) => void;
   saveSettings: () => void;
 }
 
@@ -105,15 +126,28 @@ interface StatsDataState {
   setFirstAccess: (firstAccess: Date) => void;
   setLastAccess: (lastAccess: Date) => void;
 
+  incrementTotalClicks: (number: number) => void;
+  incrementTotalMoney: (number: number) => void;
+  incrementTimeInGame: (number: number) => void;
+
   saveStats: () => void;
   resetStats: () => void;
 }
 
 interface AchievementsDataState {
   achievements: AchievementListType;
+  achievementRewardMultiplier: number;
   setAchievements: (achievements: AchievementListType) => void;
+  setAchievementRewardMultiplier: (multiplier: number) => void;
   saveAchievements: () => void;
   resetAchievements: () => void;
+}
+
+interface InventoryDataState {
+  inventory: InventoryListType;
+  setInventory: (inventory: InventoryListType) => void;
+  saveInventory: () => void;
+  resetInventory: () => void;
 }
 
 interface OutletContext {
@@ -125,4 +159,12 @@ interface NavbarLink {
   label: string;
   icon: React.ComponentType<{ size?: number; color?: string }>;
   to: string;
+}
+
+interface InventoryItem {
+  id: string;
+  name: string;
+  description: string;
+  method: string;
+  date?: Date;
 }

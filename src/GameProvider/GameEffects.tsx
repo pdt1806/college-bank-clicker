@@ -1,10 +1,10 @@
+import { useIdle } from "@mantine/hooks";
 import { useEffect, useRef } from "react";
-import { clickAchievementList, moneyAchievementList, totalUpgradeAchievementList } from "../utils/achievements";
 import { GAME_CURSORS, INDEXED_DB_NAME } from "../utils/const";
-import { automaticUpgradeList, manualUpgradeList } from "../utils/upgrades";
-import { addAchievement, countUpgrade, injectCursorsToDOM } from "./GameActions";
+import { injectCursorsToDOM } from "./GameActions";
 import { audio } from "./SoundManager";
 import { GameDataStore } from "./Stores/GameDataStore";
+import { InventoryDataStore } from "./Stores/InventoryDataStore";
 import { SettingsDataStore } from "./Stores/SettingsDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
 
@@ -46,12 +46,14 @@ export const GameEffects = () => {
     return unsub;
   }, []);
 
-  // Offline mode logic
+  // Offline mode logic (item required)
   // Add money
   useEffect(() => {
-    const { offlineMode } = SettingsDataStore.getState();
+    const { inventory } = InventoryDataStore.getState();
     const { money, setMoney, perSecond } = GameDataStore.getState();
     const { totalMoney, setTotalMoney } = StatsDataStore.getState();
+
+    const offlineMode = Object.keys(inventory).includes("item-offline-earning-upgrade-50");
 
     if (!offlineMode || perSecond == 0) return;
     const lastAccess = sessionStorage.getItem("lastAccess");
@@ -67,34 +69,57 @@ export const GameEffects = () => {
     }
   }, []);
 
+  // Double per second when idle logic
+  const idle = useIdle(5 * 60 * 1000); // 5 minutes in milliseconds;
+  useEffect(() => {
+    const inventoryList = Object.keys(InventoryDataStore.getState().inventory);
+    if (!inventoryList.includes("item-double-per-second-when-idle")) return;
+
+    const { setSecondMultiplier } = GameDataStore.getState();
+    if (idle) setSecondMultiplier(2);
+    else setSecondMultiplier(1);
+  }, [idle]);
+
   // Increment money logic
   // using RAF + TPS for smooth updates & saving battery
-
   useEffect(() => {
     let lastFrameTime = performance.now();
+    let wasPerSecondZero = true;
+    let animationFrameId: number;
 
     const tick = (now: number) => {
-      const { money, perSecond, setMoney } = GameDataStore.getState();
-      const { totalMoney, setTotalMoney } = StatsDataStore.getState();
-      const { TPS } = SettingsDataStore.getState();
+      const { perSecond, incrementMoney, secondMultiplier } = GameDataStore.getState();
 
-      const frameDuration = 1000 / TPS;
-      const delta = now - lastFrameTime;
+      if (perSecond > 0) {
+        if (wasPerSecondZero) {
+          // reset lastFrameTime to now so that delta doesn't count the time when perSecond was zero
+          lastFrameTime = now;
+          wasPerSecondZero = false;
+        }
 
-      if (perSecond > 0 && delta >= frameDuration) {
-        lastFrameTime = now;
+        const { incrementTotalMoney } = StatsDataStore.getState();
+        const { TPS } = SettingsDataStore.getState();
 
-        const deltaSeconds = delta / 1000;
-        const earned = perSecond * deltaSeconds;
+        const frameDuration = 1000 / TPS;
+        const delta = now - lastFrameTime;
 
-        setMoney(money + earned);
-        setTotalMoney(totalMoney + earned);
+        if (delta >= frameDuration) {
+          lastFrameTime = now;
+
+          const deltaSeconds = delta / 1000;
+          const earned = perSecond * deltaSeconds * secondMultiplier;
+
+          incrementMoney(earned);
+          incrementTotalMoney(earned);
+        }
+      } else {
+        !wasPerSecondZero && (wasPerSecondZero = true);
       }
 
       animationFrameId = requestAnimationFrame(tick);
     };
 
-    let animationFrameId = requestAnimationFrame(tick);
+    animationFrameId = requestAnimationFrame(tick);
 
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
@@ -103,11 +128,11 @@ export const GameEffects = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       const { saveGame } = GameDataStore.getState();
-      const { setTimeInGame, timeInGame, saveStats, setLastAccess } = StatsDataStore.getState();
+      const { incrementTimeInGame, saveStats, setLastAccess } = StatsDataStore.getState();
 
       saveGame();
       setLastAccess(new Date());
-      setTimeInGame(timeInGame + 1);
+      incrementTimeInGame(1);
 
       saveStats();
     }, 1000);
@@ -115,49 +140,13 @@ export const GameEffects = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Check achievements based on upgrades
-  useEffect(() => {
-    const unsub = GameDataStore.subscribe((state) => {
-      const { upgrades } = state;
-
-      totalUpgradeAchievementList.forEach((achievement) => {
-        if (Object.values(upgrades).reduce((total, value) => total + value, 0) >= achievement.value!)
-          addAchievement(achievement);
-      });
-
-      const allManualUpgrades = manualUpgradeList.every((upgrade) => countUpgrade(upgrade) > 0);
-      if (allManualUpgrades) addAchievement("achievement-upgrade-manual");
-
-      const allAutomaticUpgrades = automaticUpgradeList.every((upgrade) => countUpgrade(upgrade) > 0);
-      if (allAutomaticUpgrades) addAchievement("achievement-upgrade-automation");
-    });
-
-    return unsub;
-  }, []);
-
-  // Check achievements based on money
+  // Set max money
   useEffect(() => {
     const unsub = GameDataStore.subscribe((state) => {
       const { maxMoney, setMaxMoney } = StatsDataStore.getState();
 
       const currentMoney = state.money;
-      moneyAchievementList.forEach((achievement) => {
-        if (currentMoney >= achievement.value!) addAchievement(achievement);
-      });
-
       if (currentMoney > maxMoney) setMaxMoney(currentMoney);
-    });
-
-    return unsub;
-  }, []);
-
-  // Check achievements based on total clicks
-  useEffect(() => {
-    const unsub = StatsDataStore.subscribe((state) => {
-      const totalClicks = state.totalClicks;
-      clickAchievementList.forEach((achievement) => {
-        if (totalClicks >= achievement.value!) addAchievement(achievement);
-      });
     });
 
     return unsub;

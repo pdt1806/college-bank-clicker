@@ -1,5 +1,6 @@
 import { Box, Stack, Text } from "@mantine/core";
 import { IconArrowUp, IconMoneybag, IconMouse } from "@tabler/icons-react";
+import { REWARD_MESSAGE } from "../../utils/const";
 
 const AchievementBox = ({ achievement }: { achievement: Achievement }) => {
   return (
@@ -40,15 +41,21 @@ const AchievementBox = ({ achievement }: { achievement: Achievement }) => {
               lineHeight: 1.5,
             }}
           >
-            {achievement.date ? achievement.name : "???"}
+            {achievement.date ? achievement.name : `???`}
           </Text>
           <Text size="sm" c="dimmed" mt="xs">
-            {achievement.date ? achievement.description : "Try to achieve this!"}
+            {achievement.date ? achievement.message : achievement.description}
           </Text>
           {achievement.date && (
-            <Text size="sm" c="dimmed" mt="xs">
-              Date achieved: {new Date(achievement.date).toLocaleDateString()}
-            </Text>
+            <>
+              <Text size="sm" c="dimmed" mt="xs">
+                Reward:{" "}
+                {REWARD_MESSAGE[achievement.reward.type].replace("[VALUE]", achievement.reward.value.toString())}
+              </Text>
+              <Text size="sm" c="dimmed" mt="xs">
+                Date achieved: {new Date(achievement.date).toLocaleDateString()}
+              </Text>
+            </>
           )}
         </Box>
       </Stack>

@@ -1,4 +1,4 @@
-import { Button, FileButton, Group, Image, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
+import { Button, FileButton, Group, Image, Stack, Table, Text, Title, Tooltip, UnstyledButton } from "@mantine/core";
 import { useState } from "react";
 import { resetCursor, updateCursor } from "../../../GameProvider/GameActions";
 import { playSound } from "../../../GameProvider/SoundManager";
@@ -63,14 +63,17 @@ export const CustomCursorsSettings = () => {
                     multiple={false}
                   >
                     {(props) => (
-                      <Tooltip label="Click to change cursor" withArrow>
-                        <Image
-                          {...props}
-                          src={item.image}
-                          alt={item.label}
-                          style={{ width: "50px", height: "50px" }}
-                          {...(item.type == "pointer" && { className: "cursor-pointer" })}
-                        />
+                      // <Image
+                      //   {...props}
+                      //   src={item.image}
+                      //   alt={item.label}
+                      //   style={{ width: "50px", height: "50px" }}
+                      //   {...(item.type == "pointer" && { className: "cursor-pointer" })}
+                      // />
+                      <Tooltip label="Click to change cursor image" withArrow>
+                        <UnstyledButton {...props}>
+                          <Image src={item.image} alt={item.label} style={{ width: "auto", height: "50px" }} />
+                        </UnstyledButton>
                       </Tooltip>
                     )}
                   </FileButton>

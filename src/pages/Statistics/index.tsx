@@ -3,8 +3,10 @@ import { memo } from "react";
 import PageWrapper from "../../components/PageWrapper";
 import { AchievementsDataStore } from "../../GameProvider/Stores/AchievementsDataStore";
 import { GameDataStore } from "../../GameProvider/Stores/GameDataStore";
+import { InventoryDataStore } from "../../GameProvider/Stores/InventoryDataStore";
 import { StatsDataStore } from "../../GameProvider/Stores/StatsDataStore";
 import { allAchievements } from "../../utils/achievements";
+import { inventoryItems } from "../../utils/inventory";
 import { allUpgrades } from "../../utils/upgrades";
 import { StatsMaxMoney } from "./Values/MaxMoney";
 import { StatsTimeInGame } from "./Values/TimeInGame";
@@ -18,6 +20,10 @@ const Statistics = () => {
   const achievementsCount = AchievementsDataStore((state) => Object.keys(state.achievements).length);
   const totalClicks = StatsDataStore.getState().totalClicks;
   const { firstAccess } = StatsDataStore.getState();
+  const achievementRewardMultiplier = AchievementsDataStore((state) => state.achievementRewardMultiplier);
+  const clickMultiplier = GameDataStore((state) => state.clickMultiplier);
+  const secondMultiplier = GameDataStore((state) => state.secondMultiplier);
+  const inventoryItemsCount = InventoryDataStore((state) => Object.keys(state.inventory).length);
 
   const table = [
     {
@@ -33,6 +39,15 @@ const Statistics = () => {
       value: totalClicks,
     },
     {
+      name: "Per-click multiplier",
+      value: clickMultiplier,
+    },
+    {
+      name: "Per-second multiplier",
+      value: secondMultiplier,
+    },
+
+    {
       name: "Total upgrades purchased",
       value: totalUpgradesPurchased,
     },
@@ -43,6 +58,14 @@ const Statistics = () => {
     {
       name: "Achievements earned",
       value: `${achievementsCount} / ${allAchievements.length}`,
+    },
+    {
+      name: "Achievement reward multiplier",
+      value: achievementRewardMultiplier,
+    },
+    {
+      name: "Inventory items",
+      value: `${inventoryItemsCount} / ${inventoryItems.length}`,
     },
     {
       name: "Total time in game",

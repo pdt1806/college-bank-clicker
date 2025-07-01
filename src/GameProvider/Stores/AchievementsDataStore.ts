@@ -4,8 +4,10 @@ const achievementsData = localStorage.getItem("achievementsData");
 
 export const AchievementsDataStore = create<AchievementsDataState>()((set) => ({
   achievements: achievementsData ? JSON.parse(achievementsData) : {},
+  achievementRewardMultiplier: 1,
 
   setAchievements: (achievements: AchievementListType) => set({ achievements }),
+  setAchievementRewardMultiplier: (multiplier: number) => set({ achievementRewardMultiplier: multiplier }),
 
   saveAchievements: () => {
     const achievements = AchievementsDataStore.getState().achievements;
@@ -13,7 +15,7 @@ export const AchievementsDataStore = create<AchievementsDataState>()((set) => ({
   },
 
   resetAchievements: () => {
-    set({ achievements: {} });
+    set({ achievements: {}, achievementRewardMultiplier: 1 });
     localStorage.removeItem("achievementsData");
   },
 }));

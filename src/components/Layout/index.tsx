@@ -1,8 +1,11 @@
 import { AppShell, Box, ScrollArea } from "@mantine/core";
 import { useMediaQuery, useOs } from "@mantine/hooks";
 import { Outlet, useLocation } from "@tanstack/react-router";
+import { AchievementsEffect } from "../../GameProvider/AchievementsEffects";
 import { GameEffects } from "../../GameProvider/GameEffects";
-import { useGlobalSounds } from "../../GameProvider/SoundManager";
+import { InventoryEffects } from "../../GameProvider/InventoryEffects";
+import { PWAUpdateNotifier } from "../../GameProvider/PWAUpdateNoti";
+import GlobalSounds from "../../GameProvider/SoundManager";
 import { SidebarsStore } from "../../GameProvider/Stores/SidebarsStore";
 import { TOP_OFFSET, UNIFORMED_HEIGHT } from "../../utils/const";
 import BottomNav from "../BottomNav";
@@ -11,23 +14,24 @@ import UpgradeBar from "../UpgradeBar";
 import classes from "./index.module.css";
 
 const Layout = () => {
-  const { toggleAside, closeAside, toggleNavbar, closeNavbar } = SidebarsStore.getState();
   const asideOpened = SidebarsStore((state) => state.asideOpened);
   const navbarOpened = SidebarsStore((state) => state.navbarOpened);
 
   const location = useLocation();
 
   const isMobile = useMediaQuery("(max-width: 75em)");
-  const os = useOs();
 
+  const os = useOs();
   const isIOS = os === "ios";
   const adjustedHeight = isIOS ? "100%" : UNIFORMED_HEIGHT;
 
-  useGlobalSounds(); // Initialize global sounds
-
   return (
     <>
+      <PWAUpdateNotifier />
+      <GlobalSounds />
+      <InventoryEffects />
       <GameEffects />
+      <AchievementsEffect />
       <AppShell
         aside={{
           width: 400,
@@ -58,7 +62,7 @@ const Layout = () => {
             className={classes.sidebar + " " + classes.navBar}
             pt={TOP_OFFSET}
           >
-            <Navbar navbarOpened={navbarOpened} toggleNavbar={toggleNavbar} />
+            <Navbar />
           </ScrollArea.Autosize>
         </AppShell.Navbar>
 
@@ -73,17 +77,12 @@ const Layout = () => {
             className={classes.sidebar + " " + classes.upgradeBar}
             pt={TOP_OFFSET}
           >
-            <UpgradeBar asideOpened={asideOpened} />
+            <UpgradeBar />
           </ScrollArea.Autosize>
         </AppShell.Aside>
 
         <AppShell.Footer h={60}>
-          <BottomNav
-            toggleAside={toggleAside}
-            toggleNavbar={toggleNavbar}
-            closeAside={closeAside}
-            closeNavbar={closeNavbar}
-          />
+          <BottomNav />
         </AppShell.Footer>
       </AppShell>
     </>

@@ -1,6 +1,6 @@
 {
   "name": "college-bank-clicker",
-  "version": "0.7.4",
+  "version": "0.8.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -11,9 +11,12 @@
     "@mantine/core": "8.1.0",
     "@mantine/hooks": "8.1.0",
     "@mantine/notifications": "^8.1.0",
+    "@preact/preset-vite": "^2.10.2",
+    "@preact/signals": "^2.2.1",
     "@tabler/icons-react": "^3.33.0",
     "@tanstack/react-router": "^1.122.0",
     "@tanstack/react-router-devtools": "^1.122.0",
+    "@types/howler": "^2.2.12",
     "browser-image-resizer": "^2.4.1",
     "preact": "^10.26.9",
     "pretty-ms": "^9.2.0",
@@ -36,6 +39,7 @@
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "vite-plugin-auto-preload": "^0.1.1",
-    "vite-plugin-pwa": "^1.0.0"
+    "vite-plugin-html": "^3.2.2",
+    "vite-plugin-pwa": "^1.0.1"
   }
 }

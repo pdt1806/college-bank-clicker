@@ -1,11 +1,14 @@
 import { NumberFormatter, Text } from "@mantine/core";
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GameDataStore } from "../../../GameProvider/Stores/GameDataStore";
+import { SidebarsStore } from "../../../GameProvider/Stores/SidebarsStore";
 
-const UpgradeBarBalance = ({ asideOpened }: { asideOpened: boolean }) => {
-  const [money, setMoney] = useState(() => GameDataStore.getState().money);
+const UpgradeBarBalance = () => {
+  const asideOpened = SidebarsStore((state) => state.asideOpened);
 
   useEffect(() => {
+    setMoney(Math.trunc(GameDataStore.getState().money));
+
     if (!asideOpened) return;
 
     const unsub = GameDataStore.subscribe((state) => {
@@ -14,6 +17,8 @@ const UpgradeBarBalance = ({ asideOpened }: { asideOpened: boolean }) => {
 
     return () => unsub();
   }, [asideOpened]);
+
+  const [money, setMoney] = useState(() => Math.trunc(GameDataStore.getState().money));
 
   if (!asideOpened) return null;
 
@@ -34,4 +39,4 @@ const UpgradeBarBalance = ({ asideOpened }: { asideOpened: boolean }) => {
   );
 };
 
-export default memo(UpgradeBarBalance);
+export default UpgradeBarBalance;

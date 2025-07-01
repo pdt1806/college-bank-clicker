@@ -11,7 +11,7 @@ export const MainGameBalanceNumber = () => {
 
   useEffect(() => {
     if (asideOpened || navbarOpened) {
-      setMoney(GameDataStore.getState().money);
+      setMoney(Math.trunc(GameDataStore.getState().money));
       return;
     }
 
@@ -21,5 +21,5 @@ export const MainGameBalanceNumber = () => {
     return () => unsub();
   }, [asideOpened, navbarOpened]);
 
-  return <NumberFormatter prefix="$ " value={money} thousandSeparator decimalScale={0} />;
+  return <NumberFormatter prefix="$ " value={Math.trunc(money)} thousandSeparator decimalScale={0} />;
 };
