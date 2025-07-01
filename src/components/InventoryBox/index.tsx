@@ -15,8 +15,9 @@ const InventoryBox = ({ item, open }: { item: InventoryItem; open: (item: Invent
         onClick={() => open(item)}
       >
         <Image
-          src={`/assets/inventory/${item.id}.svg`}
-          fallbackSrc="/assets/pearto.webp"
+          // src={`/assets/inventory/${item.id}.svg`}
+          src="/assets/pearto.webp" // Placeholder for the actual image path
+          // fallbackSrc="/assets/pearto.webp"
           alt={item.name}
           w="100%"
           h="auto"

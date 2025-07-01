@@ -23,12 +23,13 @@ export const InventoryModal = () => {
           <Stack>
             <Group>
               <Image
-                src={`/assets/inventory/${item.id}.svg`}
+                // src={`/assets/inventory/${item.id}.svg`}
                 alt={item.name}
                 h={135}
                 w={135}
                 style={{ borderRadius: "var(--mantine-radius-lg)" }}
-                fallbackSrc="/assets/pearto.webp"
+                src="/assets/pearto.webp" // Placeholder for the actual image path
+                // fallbackSrc="/assets/pearto.webp"
               />
               <Stack>
                 <Title order={3} fw={500} mt="xs">
