@@ -430,7 +430,7 @@ const addEntry = <T extends { id: string; name: string; date?: Date; reward?: Ac
       message:
         actualEntry.name +
         (actualEntry.reward
-          ? ` - Reward: ${REWARD_MESSAGE[actualEntry.reward.type].replace("[VALUE]", actualEntry.reward.value.toString())}`
+          ? ` - Reward: ${REWARD_MESSAGE[actualEntry.reward.type].replace("[VALUE]", actualEntry.reward.value.toLocaleString())}`
           : ""),
       color: color,
       autoClose: 10000,

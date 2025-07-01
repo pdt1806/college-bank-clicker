@@ -14,11 +14,13 @@ export const audio: Record<string, string> = {
 
 type SoundName = keyof typeof audio;
 
-const soundMap: Record<SoundName, () => void> = Object.fromEntries(
-  Object.entries(audio).map(([key, _]) => [key, () => {}])
-) as Record<SoundName, () => void>;
+type SoundMapType = Record<SoundName, () => void>;
 
-export const useGlobalSounds = () => {
+const soundMap: SoundMapType = Object.fromEntries(
+  Object.entries(audio).map(([key, _]) => [key, () => {}])
+) as SoundMapType;
+
+export default function GlobalSounds() {
   const sfxVolume = SettingsDataStore((state) => state.sfxVolume);
   const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
 
@@ -30,12 +32,14 @@ export const useGlobalSounds = () => {
         soundEnabled: !sfxMutedIOS,
       })[0],
     ])
-  ) as Record<SoundName, () => void>;
+  ) as SoundMapType;
 
   Object.keys(soundMap).forEach((key) => {
     soundMap[key as SoundName] = soundHooks[key as SoundName];
   });
-};
+
+  return null;
+}
 
 export const playSound = (soundName: SoundName) => {
   if (soundMap[soundName]) soundMap[soundName]();

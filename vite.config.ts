@@ -5,7 +5,6 @@ import react from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import autoPreload from "vite-plugin-auto-preload";
-import { createHtmlPlugin } from "vite-plugin-html";
 import { VitePWA } from "vite-plugin-pwa";
 import packageJson from "./package.json";
 
@@ -16,55 +15,66 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       autoPreload(),
-      visualizer({ open: true }),
+      visualizer({ open: false }),
       tanstackRouter({
         target: "react",
         autoCodeSplitting: true,
       }),
       isProd ? preact() : react(),
-      reactScan(),
+      reactScan({
+        enable: false,
+      }),
       VitePWA({
         registerType: "autoUpdate",
-        includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
+        workbox: {
+          globPatterns: ["**/*"],
+          maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
+          navigateFallback: "/index.html",
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
+        },
+        devOptions: {
+          enabled: false,
+          suppressWarnings: true,
+          navigateFallback: "/",
+          navigateFallbackAllowlist: [/^\/$/],
+          type: "module",
+        },
         manifest: {
           name: "College Bank Clicker",
           short_name: "CB Clicker",
-          description: "A parody clicker game about the College Board AP exams",
+          description: "A parody clicker game about the College Board AP exams.",
           theme_color: "#2f2542",
-          display: "standalone",
+          background_color: "#2f2542",
+          display: "fullscreen",
           icons: [
             {
               src: "pwa-192x192.png",
               sizes: "192x192",
               type: "image/png",
-              purpose: "maskable any",
+              purpose: "any maskable",
+            },
+            {
+              src: "pwa-256x256.png",
+              sizes: "256x256",
+              type: "image/png",
+              purpose: "any maskable",
+            },
+            {
+              src: "pwa-384x384.png",
+              sizes: "384x384",
+              type: "image/png",
+              purpose: "any maskable",
             },
             {
               src: "pwa-512x512.png",
               sizes: "512x512",
               type: "image/png",
-              purpose: "maskable any",
+              purpose: "any maskable",
             },
           ],
         },
       }),
-      isProd &&
-        createHtmlPlugin({
-          inject: {
-            tags: [
-              {
-                tag: "link",
-                injectTo: "head",
-                attrs: {
-                  rel: "preload",
-                  href: "/registerSW.js",
-                  as: "script",
-                  fetchpriority: "high",
-                },
-              },
-            ],
-          },
-        }),
     ],
     define: {
       __APP_VERSION__: JSON.stringify(packageJson.version),

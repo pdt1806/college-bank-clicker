@@ -3,7 +3,7 @@ import "@mantine/core/styles.css";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import { createMemoryHistory, createRouter, RouterProvider } from "@tanstack/react-router";
-import { routeTree } from "./routes";
+import { routeTree } from "./routes/__root";
 import { colors } from "./utils/colors";
 
 export const theme = createTheme({

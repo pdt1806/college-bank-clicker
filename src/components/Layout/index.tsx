@@ -4,7 +4,8 @@ import { Outlet, useLocation } from "@tanstack/react-router";
 import { AchievementsEffect } from "../../GameProvider/AchievementsEffects";
 import { GameEffects } from "../../GameProvider/GameEffects";
 import { InventoryEffects } from "../../GameProvider/InventoryEffects";
-import { useGlobalSounds } from "../../GameProvider/SoundManager";
+import { PWAUpdateNotifier } from "../../GameProvider/PWAUpdateNoti";
+import GlobalSounds from "../../GameProvider/SoundManager";
 import { SidebarsStore } from "../../GameProvider/Stores/SidebarsStore";
 import { TOP_OFFSET, UNIFORMED_HEIGHT } from "../../utils/const";
 import BottomNav from "../BottomNav";
@@ -24,10 +25,10 @@ const Layout = () => {
   const isIOS = os === "ios";
   const adjustedHeight = isIOS ? "100%" : UNIFORMED_HEIGHT;
 
-  useGlobalSounds(); // Initialize global sounds
-
   return (
     <>
+      <PWAUpdateNotifier />
+      <GlobalSounds />
       <InventoryEffects />
       <GameEffects />
       <AchievementsEffect />

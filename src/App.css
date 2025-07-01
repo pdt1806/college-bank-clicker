@@ -1,0 +1,54 @@
+@font-face {
+  font-family: "Oxanium";
+  src: url("/assets/fonts/Oxanium-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Host Grotesk";
+  src: url("/assets/fonts/HostGrotesk-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Host Grotesk";
+  src: url("/assets/fonts/HostGrotesk-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+* {
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+html,
+body,
+root {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+body {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+:disabled,
+[aria-disabled="true"],
+.m-disabled {
+  cursor: not-allowed !important;
+}
+img {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}

@@ -82,32 +82,44 @@ export const GameEffects = () => {
 
   // Increment money logic
   // using RAF + TPS for smooth updates & saving battery
-
   useEffect(() => {
     let lastFrameTime = performance.now();
+    let wasPerSecondZero = true;
+    let animationFrameId: number;
 
     const tick = (now: number) => {
       const { perSecond, incrementMoney, secondMultiplier } = GameDataStore.getState();
-      const { incrementTotalMoney } = StatsDataStore.getState();
-      const { TPS } = SettingsDataStore.getState();
 
-      const frameDuration = 1000 / TPS;
-      const delta = now - lastFrameTime;
+      if (perSecond > 0) {
+        if (wasPerSecondZero) {
+          // reset lastFrameTime to now so that delta doesn't count the time when perSecond was zero
+          lastFrameTime = now;
+          wasPerSecondZero = false;
+        }
 
-      if (perSecond > 0 && delta >= frameDuration) {
-        lastFrameTime = now;
+        const { incrementTotalMoney } = StatsDataStore.getState();
+        const { TPS } = SettingsDataStore.getState();
 
-        const deltaSeconds = delta / 1000;
-        const earned = perSecond * deltaSeconds * secondMultiplier;
+        const frameDuration = 1000 / TPS;
+        const delta = now - lastFrameTime;
 
-        incrementMoney(earned);
-        incrementTotalMoney(earned);
+        if (delta >= frameDuration) {
+          lastFrameTime = now;
+
+          const deltaSeconds = delta / 1000;
+          const earned = perSecond * deltaSeconds * secondMultiplier;
+
+          incrementMoney(earned);
+          incrementTotalMoney(earned);
+        }
+      } else {
+        !wasPerSecondZero && (wasPerSecondZero = true);
       }
 
       animationFrameId = requestAnimationFrame(tick);
     };
 
-    let animationFrameId = requestAnimationFrame(tick);
+    animationFrameId = requestAnimationFrame(tick);
 
     return () => cancelAnimationFrame(animationFrameId);
   }, []);

@@ -7,7 +7,7 @@ const UpgradeBarBalance = () => {
   const asideOpened = SidebarsStore((state) => state.asideOpened);
 
   useEffect(() => {
-    setMoney(GameDataStore.getState().money);
+    setMoney(Math.trunc(GameDataStore.getState().money));
 
     if (!asideOpened) return;
 
@@ -18,7 +18,7 @@ const UpgradeBarBalance = () => {
     return () => unsub();
   }, [asideOpened]);
 
-  const [money, setMoney] = useState(() => GameDataStore.getState().money);
+  const [money, setMoney] = useState(() => Math.trunc(GameDataStore.getState().money));
 
   if (!asideOpened) return null;
 
