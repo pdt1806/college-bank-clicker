@@ -3,8 +3,6 @@
 
 <p align="center">College Bank Clicker is an amusingly addictive clicker game with progression, upgrades, achievements, and automation systems for students and anyone needing a fun break. Play now and enjoy!</p>
 
----
-
 ## Try It Now
 
 Play instantly on the web:  
@@ -16,8 +14,6 @@ Or install it as a **PWA** (Progressive Web App) on your phone:
 2. Tap the “Add to Home Screen” option
 3. Launch it like a native app!
 
----
-
 ## Gameplay Overview
 
 - 💰 **Click** to earn money
@@ -27,8 +23,6 @@ Or install it as a **PWA** (Progressive Web App) on your phone:
 - 🎵 **Sound effects** and visuals enhance feedback
 
 This game is intended as a parody and satire of standardized testing culture, particularly the College Board’s AP program. It is not affiliated with or endorsed by the College Board. All jokes are made in good fun.
-
----
 
 ## Tech Stack
 
@@ -41,8 +35,6 @@ This game is intended as a parody and satire of standardized testing culture, pa
 - [**IndexedDB**](https://developer.mozilla.org/docs/Web/API/IndexedDB_API) — Advanced persistent storage for game data
 - [**Workbox (via vite-plugin-pwa)**](https://vite-pwa-org.netlify.app/) — Offline-ready and installable
 - [**Mantine UI**](https://mantine.dev/) — Modern styling and components
-
----
 
 ## PWA Support
 
