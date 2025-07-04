@@ -23,8 +23,8 @@ const MainGameBalance = () => {
       <Title order={1} size="2.5rem" className={classes.balance}>
         <MainGameBalanceNumber />
       </Title>
-      <Text size="md">per second: {(perSecond * secondMultiplier).toFixed(1)}</Text>
-      <Text size="md">per click: {perClick * clickMultiplier}</Text>
+      <Text size="md">per second: {(perSecond * secondMultiplier).toLocaleString()}</Text>
+      <Text size="md">per click: {(perClick * clickMultiplier).toLocaleString()}</Text>
     </Box>
   );
 };

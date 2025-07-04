@@ -16,7 +16,7 @@ const MainGameButton = () => {
 
     const float = document.createElement("div");
     float.className = classes.floatingText;
-    float.innerText = "+$" + perClick * clickMultiplier;
+    float.innerText = "+$" + (perClick * clickMultiplier).toLocaleString();
 
     float.style.left = `${e.nativeEvent.offsetX + (Math.random() * 20 - 10)}px`;
     float.style.top = `${e.nativeEvent.offsetY + (Math.random() * 10 - 5)}px`;

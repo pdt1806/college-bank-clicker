@@ -11,16 +11,45 @@ export const AchievementsEffect = () => {
     const unsub = GameDataStore.subscribe((state) => {
       const { upgrades } = state;
 
+      // ----------------------------------------------
+      // Check total upgrades
+
       totalUpgradeAchievementList.forEach((achievement) => {
         if (Object.values(upgrades).reduce((total, value) => total + value, 0) >= achievement.value!)
           addAchievement(achievement);
       });
 
-      const allManualUpgrades = manualUpgradeList.every((upgrade) => countUpgrade(upgrade) > 0);
-      if (allManualUpgrades) addAchievement("achievement-upgrade-manual");
+      // ----------------------------------------------
+      // Check all upgrades in each category
 
-      const allAutomaticUpgrades = automaticUpgradeList.every((upgrade) => countUpgrade(upgrade) > 0);
-      if (allAutomaticUpgrades) addAchievement("achievement-upgrade-automatic");
+      const checkCategoryAllUpgrades = (list: Upgrade[], threshold: number) => {
+        return list.every((upgrade) => countUpgrade(upgrade) >= threshold);
+      };
+      const achievementConfigs = [
+        {
+          list: manualUpgradeList,
+          prefix: "achievement-upgrade-manual",
+        },
+        {
+          list: automaticUpgradeList,
+          prefix: "achievement-upgrade-automatic",
+        },
+      ];
+      const thresholds = [
+        { value: 1, suffix: "" },
+        { value: 10, suffix: "-ten-times" },
+        { value: 20, suffix: "-twenty-times" },
+      ];
+      achievementConfigs.forEach(({ list, prefix }) => {
+        thresholds.forEach(({ value, suffix }) => {
+          if (checkCategoryAllUpgrades(list, value)) {
+            addAchievement(prefix + suffix);
+          }
+        });
+      });
+
+      // ----------------------------------------------
+      //
     });
 
     return unsub;

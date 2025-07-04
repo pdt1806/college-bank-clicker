@@ -354,7 +354,7 @@ export const categoryUpgradeAchievementList: Achievement[] = [
       type: "money",
     },
   },
-];
+]; // remember, add manually to AchievementsEffects.tsx
 
 export const upgradeAchievementList: Achievement[] = [
   ...totalUpgradeAchievementList,
