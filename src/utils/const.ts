@@ -14,3 +14,5 @@ export const REWARD_MESSAGE = {
   perClick: "+[VALUE] per click",
   perSecond: "+[VALUE] per second",
 };
+
+// export const DISCORD_API_ENDPOINT = `https://${import.meta.env.DEV ? "dev-" : ""}discord.collegebank.click/api`;

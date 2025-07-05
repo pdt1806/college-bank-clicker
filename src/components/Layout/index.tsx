@@ -2,6 +2,7 @@ import { AppShell, Box, ScrollArea } from "@mantine/core";
 import { useMediaQuery, useOs } from "@mantine/hooks";
 import { Outlet, useLocation } from "@tanstack/react-router";
 import { AchievementsEffect } from "../../GameProvider/AchievementsEffects";
+import DiscordSDKComponent from "../../GameProvider/DiscordSDK";
 import { GameEffects } from "../../GameProvider/GameEffects";
 import { InventoryEffects } from "../../GameProvider/InventoryEffects";
 import { PWAUpdateNotifier } from "../../GameProvider/PWAUpdateNoti";
@@ -27,6 +28,7 @@ const Layout = () => {
 
   return (
     <>
+      <DiscordSDKComponent />
       <PWAUpdateNotifier />
       <GlobalSounds />
       <InventoryEffects />
