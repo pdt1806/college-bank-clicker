@@ -1,12 +1,14 @@
 import { AppShell, Box, ScrollArea } from "@mantine/core";
 import { useMediaQuery, useOs } from "@mantine/hooks";
-import { Outlet, useLocation } from "@tanstack/react-router";
+import { Outlet, useLocation, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { AchievementsEffect } from "../../GameProvider/AchievementsEffects";
 import DiscordSDKComponent from "../../GameProvider/DiscordSDK";
 import { GameEffects } from "../../GameProvider/GameEffects";
 import { InventoryEffects } from "../../GameProvider/InventoryEffects";
 import { PWAUpdateNotifier } from "../../GameProvider/PWAUpdateNoti";
 import GlobalSounds from "../../GameProvider/SoundManager";
+import { DiscordStore } from "../../GameProvider/Stores/DiscordStore";
 import { SidebarsStore } from "../../GameProvider/Stores/SidebarsStore";
 import { TOP_OFFSET, UNIFORMED_HEIGHT } from "../../utils/const";
 import BottomNav from "../BottomNav";
@@ -18,13 +20,28 @@ const Layout = () => {
   const asideOpened = SidebarsStore((state) => state.asideOpened);
   const navbarOpened = SidebarsStore((state) => state.navbarOpened);
 
+  const { closeAside, closeNavbar } = SidebarsStore.getState();
+
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isMobile = useMediaQuery("(max-width: 75em)");
 
   const os = useOs();
   const isIOS = os === "ios";
   const adjustedHeight = isIOS ? "100%" : UNIFORMED_HEIGHT;
+
+  const isInDiscord = DiscordStore((state) => state.isInDiscord);
+  const isMinifiedInDiscord = useMediaQuery("(max-width: 330px)");
+  const discordSmallScreen = isInDiscord && isMinifiedInDiscord;
+
+  useEffect(() => {
+    if (discordSmallScreen) {
+      closeAside();
+      closeNavbar();
+      navigate({ to: "/", replace: true });
+    }
+  }, [discordSmallScreen]);
 
   return (
     <>
@@ -50,7 +67,7 @@ const Layout = () => {
         }}
         footer={{
           height: 60,
-          collapsed: !isMobile,
+          collapsed: !isMobile || discordSmallScreen,
         }}
         bg="cbc-purple.9"
         pt={TOP_OFFSET}

@@ -97,7 +97,16 @@ export const AboutAdditionalCredits = () => {
         </Text>
         .
       </Text>
-      <Text size="lg">Kasane Pearto 🍐 🥀</Text>
+      <Text
+        size="lg"
+        c="cbc-teal"
+        component="a"
+        href="https://www.youtube.com/watch?v=yjBuru8lHLs"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Kasane Pearto 🍐 🥀
+      </Text>
     </Stack>
   );
 };

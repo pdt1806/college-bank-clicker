@@ -150,6 +150,26 @@ interface InventoryDataState {
   resetInventory: () => void;
 }
 
+interface DiscordStoreState {
+  isInDiscord: boolean;
+  user: DiscordUserType | null;
+  currentPage: string;
+  sessionId: string;
+  setIsInDiscord: (isInDiscord: boolean) => void;
+  setUser: (user: DiscordUserType | null) => void;
+  setCurrentPage: (page: string) => void;
+  setSessionId: (sessionId: string) => void;
+}
+
+type DiscordUserType = {
+  username: string;
+  discriminator: string;
+  id: string;
+  public_flags: number;
+  avatar?: string | null | undefined;
+  global_name?: string | null | undefined;
+};
+
 interface OutletContext {
   asideOpened: boolean;
   navbarOpened: boolean;
