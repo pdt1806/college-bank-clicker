@@ -71,7 +71,6 @@ export const AboutCredits = () => {
                 rel={author.link ? "noopener noreferrer" : undefined}
                 style={{
                   borderRadius: "var(--mantine-radius-xl)",
-
                   textDecoration: "none",
                 }}
               >

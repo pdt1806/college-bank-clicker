@@ -1,6 +1,6 @@
 {
   "name": "college-bank-clicker",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -8,6 +8,7 @@
     "preview": "vite preview --host"
   },
   "dependencies": {
+    "@discord/embedded-app-sdk": "^2.0.0",
     "@mantine/core": "8.1.0",
     "@mantine/hooks": "8.1.0",
     "@mantine/notifications": "^8.1.0",
