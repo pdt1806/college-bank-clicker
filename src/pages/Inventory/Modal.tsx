@@ -2,6 +2,7 @@ import { Button, Group, Image, Modal, Stack, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useCallback, useMemo, useState } from "react";
 import { playSound } from "../../GameProvider/SoundManager";
+import { InventoryItem } from "../../utils/types";
 
 export const InventoryModal = () => {
   const [opened, { open: openModal, close }] = useDisclosure(false);

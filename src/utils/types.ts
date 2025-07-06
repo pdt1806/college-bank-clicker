@@ -1,4 +1,6 @@
-type GeneralUpgrade = {
+import { DiscordSDK } from "@discord/embedded-app-sdk";
+
+export type GeneralUpgrade = {
   id: string;
   name: string;
   cost: number;
@@ -6,21 +8,21 @@ type GeneralUpgrade = {
   description: string;
 };
 
-type AutomaticUpgrade = GeneralUpgrade & {
+export type AutomaticUpgrade = GeneralUpgrade & {
   perSecond?: number;
 };
 
-type ManualUpgrade = GeneralUpgrade & {
+export type ManualUpgrade = GeneralUpgrade & {
   perClick?: number;
 };
 
-type Upgrade = AutomaticUpgrade & ManualUpgrade;
+export type Upgrade = AutomaticUpgrade & ManualUpgrade;
 
-type UpgradeListType = {
+export type UpgradeListType = {
   [key: string]: number;
 };
 
-type Achievement = {
+export type Achievement = {
   id: string;
   name: string;
   description: string;
@@ -30,40 +32,40 @@ type Achievement = {
   date?: Date;
 };
 
-type AchievementReward = {
+export type AchievementReward = {
   value: number;
   type: "money" | "perClick" | "perSecond";
 };
 
-type AchievementsTab = {
+export type AchievementsTab = {
   name: string;
   icon: React.ComponentType<{ size?: number }>;
   list: Achievement[];
 };
 
-type AchievementListType = {
+export type AchievementListType = {
   [key: string]: Date;
 };
 
-type InventoryListType = {
+export type InventoryListType = {
   [key: string]: Date;
 };
 
-interface FloatingText {
+export interface FloatingText {
   id: number;
   x: number;
   y: number;
   value: string;
 }
 
-interface UpgradeBarTab {
+export interface UpgradeBarTab {
   name: string;
   icon: React.FC<{ size?: number; color?: string }>;
   description: string;
   list: Upgrade[];
 }
 
-interface GameDataState {
+export interface GameDataState {
   money: number;
   perSecond: number;
   perClick: number;
@@ -86,7 +88,7 @@ interface GameDataState {
   resetGame: () => void;
 }
 
-interface SettingsDataState {
+export interface SettingsDataState {
   musicVolume: number;
   sfxVolume: number;
   musicMutedIOS: boolean;
@@ -102,7 +104,7 @@ interface SettingsDataState {
   saveSettings: () => void;
 }
 
-interface SidebarsState {
+export interface SidebarsState {
   asideOpened: boolean;
   navbarOpened: boolean;
   toggleAside: () => void;
@@ -111,7 +113,7 @@ interface SidebarsState {
   closeNavbar: () => void;
 }
 
-interface StatsDataState {
+export interface StatsDataState {
   totalClicks: number;
   totalMoney: number;
   timeInGame: number;
@@ -134,7 +136,7 @@ interface StatsDataState {
   resetStats: () => void;
 }
 
-interface AchievementsDataState {
+export interface AchievementsDataState {
   achievements: AchievementListType;
   achievementRewardMultiplier: number;
   setAchievements: (achievements: AchievementListType) => void;
@@ -143,25 +145,27 @@ interface AchievementsDataState {
   resetAchievements: () => void;
 }
 
-interface InventoryDataState {
+export interface InventoryDataState {
   inventory: InventoryListType;
   setInventory: (inventory: InventoryListType) => void;
   saveInventory: () => void;
   resetInventory: () => void;
 }
 
-interface DiscordStoreState {
+export interface DiscordStoreState {
+  discordSdk: DiscordSDK | null;
   isInDiscord: boolean;
   user: DiscordUserType | null;
   currentPage: string;
   sessionId: string;
+  setDiscordSdk: (discordSdk: DiscordSDK) => void;
   setIsInDiscord: (isInDiscord: boolean) => void;
   setUser: (user: DiscordUserType | null) => void;
   setCurrentPage: (page: string) => void;
   setSessionId: (sessionId: string) => void;
 }
 
-type DiscordUserType = {
+export type DiscordUserType = {
   username: string;
   discriminator: string;
   id: string;
@@ -170,21 +174,28 @@ type DiscordUserType = {
   global_name?: string | null | undefined;
 };
 
-interface OutletContext {
+export interface OutletContext {
   asideOpened: boolean;
   navbarOpened: boolean;
 }
 
-interface NavbarLink {
+export interface NavbarLink {
   label: string;
   icon: React.ComponentType<{ size?: number; color?: string }>;
   to: string;
 }
 
-interface InventoryItem {
+export interface InventoryItem {
   id: string;
   name: string;
   description: string;
   method: string;
   date?: Date;
 }
+
+export type ExportGameDataType = {
+  gameData: GameDataState | null;
+  statsData: StatsDataState | null;
+  achievementsData: AchievementsDataState | null;
+  inventoryData: InventoryDataState | null;
+};

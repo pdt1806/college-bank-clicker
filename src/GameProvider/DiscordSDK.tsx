@@ -1,5 +1,6 @@
 import { DiscordSDK } from "@discord/embedded-app-sdk";
 import { useEffect } from "react";
+import { DiscordUserType } from "../utils/types";
 import { DiscordStore } from "./Stores/DiscordStore";
 import { GameDataStore } from "./Stores/GameDataStore";
 
@@ -7,15 +8,18 @@ const startTime = Date.now();
 
 let discordSdk: DiscordSDK;
 
+const isDev = import.meta.env.DEV;
+const CLIENT_ID = isDev ? import.meta.env.VITE_DEV_DISCORD_CLIENT_ID : import.meta.env.VITE_DISCORD_CLIENT_ID;
+
 export default function DiscordSDKComponent() {
   const isDiscordEmbed = new URLSearchParams(window.location.search).has("frame_id");
+  if (!isDiscordEmbed) return;
 
   useEffect(() => {
-    if (!isDiscordEmbed) return;
+    const { setIsInDiscord, setUser, setDiscordSdk } = DiscordStore.getState();
 
-    const { setIsInDiscord, setUser } = DiscordStore.getState();
-
-    discordSdk = new DiscordSDK(import.meta.env.VITE_DISCORD_CLIENT_ID);
+    discordSdk = new DiscordSDK(CLIENT_ID);
+    setDiscordSdk(discordSdk);
     setIsInDiscord(true);
 
     const setup = async () => {
@@ -23,7 +27,7 @@ export default function DiscordSDKComponent() {
         await discordSdk.ready();
 
         const { code } = await discordSdk.commands.authorize({
-          client_id: import.meta.env.VITE_DISCORD_CLIENT_ID,
+          client_id: CLIENT_ID,
           response_type: "code",
           state: "",
           prompt: "none",
@@ -52,8 +56,6 @@ export default function DiscordSDKComponent() {
           if (!auth) throw new Error("Failed to authenticate with Discord SDK");
 
           setUser(auth.user);
-
-          console.log("Authenticated with Discord SDK:", auth.user);
         } catch (error) {
           console.error("Failed to authenticate with Discord SDK:", error);
         }

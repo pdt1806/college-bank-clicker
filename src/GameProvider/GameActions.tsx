@@ -1,9 +1,11 @@
+import { DiscordSDK } from "@discord/embedded-app-sdk";
 import { notifications } from "@mantine/notifications";
 import { Icon, IconBackpack, IconExclamationCircleFilled, IconProps, IconStar, IconUpload } from "@tabler/icons-react";
 import { readAndCompressImage } from "browser-image-resizer";
 import { allAchievements } from "../utils/achievements";
 import { GAME_CURSORS, INDEXED_DB_NAME, REWARD_MESSAGE } from "../utils/const";
 import { inventoryItems } from "../utils/inventory";
+import { Achievement, AchievementReward, InventoryItem, Upgrade, UpgradeListType } from "../utils/types";
 import { playSound } from "./SoundManager";
 import { AchievementsDataStore } from "./Stores/AchievementsDataStore";
 import { GameDataStore } from "./Stores/GameDataStore";
@@ -139,7 +141,7 @@ const saveAllGame = () => {
   saveInventory();
 };
 
-export const exportAllGame = () => {
+export const exportAllGame = async (discordSdk?: DiscordSDK) => {
   saveAllGame();
   const data = {
     gameData: localStorage.getItem("gameData"),
@@ -147,10 +149,25 @@ export const exportAllGame = () => {
     achievementsData: localStorage.getItem("achievementsData"),
     inventoryData: localStorage.getItem("inventoryData"),
   };
+  // if (shouldReturn) return data as ExportGameDataType;
+
   const blob = new Blob([JSON.stringify(data, null, 2)], {
     type: "application/json",
   });
   const url = URL.createObjectURL(blob);
+
+  if (discordSdk) {
+    try {
+      const base64 = btoa(encodeURIComponent(JSON.stringify(data)));
+      const url = `https://${import.meta.env.DEV ? "dev-" : ""}discord.collegebank.click/api/export?data=${base64}`;
+      await discordSdk.commands.openExternalLink({ url });
+      return;
+    } catch (error) {
+      console.error("Failed to export game data from Discord:", error);
+      return;
+    }
+  }
+
   const a = document.createElement("a");
   a.href = url;
   a.download = "college-bank-clicker-export-" + new Date().toISOString() + ".json";
@@ -267,7 +284,7 @@ export const updateCursor = (type: string, file: File): Promise<string | undefin
         store.put(resizedBlob, "cursor-" + type);
 
         transaction.oncomplete = () => {
-          console.log("Cursor updated successfully for type: " + type);
+          // console.log("Cursor updated successfully for type: " + type);
 
           if (type === "default") injectCursorsToDOM({ defaultURL: cursorURL });
           else if (type === "pointer") injectCursorsToDOM({ pointerURL: cursorURL });
