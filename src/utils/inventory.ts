@@ -1,3 +1,5 @@
+import { InventoryItem } from "./types";
+
 export const inventoryItems: InventoryItem[] = [
   {
     id: "item-click-100x",

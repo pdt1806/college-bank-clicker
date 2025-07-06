@@ -1,6 +1,7 @@
 import { HoverCard } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { forwardRef } from "react";
+import type { Upgrade } from "../../utils/types";
 import UpgradeButton from "./Button";
 import UpgradeInfo from "./Information";
 

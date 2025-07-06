@@ -1,3 +1,5 @@
+import { AutomaticUpgrade, ManualUpgrade, Upgrade } from "./types";
+
 export const automaticUpgradeList: AutomaticUpgrade[] = [
   {
     id: "upgrade-ap-psychology",

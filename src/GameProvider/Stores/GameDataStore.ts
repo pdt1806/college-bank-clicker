@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { GameDataState, UpgradeListType } from "../../utils/types";
 
 const savedGame = localStorage.getItem("gameData");
 const parsedGameData = savedGame ? JSON.parse(savedGame) : {};

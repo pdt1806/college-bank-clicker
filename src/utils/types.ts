@@ -179,11 +179,11 @@ export interface OutletContext {
   navbarOpened: boolean;
 }
 
-export interface NavbarLink {
+export type NavbarLinkType = {
   label: string;
   icon: React.ComponentType<{ size?: number; color?: string }>;
   to: string;
-}
+};
 
 export interface InventoryItem {
   id: string;

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { AchievementListType, AchievementsDataState } from "../../utils/types";
 
 const achievementsData = localStorage.getItem("achievementsData");
 

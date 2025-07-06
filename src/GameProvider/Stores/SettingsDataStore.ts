@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { SettingsDataState } from "../../utils/types";
 
 const settingsData = localStorage.getItem("settingsData");
 const parsedSettingsData = settingsData ? JSON.parse(settingsData) : {};

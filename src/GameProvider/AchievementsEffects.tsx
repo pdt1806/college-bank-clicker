@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { clickAchievementList, moneyAchievementList, totalUpgradeAchievementList } from "../utils/achievements";
+import { Upgrade } from "../utils/types";
 import { automaticUpgradeList, manualUpgradeList } from "../utils/upgrades";
 import { addAchievement, countUpgrade } from "./GameActions";
 import { GameDataStore } from "./Stores/GameDataStore";

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { InventoryDataState, InventoryListType } from "../../utils/types";
 
 const inventoryData = localStorage.getItem("inventoryData");
 

@@ -1,6 +1,7 @@
 import { Accordion, Box, Stack } from "@mantine/core";
 import { IconAutomation, IconMouse } from "@tabler/icons-react";
 import { useState } from "react";
+import { UpgradeBarTab } from "../../utils/types";
 import { automaticUpgradeList, manualUpgradeList } from "../../utils/upgrades";
 import Upgrade from "../Upgrade";
 import UpgradeBarBalance from "./Balance";

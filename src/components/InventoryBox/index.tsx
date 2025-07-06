@@ -1,5 +1,6 @@
 import { Box, Image, Tooltip } from "@mantine/core";
 import { memo } from "react";
+import { InventoryItem } from "../../utils/types";
 
 const InventoryBox = ({ item, open }: { item: InventoryItem; open: (item: InventoryItem) => void }) => {
   return (

@@ -4,9 +4,10 @@ import { memo } from "react";
 import { getDiscordUserAvatar } from "../../GameProvider/DiscordSDK";
 import { DiscordStore } from "../../GameProvider/Stores/DiscordStore";
 import { SidebarsStore } from "../../GameProvider/Stores/SidebarsStore";
+import { NavbarLinkType } from "../../utils/types";
 import { NavbarLink } from "./Link";
 
-const links: NavbarLink[] = [
+const links: NavbarLinkType[] = [
   { label: "Game", icon: IconClick, to: "/" },
   { label: "Achievements", icon: IconStar, to: "/achievements" },
   { label: "Inventory", icon: IconBackpack, to: "/inventory" },

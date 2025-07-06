@@ -7,6 +7,7 @@ import { playSound } from "../../GameProvider/SoundManager";
 import { AchievementsDataStore } from "../../GameProvider/Stores/AchievementsDataStore";
 import { clickAchievementList, moneyAchievementList, upgradeAchievementList } from "../../utils/achievements";
 import { UNIFORMED_HEIGHT } from "../../utils/const";
+import { AchievementsTab } from "../../utils/types";
 import classes from "./index.module.css";
 
 const tabs = [

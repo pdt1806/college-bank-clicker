@@ -1,3 +1,5 @@
+import { Achievement } from "./types";
+
 export const moneyAchievementList: Achievement[] = [
   {
     id: "achievement-money-one-thousand",

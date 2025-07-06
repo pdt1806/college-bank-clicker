@@ -1,5 +1,6 @@
 import { Accordion, Group, Text, Tooltip } from "@mantine/core";
 import { playSound } from "../../../GameProvider/SoundManager";
+import { UpgradeBarTab } from "../../../utils/types";
 
 export const UpgradeBarTabControl = ({ tab }: { tab: UpgradeBarTab }) => {
   return (

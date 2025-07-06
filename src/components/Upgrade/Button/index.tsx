@@ -4,6 +4,7 @@ import { buyUpgrade, countUpgrade, currentCost } from "../../../GameProvider/Gam
 import { playSound } from "../../../GameProvider/SoundManager";
 import { GameDataStore } from "../../../GameProvider/Stores/GameDataStore";
 import { StatsDataStore } from "../../../GameProvider/Stores/StatsDataStore";
+import { Upgrade } from "../../../utils/types";
 import classes from "./index.module.css";
 
 const UpgradeButton = ({ upgrade }: { upgrade: Upgrade }) => {

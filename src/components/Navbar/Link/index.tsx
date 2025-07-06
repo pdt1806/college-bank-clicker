@@ -2,13 +2,14 @@ import { Button, Title } from "@mantine/core";
 import { Link, useLocation } from "@tanstack/react-router";
 import { playSound } from "../../../GameProvider/SoundManager";
 import { DiscordStore } from "../../../GameProvider/Stores/DiscordStore";
+import { NavbarLinkType } from "../../../utils/types";
 
 export const NavbarLink = ({
   link,
   navbarOpened,
   toggleNavbar,
 }: {
-  link: NavbarLink;
+  link: NavbarLinkType;
   navbarOpened: boolean;
   toggleNavbar: () => void;
 }) => {

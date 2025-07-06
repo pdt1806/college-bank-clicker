@@ -1,6 +1,7 @@
 import { Box, Stack, Text } from "@mantine/core";
 import { IconArrowUp, IconMoneybag, IconMouse } from "@tabler/icons-react";
 import { REWARD_MESSAGE } from "../../utils/const";
+import { Achievement } from "../../utils/types";
 
 const AchievementBox = ({ achievement }: { achievement: Achievement }) => {
   return (
