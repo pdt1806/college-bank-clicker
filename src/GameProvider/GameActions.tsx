@@ -144,12 +144,11 @@ const saveAllGame = () => {
 export const exportAllGame = async (discordSdk?: DiscordSDK) => {
   saveAllGame();
   const data = {
-    gameData: localStorage.getItem("gameData"),
-    statsData: localStorage.getItem("statsData"),
-    achievementsData: localStorage.getItem("achievementsData"),
-    inventoryData: localStorage.getItem("inventoryData"),
+    gameData: JSON.parse(localStorage.getItem("gameData") || "{}"),
+    statsData: JSON.parse(localStorage.getItem("statsData") || "{}"),
+    achievementsData: JSON.parse(localStorage.getItem("achievementsData") || "{}"),
+    inventoryData: JSON.parse(localStorage.getItem("inventoryData") || "{}"),
   };
-  // if (shouldReturn) return data as ExportGameDataType;
 
   const blob = new Blob([JSON.stringify(data, null, 2)], {
     type: "application/json",
@@ -178,21 +177,39 @@ export const exportAllGame = async (discordSdk?: DiscordSDK) => {
 };
 
 const checkGameDataAuthenticity = (data: any) => {
-  if (!data || typeof data !== "object") return "Invalid game data format.";
+  if (!data || typeof data !== "object") return { invalid: "Invalid game data format.", data: null };
 
-  try {
-    JSON.parse(data.gameData);
-    JSON.parse(data.statsData);
-    JSON.parse(data.achievementsData || "{}");
-    JSON.parse(data.inventoryData || "{}");
-  } catch (error) {
-    return "Invalid game data structure. Please ensure the file is a valid game data file.";
+  if (typeof data.gameData === "string") {
+    try {
+      data = {
+        gameData: JSON.parse(data.gameData),
+        statsData: JSON.parse(data.statsData),
+        achievementsData: data.achievementsData ? JSON.parse(data.achievementsData) : {},
+        inventoryData: data.inventoryData ? JSON.parse(data.inventoryData) : {},
+      };
+    } catch (e) {
+      return {
+        invalid: "Game data is not valid JSON.",
+        data: null,
+      };
+    }
   }
 
-  if (!data.gameData) return "Game data is missing.";
-  if (!data.statsData) return "Stats data is missing.";
+  if (!data.gameData)
+    return {
+      invalid: "Game data is missing.",
+      data: null,
+    };
+  if (!data.statsData)
+    return {
+      invalid: "Stats data is missing.",
+      data: null,
+    };
 
-  return null; // Data is valid
+  return {
+    invalid: null,
+    data,
+  };
 };
 
 export const importAllGame = (file: File | null) => {
@@ -209,27 +226,29 @@ export const importAllGame = (file: File | null) => {
   const reader = new FileReader();
   reader.onload = (event) => {
     try {
-      const data = JSON.parse(event.target?.result as string);
+      const file = JSON.parse(event.target?.result as string);
 
-      const invalid = checkGameDataAuthenticity(data);
+      console.log("Importing game data:", file);
+
+      const { invalid, data } = checkGameDataAuthenticity(file);
       if (invalid) throw new Error(invalid);
 
-      const { money, perSecond, perClick, upgrades } = JSON.parse(data.gameData);
+      const { money, perSecond, perClick, upgrades } = data.gameData;
       setMoney(money);
       setPerSecond(perSecond);
       setUpgrades(upgrades);
       setPerClick(perClick);
 
-      const { totalClicks, totalMoney, timeInGame, maxMoney } = JSON.parse(data.statsData);
+      const { totalClicks, totalMoney, timeInGame, maxMoney } = data.statsData;
       setTotalClicks(totalClicks);
       setTotalMoney(totalMoney);
       setTimeInGame(timeInGame);
       setMaxMoney(maxMoney);
 
-      const achievements = JSON.parse(data.achievementsData || "{}");
+      const achievements = data.achievementsData;
       setAchievements(achievements);
 
-      const inventory = JSON.parse(data.inventoryData || "{}");
+      const inventory = data.inventoryData;
       setInventory(inventory);
 
       saveGame();
