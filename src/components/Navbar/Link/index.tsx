@@ -1,5 +1,5 @@
-import { Button, Title } from "@mantine/core";
-import { Link, useLocation } from "@tanstack/react-router";
+import { Box, Button, Title } from "@mantine/core";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import { playSound } from "../../../GameProvider/SoundManager";
 import { DiscordStore } from "../../../GameProvider/Stores/DiscordStore";
 import { NavbarLinkType } from "../../../utils/types";
@@ -17,12 +17,15 @@ export const NavbarLink = ({
   const isActive = location.pathname === link.to;
   const { setCurrentPage } = DiscordStore.getState();
 
+  const navigate = useNavigate();
+
   return (
-    <Link to={link.to} style={{ textDecoration: "none", width: "100%" }} onClick={() => setCurrentPage(link.label)}>
+    <Box style={{ textDecoration: "none", width: "100%" }} onClick={() => setCurrentPage(link.label)}>
       <Button
         onClick={() => {
           navbarOpened && toggleNavbar();
           playSound("pop3");
+          navigate({ to: link.to, replace: true });
         }}
         variant={isActive ? "filled" : "subtle"}
         color={isActive ? "cbc-bluegray.7" : "cbc-bluegray.0"}
@@ -41,6 +44,6 @@ export const NavbarLink = ({
           {link.label}
         </Title>
       </Button>
-    </Link>
+    </Box>
   );
 };

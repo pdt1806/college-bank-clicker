@@ -37,7 +37,7 @@ export const AboutAdditionalCredits = () => {
         </Text>
         .
       </Text>
-      <Text size="lg">
+      {/* <Text size="lg">
         Money cursors from{" "}
         <Text
           span
@@ -51,8 +51,8 @@ export const AboutAdditionalCredits = () => {
           Sweezy Cursors
         </Text>
         .
-      </Text>
-      <Text size="lg">
+      </Text> */}
+      {/* <Text size="lg">
         Money Bag image from{" "}
         <Text
           span
@@ -66,8 +66,8 @@ export const AboutAdditionalCredits = () => {
           SVG Repo
         </Text>
         .
-      </Text>
-      <Text size="lg">
+      </Text> */}
+      {/* <Text size="lg">
         CSS background patterns from{" "}
         <Text
           span
@@ -81,8 +81,8 @@ export const AboutAdditionalCredits = () => {
           MagicPattern
         </Text>
         .
-      </Text>
-      <Text size="lg">
+      </Text> */}
+      {/* <Text size="lg">
         Dollar sign pattern background from{" "}
         <Text
           span
@@ -96,8 +96,8 @@ export const AboutAdditionalCredits = () => {
           Freepik
         </Text>
         .
-      </Text>
-      <Text
+      </Text> */}
+      {/* <Text
         size="lg"
         c="cbc-teal"
         component="a"
@@ -106,7 +106,7 @@ export const AboutAdditionalCredits = () => {
         rel="noopener noreferrer"
       >
         Kasane Pearto 🍐 🥀
-      </Text>
+      </Text> */}
     </Stack>
   );
 };

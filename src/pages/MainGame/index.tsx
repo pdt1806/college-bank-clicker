@@ -20,13 +20,12 @@ const MainGame = () => {
       p="sm"
     >
       <MainGameBalance />
+      {!discordSmallScreen && <MainGameButton />}
+      {/* for some reason, isolating the text prevents it from re-rendering */}
       {!discordSmallScreen && (
-        <>
-          <MainGameButton />
-          <Text size="sm" c="white" ta="center">
-            This game is a parody and is definitely not affiliated with College Board.
-          </Text>
-        </>
+        <Text size="sm" c="white" ta="center">
+          This game is a parody and is not affiliated with the College Board.
+        </Text>
       )}
     </Flex>
   );

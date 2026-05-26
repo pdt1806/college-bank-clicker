@@ -3,13 +3,13 @@ import { IconLink } from "@tabler/icons-react";
 
 const sammie = {
   name: "Sammie Vizcarra",
-  image: "/assets/sammie.png",
+  image: "/assets/credits/sammie.png",
   link: "https://www.linkedin.com/in/sidesili/",
 };
 
 const benny = {
   name: "Benny Nguyen",
-  image: "/assets/benny.png",
+  image: "/assets/credits/benny.png",
   link: "https://bennynguyen.dev",
 };
 
@@ -35,14 +35,19 @@ const credits = [
     author: [
       {
         name: "Melena Millhouse",
-        image: "/assets/melena.png",
+        image: "/assets/credits/melena.png",
         link: "",
       },
       {
         name: "Polina Rotari",
-        image: "/assets/polina.png",
+        image: "/assets/credits/polina.png",
         link: "",
       },
+      // {
+      //   name: "Toby Cm",
+      //   image: "/assets/credits/toby.png",
+      //   link: "https://tobycm.dev",
+      // },
     ],
   },
 ];
@@ -79,7 +84,7 @@ export const AboutCredits = () => {
                   alt={author.name}
                   size={125}
                   radius="50%"
-                  style={{ marginBottom: "0.5rem", border: "5px solid var(--mantine-color-cbc-purple-9)" }}
+                  style={{ marginBottom: "0.5rem" }}
                   mx="auto"
                   mt={-75}
                 />

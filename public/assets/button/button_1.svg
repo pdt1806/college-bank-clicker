@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="button" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 500">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #d3db79;
+      }
+
+      .cls-3 {
+        fill: #2f2542;
+      }
+
+      .cls-4 {
+        fill: url(#linear-gradient-2);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="250" y1="457.28" x2="250" y2="263" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#302c4a"/>
+      <stop offset="0" stop-color="#302c4a"/>
+      <stop offset=".19" stop-color="#3a415c"/>
+      <stop offset=".39" stop-color="#425069"/>
+      <stop offset=".63" stop-color="#465970"/>
+      <stop offset="1" stop-color="#485c73"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="250.5" y1="414" x2="250.5" y2="220.76" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#347f80"/>
+      <stop offset=".15" stop-color="#428879"/>
+      <stop offset=".44" stop-color="#57976f"/>
+      <stop offset=".73" stop-color="#63a069"/>
+      <stop offset="1" stop-color="#68a367"/>
+    </linearGradient>
+  </defs>
+  <g>
+    <ellipse class="cls-3" cx="250" cy="409.98" rx="250" ry="90.02"/>
+    <polygon class="cls-3" points="500 359.63 500 409.47 0 409.47 0 359.63 5.45 359.63 5.45 355.56 495.64 355.56 495.64 359.63 500 359.63"/>
+    <ellipse class="cls-1" cx="250" cy="360.14" rx="250" ry="97.14"/>
+  </g>
+  <g>
+    <path class="cls-4" d="m446,326.25h-.01c.01.17.01.33.01.5,0,48.19-87.53,87.25-195.5,87.25s-195.5-39.06-195.5-87.25c0-.17,0-.33.01-.5h-.01v-36c0-15.43,8.97-29.92,24.72-42.49,13.2-10.54,31.14-19.73,52.54-27h236.46c21.42,7.26,39.37,16.46,52.57,27,15.74,12.57,24.71,27.07,24.71,42.49v36Z"/>
+    <path class="cls-2" d="m446,282.25c0,48.19-87.53,87.26-195.5,87.26s-195.5-39.07-195.5-87.26c0-15.43,8.97-29.92,24.72-42.49,13.2-10.54,31.14-19.73,52.54-27,32.83-11.14,73.8-17.76,118.24-17.76s85.39,6.61,118.22,17.76c21.42,7.26,39.37,16.46,52.57,27,15.74,12.57,24.71,27.07,24.71,42.49Z"/>
+  </g>
+</svg>

@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from "@mantine/core";
+import { Avatar, Box, Stack, Text } from "@mantine/core";
 import { IconArrowUp, IconMoneybag, IconMouse } from "@tabler/icons-react";
 import { REWARD_MESSAGE } from "../../utils/const";
 import { Achievement } from "../../utils/types";
@@ -27,9 +27,21 @@ const AchievementBox = ({ achievement }: { achievement: Achievement }) => {
             (e.currentTarget as HTMLImageElement).src = "/assets/osaka.jpg"; // Fallback image
           }}
         /> */}
-        {achievement.id.includes("money") && <IconMoneybag size={125} color="var(--mantine-color-cbc-teal-8)" />}
-        {achievement.id.includes("click") && <IconMouse size={125} color="var(--mantine-color-cbc-teal-8)" />}
-        {achievement.id.includes("upgrade") && <IconArrowUp size={125} color="var(--mantine-color-cbc-teal-8)" />}
+        {achievement.id.includes("money") && (
+          <Avatar size={125} color="var(--mantine-color-cbc-green-7)" variant="filled">
+            <IconMoneybag size={75} />
+          </Avatar>
+        )}
+        {achievement.id.includes("click") && (
+          <Avatar size={125} color="var(--mantine-color-cbc-yellow-7)" variant="filled">
+            <IconMouse size={75} />
+          </Avatar>
+        )}
+        {achievement.id.includes("upgrade") && (
+          <Avatar size={125} color="var(--mantine-color-cbc-bluegreen-7)" variant="filled">
+            <IconArrowUp size={75} />
+          </Avatar>
+        )}
 
         <Box>
           <Text

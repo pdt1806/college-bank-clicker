@@ -16,32 +16,24 @@
 
   position: absolute;
 
-  background-image: url("/assets/money-button.svg");
+  background-image: url("/assets/button/button_0.svg");
   background-size: cover;
 
-  border-radius: 50%;
-  transition: transform 0.1s;
-  will-change: transform;
+  /* border-radius: 50%; */
+  transition: background-image;
+  will-change: background-image;
   touch-action: manipulation;
 
-  animation: glow 1.5s ease-in-out infinite alternate;
-
-  &:hover {
-    transform: scale(1.05);
-  }
+  /* animation: glow 1.5s ease-in-out infinite alternate; */
 
   &:active {
-    transform: scale(1);
+    background-image: url("/assets/button/button_1.svg");
   }
 }
 
 @media (hover: none) and (pointer: coarse) {
-  .image:hover {
-    transform: none;
-  }
-
   .image:active {
-    transform: scale(0.95);
+    background-image: url("/assets/button/button_1.svg");
   }
 }
 
@@ -62,11 +54,15 @@
   user-select: none;
   z-index: 2;
   font-family: "Oxanium", sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
 
   color: var(--mantine-color-cbc-green-9);
   font-weight: bold;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  text-shadow:
+    -1px 0 var(--mantine-color-cbc-green-3),
+    0 1px var(--mantine-color-cbc-green-3),
+    1px 0 var(--mantine-color-cbc-green-3),
+    0 -1px var(--mantine-color-cbc-green-3);
   opacity: 1;
   transition: opacity 0.5s ease-out;
   will-change: transform, opacity;

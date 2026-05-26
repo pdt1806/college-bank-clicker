@@ -28,13 +28,15 @@ This game is intended as a parody and satire of standardized testing culture, pa
 
 - [**React + TypeScript**](https://react.dev/) — Fast and type-safe frontend
 - [**Preact**](https://preactjs.com/) — Lightweight React alternative for smaller production bundles
+- [**Mantine UI**](https://mantine.dev/) — Modern styling and components
 - [**Vite**](https://vitejs.dev/) — Ultra-fast dev server and optimized builds
 - [**Zustand**](https://zustand-demo.pmnd.rs/) — Lightweight state management
-- [**localStorage**](https://developer.mozilla.org/docs/Web/API/Window/localStorage) — Persistent save data
+- [**use-sound**](https://github.com/joshwcomeau/use-sound) - Simple sound effect management for React
 - [**TanStack Router**](https://tanstack.com/router) — Type-safe client-side routing
-- [**IndexedDB**](https://developer.mozilla.org/docs/Web/API/IndexedDB_API) — Advanced persistent storage for game data
-- [**Workbox (via vite-plugin-pwa)**](https://vite-pwa-org.netlify.app/) — Offline-ready and installable
-- [**Mantine UI**](https://mantine.dev/) — Modern styling and components
+- [**Workbox (via vite-plugin-pwa)**](https://vite-pwa-org.netlify.app/) — Offline-ready and installable PWA support
+  <!-- - [**Tabler Icons**](https://tabler-icons.io/) — Open-source SVG icons for UI elements -->
+  <!-- - [**IndexedDB**](https://developer.mozilla.org/docs/Web/API/IndexedDB_API) — Advanced persistent storage for game data -->
+  <!-- - [**localStorage**](https://developer.mozilla.org/docs/Web/API/Window/localStorage) — Persistent save data -->
 
 ## PWA Support
 
@@ -44,9 +46,8 @@ College Bank Clicker is fully installable:
 - ✅ iOS (Safari)
 - ✅ Desktop (Chrome, Edge)
 
-**Features:**
+<!-- **Features:**
 
-- Works offline
-- Starts fullscreen
+- Works offline after the first load
 - Persistent data storage
-- Light on battery and data
+- Light on battery and data -->

@@ -31,11 +31,11 @@
   width: 100%;
   height: 100%;
   z-index: 0;
-  opacity: 0.15;
-  background-color: #2f2542;
-  background-image: url("/assets/background-pattern.webp");
+  /* opacity: 0.15; */
+  /* background-color: #2f2542; */
+  background-image: url("/assets/background.svg");
   background-size: cover;
-  background-blend-mode: multiply;
+  /* background-blend-mode: multiply; */
 
   animation: bgZoom 10s ease-in-out infinite;
 }
@@ -54,15 +54,15 @@
 
 .upgradeBar {
   background-color: var(--mantine-color-cbc-bluegreen-8);
-  background-image:
+  /* background-image:
     linear-gradient(var(--mantine-color-cbc-bluegreen-9) 1px, transparent 1px),
     linear-gradient(to right, var(--mantine-color-cbc-bluegreen-9) 1px, var(--mantine-color-cbc-bluegreen-8) 1px);
-  background-size: 20px 20px;
+  background-size: 20px 20px; */
 }
 
 .navBar {
-  background-color: #526377;
-  opacity: 1;
+  background-color: var(--mantine-color-cbc-bluegray-9);
+  /* opacity: 1;
   background-image:
     linear-gradient(30deg, #485c73 12%, transparent 12.5%, transparent 87%, #485c73 87.5%, #485c73),
     linear-gradient(150deg, #485c73 12%, transparent 12.5%, transparent 87%, #485c73 87.5%, #485c73),
@@ -77,5 +77,5 @@
     40px 70px,
     40px 70px,
     0 0,
-    40px 70px;
+    40px 70px; */
 }

@@ -26,7 +26,7 @@ export const Inventory = () => {
       });
   }, [inventory]);
 
-  const { open, element: ModalElement } = InventoryModal();
+  const { element: ModalElement } = InventoryModal();
 
   return (
     <>
@@ -40,7 +40,7 @@ export const Inventory = () => {
         </Text>
         <SimpleGrid cols={{ base: 4, xs: 5, sm: 6, md: 8, lg: 10 }} spacing="lg">
           {processedInventoryItems.map((item) => (
-            <InventoryBox item={item} open={open} key={item.id} />
+            <InventoryBox item={item} key={item.id} />
           ))}
         </SimpleGrid>
       </PageWrapper>

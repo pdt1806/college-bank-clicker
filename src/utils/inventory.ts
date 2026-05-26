@@ -21,13 +21,13 @@ export const inventoryItems: InventoryItem[] = [
   }, // done
   {
     id: "item-spike-3x-random",
-    name: "Crypto Wallet",
-    description: "Randomly fluctuates, can spike earnings by 3x occasionally.",
+    name: "College Board's Favor",
+    description: "Spike earnings by 3x occasionally.",
     method: "Collect by reaching 1,000,000 total money earned.",
   }, // done
   {
     id: "item-double-per-second-when-idle",
-    name: "Black Card",
+    name: "Procrastinator's Blessing",
     description: "Doubles money earned per second when idle (not when offline though).",
     method: "Collect by reaching 10,000,000 total money earned.",
   }, // done

@@ -9,7 +9,7 @@ import { AboutCredits } from "./Credits";
 const About = () => {
   return (
     <PageWrapper>
-      <Image src="/assets/cbc-logo.svg" alt="Logo" w="100%" py="md" px="xs" maw={500} mx="auto" />
+      <Image src="/assets/cbc-logo.svg" alt="Logo" w="100%" py="xl" px="xs" maw={500} mx="auto" />
       <Box mb="xl" style={{ textAlign: "center" }}>
         <Text size="lg" mb="sm">
           A parody clicker game about the College Board AP exams, amusingly addictive for students and anyone needing a
