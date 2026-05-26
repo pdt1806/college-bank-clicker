@@ -16,26 +16,30 @@
 
   position: absolute;
 
-  background-image: url("/assets/button/button_0.svg");
-  background-size: cover;
+  /* background-image: url("/assets/button/button_0.svg");
+  background-size: cover; */
 
   /* border-radius: 50%; */
-  transition: background-image;
+  /* transition: background-image;
   will-change: background-image;
-  touch-action: manipulation;
+  touch-action: manipulation; */
 
   /* animation: glow 1.5s ease-in-out infinite alternate; */
 
-  &:active {
+  /* &:active {
     background-image: url("/assets/button/button_1.svg");
-  }
+  } */
+}
+
+/* .buttonDown {
+  background-image: url("/assets/button/button_1.svg") !important;
 }
 
 @media (hover: none) and (pointer: coarse) {
   .image:active {
     background-image: url("/assets/button/button_1.svg");
   }
-}
+} */
 
 @keyframes glow {
   0% {

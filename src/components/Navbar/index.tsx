@@ -25,7 +25,7 @@ const Navbar = () => {
 
   return (
     <Stack gap={0} justify="space-between" px="xs">
-      <Image src="/assets/cbc-logo.svg" alt="Logo" w="100%" maw={400} mx="auto" py="lg" px="xs" />
+      <Image src="/assets/cbc-logo.svg" alt="Logo" w="100%" maw={400} mx="auto" py="lg" px="md" />
       {isInDiscord && user ? (
         <Group
           p="xs"

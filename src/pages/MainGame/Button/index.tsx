@@ -1,5 +1,5 @@
-import { Box, Center } from "@mantine/core";
-import { memo, useRef } from "react";
+import { Box, Center, Image } from "@mantine/core";
+import { memo, useRef, useState } from "react";
 import { increment } from "../../../GameProvider/GameActions";
 import { playSound } from "../../../GameProvider/SoundManager";
 import { GameDataStore } from "../../../GameProvider/Stores/GameDataStore";
@@ -28,16 +28,27 @@ const MainGameButton = () => {
     }, 1000);
   };
 
+  const [isClicked, setIsClicked] = useState(false);
+
   return (
     <Center h="100%" w="100%">
-      <Box className={classes.wrapper} ref={containerRef}>
-        <Box
-          onClick={(e) => {
-            animate(e);
-            increment();
-            playSound("pop2");
-          }}
-          className={`${classes.image} cursor-pointer`}
+      <Box
+        className={`${classes.wrapper} cursor-pointer`}
+        ref={containerRef}
+        onClick={(e) => {
+          animate(e);
+          increment();
+          playSound("pop2");
+          setIsClicked(true);
+          setTimeout(() => setIsClicked(false), 50);
+        }}
+        onMouseDown={() => setIsClicked(true)}
+        onMouseUp={() => setIsClicked(false)}
+        onMouseLeave={() => setIsClicked(false)}
+      >
+        <Image
+          className={classes.image}
+          src={!isClicked ? "/assets/button/button_0.svg" : "/assets/button/button_1.svg"}
         />
       </Box>
     </Center>
