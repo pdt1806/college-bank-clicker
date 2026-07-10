@@ -228,7 +228,7 @@ export const importAllGame = (file: File | null) => {
     try {
       const file = JSON.parse(event.target?.result as string);
 
-      console.log("Importing game data:", file);
+      // console.log("Importing game data:", file);
 
       const { invalid, data } = checkGameDataAuthenticity(file);
       if (invalid) throw new Error(invalid);
@@ -327,7 +327,7 @@ export const updateCursor = (type: string, file: File): Promise<string | undefin
 };
 
 export const resetCursor = (type: string) => {
-  console.log("Resetting cursor for type: " + type);
+  // console.log("Resetting cursor for type: " + type);
 
   const request = indexedDB.open(INDEXED_DB_NAME, 1);
 
@@ -414,7 +414,7 @@ type AddEntryOptions<T extends { id: string; name: string; date?: Date; reward?:
 };
 
 const addEntry = <T extends { id: string; name: string; date?: Date; reward?: AchievementReward }>(
-  options: AddEntryOptions<T>
+  options: AddEntryOptions<T>,
 ): boolean => {
   const { entry, allEntries, store, typeLabel, icon, color, soundId } = options;
   const { data, setData, saveData } = store.getState();
@@ -470,7 +470,7 @@ const addEntry = <T extends { id: string; name: string; date?: Date; reward?: Ac
           : ""),
       color: color,
       autoClose: 10000,
-      position: "top-right",
+      position: "bottom-right",
       icon: <NotiIcon size={24} />,
     });
     return true;

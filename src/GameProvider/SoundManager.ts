@@ -1,24 +1,13 @@
 import useSound from "use-sound";
+import { sfx } from "../utils/audio";
 import { SettingsDataStore } from "./Stores/SettingsDataStore";
 
-export const audio: Record<string, string> = {
-  upgrade: "/assets/audio/upgrade.mp3",
-  // bgm: "/assets/audio/bgm/persona4/heartbeat_heartbreak.mp3",
-  bgm: "/assets/audio/bgm/pekora.mp3",
-  achievement: "/assets/audio/achievement.mp3",
-  isReached: "/assets/audio/is_reached.mp3",
-  pop: "/assets/audio/pop.mp3",
-  pop2: "/assets/audio/pop_2.mp3", // money button
-  pop3: "/assets/audio/pop_3.mp3", // navigation
-  dropdown: "/assets/audio/dropdown.mp3",
-};
-
-type SoundName = keyof typeof audio;
+type SoundName = keyof typeof sfx;
 
 type SoundMapType = Record<SoundName, () => void>;
 
 const soundMap: SoundMapType = Object.fromEntries(
-  Object.entries(audio).map(([key, _]) => [key, () => {}]),
+  Object.entries(sfx).map(([key, _]) => [key, () => {}]),
 ) as SoundMapType;
 
 export default function GlobalSounds() {
@@ -26,7 +15,7 @@ export default function GlobalSounds() {
   const sfxMutedIOS = SettingsDataStore((state) => state.sfxMutedIOS);
 
   const soundHooks = Object.fromEntries(
-    Object.entries(audio).map(([key, src]) => [
+    Object.entries(sfx).map(([key, src]) => [
       key,
       useSound(src, {
         volume: sfxVolume / 100,

@@ -16,6 +16,7 @@ const AudioSettings = () => {
     setMusicMutedIOS,
     sfxMutedIOS,
     setSfxMutedIOS,
+    saveSettings,
   } = SettingsDataStore(
     useShallow(
       ({
@@ -27,6 +28,7 @@ const AudioSettings = () => {
         setMusicMutedIOS,
         sfxMutedIOS,
         setSfxMutedIOS,
+        saveSettings,
       }) => ({
         musicVolume,
         sfxVolume,
@@ -36,8 +38,9 @@ const AudioSettings = () => {
         setMusicMutedIOS,
         sfxMutedIOS,
         setSfxMutedIOS,
-      })
-    )
+        saveSettings,
+      }),
+    ),
   );
 
   const os = useOs();
@@ -49,7 +52,7 @@ const AudioSettings = () => {
       onChange: setMusicVolume,
       mutedIOS: musicMutedIOS,
       setMutedIOS: setMusicMutedIOS,
-      onChangeEnd: () => {}, // No sound for music change
+      onChangeEnd: saveSettings, // No sound for music change
     },
     {
       label: "SFX",
@@ -60,6 +63,7 @@ const AudioSettings = () => {
       onChangeEnd: (value: number) => {
         setSfxVolume(value);
         playSound("pop");
+        saveSettings();
       },
     },
   ];
@@ -103,6 +107,7 @@ const AudioSettings = () => {
                     color="cbc-purple"
                     onClick={() => {
                       item.setMutedIOS(!item.mutedIOS);
+                      saveSettings();
                     }}
                     size="xl"
                   >

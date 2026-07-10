@@ -1,59 +1,13 @@
 import { useIdle } from "@mantine/hooks";
-import { useEffect, useRef, useState } from "react";
-import useSound from "use-sound";
+import { useEffect } from "react";
 import { GAME_CURSORS, INDEXED_DB_NAME } from "../utils/const";
 import { injectCursorsToDOM } from "./GameActions";
-import { audio } from "./SoundManager";
 import { GameDataStore } from "./Stores/GameDataStore";
 import { InventoryDataStore } from "./Stores/InventoryDataStore";
 import { SettingsDataStore } from "./Stores/SettingsDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
 
 export const GameEffects = () => {
-  // --------------------
-  // BGM & SFX Logic
-
-  const { musicVolume, musicMutedIOS } = SettingsDataStore.getState();
-  const [BGMVolume, setBGMVolume] = useState(musicVolume);
-  const [BGMMuted, setBGMMuted] = useState(musicMutedIOS);
-
-  const hasPlayedBGM = useRef(false);
-
-  const [playBGM] = useSound(audio.bgm, {
-    loop: true,
-    volume: BGMVolume / 100,
-    soundEnabled: !BGMMuted,
-  });
-
-  useEffect(() => {
-    const unsub = SettingsDataStore.subscribe((state) => {
-      const { musicVolume, musicMutedIOS, saveSettings } = state;
-      setBGMVolume(musicVolume);
-      setBGMMuted(musicMutedIOS);
-      saveSettings();
-    });
-    return unsub;
-  }, []);
-
-  // useEffect(() => {
-  //   console.log("Volume: " + BGMVolume + ", Muted: " + BGMMuted);
-  // }, [BGMVolume, BGMMuted]);
-
-  useEffect(() => {
-    const handleInteraction = () => {
-      // console.log(hasPlayedBGM.current);
-      if (hasPlayedBGM.current) return;
-      playBGM();
-      // console.log("BGM started");
-      hasPlayedBGM.current = true;
-    };
-    const events = ["mousedown", "keydown", "touchstart", "scroll"];
-    events.forEach((event) => window.addEventListener(event, handleInteraction));
-    return () => {
-      events.forEach((event) => window.removeEventListener(event, handleInteraction));
-    };
-  }, [playBGM]); // detect user interaction to start BGM, as browsers block autoplay
-
   // Offline mode logic (item required)
   // Add money
   useEffect(() => {

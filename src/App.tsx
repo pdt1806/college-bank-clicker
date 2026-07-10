@@ -3,6 +3,7 @@ import "@mantine/core/styles.css";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import { createMemoryHistory, createRouter, RouterProvider } from "@tanstack/react-router";
+import BGMHandler from "./GameProvider/BGMHandler";
 import { routeTree } from "./routes/__root";
 import { colors } from "./utils/colors";
 
@@ -29,6 +30,7 @@ export default function App() {
   return (
     <MantineProvider theme={theme}>
       <Notifications />
+      <BGMHandler />
       <RouterProvider router={router} />
     </MantineProvider>
   );

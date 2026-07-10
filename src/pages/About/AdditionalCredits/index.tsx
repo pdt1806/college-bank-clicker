@@ -7,8 +7,9 @@ export const AboutAdditionalCredits = () => {
         Additional Credits
       </Title>
       <Text size="lg">Sound effects were gathered from royalty-free YouTube videos labeled for reuse.</Text>
+      <Text size="lg">BGMs used in this game:</Text>
       <Text size="lg">
-        Background music is the Loading Screen BGM of Hololive's VTuber{" "}
+        - Loading Screen BGM of Hololive's VTuber{" "}
         <Text
           span
           c="cbc-teal"
@@ -19,6 +20,21 @@ export const AboutAdditionalCredits = () => {
           rel="noopener noreferrer"
         >
           Usada Pekora
+        </Text>
+        .
+      </Text>
+      <Text size="lg">
+        - Persona 4 BGMs by{" "}
+        <Text
+          span
+          c="cbc-teal"
+          inherit
+          component="a"
+          href="https://atlus.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ATLUS Sound Team
         </Text>
         .
       </Text>

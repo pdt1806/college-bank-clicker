@@ -13,10 +13,10 @@ interface CursorItem {
 
 export const CustomCursorsSettings = () => {
   const [defaultCursor, setDefaultCursor] = useState<string>(
-    sessionStorage.getItem("defaultCursorURL") || GAME_CURSORS.default
+    sessionStorage.getItem("defaultCursorURL") || GAME_CURSORS.default,
   );
   const [pointerCursor, setPointerCursor] = useState<string>(
-    sessionStorage.getItem("pointerCursorURL") || GAME_CURSORS.pointer
+    sessionStorage.getItem("pointerCursorURL") || GAME_CURSORS.pointer,
   );
 
   const data: CursorItem[] = [

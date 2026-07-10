@@ -4,6 +4,7 @@ import AudioSettings from "./AudioSettings";
 
 import { useOs } from "@mantine/hooks";
 import { memo } from "react";
+import ChangeBGMSettings from "./ChangeBGM";
 import { CustomCursorsSettings } from "./CustomCursors";
 import ExportImportGameData from "./ExportImportGameData";
 import TPSSettings from "./Performance";
@@ -20,6 +21,7 @@ const Settings = () => {
       <Divider my="xl" />
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xl">
         <AudioSettings />
+        <ChangeBGMSettings />
         {isNotMobile && <CustomCursorsSettings />}
         <TPSSettings />
         {/* <OfflineModeSettings /> */}

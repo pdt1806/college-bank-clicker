@@ -95,12 +95,16 @@ export interface SettingsDataState {
   sfxMutedIOS: boolean;
   TPS: number;
   // offlineMode: boolean;
+  currentBGM: BGMTrack;
+
   setMusicVolume: (musicVolume: number) => void;
   setSfxVolume: (sfxVolume: number) => void;
   setMusicMutedIOS: (musicMutedIOS: boolean) => void;
   setSfxMutedIOS: (sfxMutedIOS: boolean) => void;
   setTPS: (TPS: number) => void;
   // setOfflineMode: (offlineMode: boolean) => void;
+  setCurrentBGM: (currentBGM: BGMTrack) => void;
+
   saveSettings: () => void;
 }
 
@@ -198,4 +202,9 @@ export type ExportGameDataType = {
   statsData: StatsDataState | null;
   achievementsData: AchievementsDataState | null;
   inventoryData: InventoryDataState | null;
+};
+
+export type BGMTrack = {
+  title: string;
+  src: string;
 };

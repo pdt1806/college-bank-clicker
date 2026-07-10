@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { SettingsDataState } from "../../utils/types";
+import { bgm } from "../../utils/audio";
+import { BGMTrack, SettingsDataState } from "../../utils/types";
 
 const settingsData = localStorage.getItem("settingsData");
 const parsedSettingsData = settingsData ? JSON.parse(settingsData) : {};
@@ -11,6 +12,7 @@ export const SettingsDataStore = create<SettingsDataState>()((set) => ({
   sfxMutedIOS: parsedSettingsData.sfxMutedIOS ?? false,
   TPS: parsedSettingsData.TPS ?? 25,
   // offlineMode: parsedSettingsData.offlineMode ?? true,
+  currentBGM: parsedSettingsData.currentBGM ?? bgm["Other"][0],
 
   setMusicVolume: (musicVolume: number) => set({ musicVolume }),
   setSfxVolume: (sfxVolume: number) => set({ sfxVolume }),
@@ -18,6 +20,7 @@ export const SettingsDataStore = create<SettingsDataState>()((set) => ({
   setSfxMutedIOS: (sfxMutedIOS: boolean) => set({ sfxMutedIOS }),
   setTPS: (TPS: number) => set({ TPS }),
   // setOfflineMode: (offlineMode: boolean) => set({ offlineMode }),
+  setCurrentBGM: (currentBGM: BGMTrack) => set({ currentBGM }),
 
   saveSettings: () => {
     const state = SettingsDataStore.getState();
@@ -30,7 +33,8 @@ export const SettingsDataStore = create<SettingsDataState>()((set) => ({
         sfxMutedIOS: state.sfxMutedIOS,
         TPS: state.TPS,
         // offlineMode: state.offlineMode,
-      })
+        currentBGM: state.currentBGM,
+      }),
     );
   },
 }));
