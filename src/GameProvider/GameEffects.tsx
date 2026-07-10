@@ -1,5 +1,6 @@
 import { useIdle } from "@mantine/hooks";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import useSound from "use-sound";
 import { GAME_CURSORS, INDEXED_DB_NAME } from "../utils/const";
 import { injectCursorsToDOM } from "./GameActions";
 import { audio } from "./SoundManager";
@@ -9,42 +10,49 @@ import { SettingsDataStore } from "./Stores/SettingsDataStore";
 import { StatsDataStore } from "./Stores/StatsDataStore";
 
 export const GameEffects = () => {
-  const bgmRef = useRef<HTMLAudioElement | null>(null);
   // --------------------
   // BGM & SFX Logic
 
-  useEffect(() => {
-    if (!bgmRef.current) {
-      bgmRef.current = new Audio(audio.bgm);
-      bgmRef.current.loop = true;
-    }
+  const { musicVolume, musicMutedIOS } = SettingsDataStore.getState();
+  const [BGMVolume, setBGMVolume] = useState(musicVolume);
+  const [BGMMuted, setBGMMuted] = useState(musicMutedIOS);
 
-    const bgm = bgmRef.current;
-    const { musicVolume, musicMutedIOS } = SettingsDataStore.getState();
-    bgm.muted = musicMutedIOS;
-    bgm.volume = musicVolume / 100;
+  const hasPlayedBGM = useRef(false);
 
-    document.body.addEventListener("click", () => {
-      bgm.play().catch((err) => console.error("Playback failed:", err));
-    });
-
-    return () => {
-      bgm.pause();
-    };
-  }, []);
+  const [playBGM] = useSound(audio.bgm, {
+    loop: true,
+    volume: BGMVolume / 100,
+    soundEnabled: !BGMMuted,
+  });
 
   useEffect(() => {
     const unsub = SettingsDataStore.subscribe((state) => {
       const { musicVolume, musicMutedIOS, saveSettings } = state;
-      const bgm = bgmRef.current;
-      if (!bgm) return;
-      bgm.volume = musicVolume / 100;
-      bgm.muted = musicMutedIOS;
+      setBGMVolume(musicVolume);
+      setBGMMuted(musicMutedIOS);
       saveSettings();
     });
-
     return unsub;
   }, []);
+
+  // useEffect(() => {
+  //   console.log("Volume: " + BGMVolume + ", Muted: " + BGMMuted);
+  // }, [BGMVolume, BGMMuted]);
+
+  useEffect(() => {
+    const handleInteraction = () => {
+      // console.log(hasPlayedBGM.current);
+      if (hasPlayedBGM.current) return;
+      playBGM();
+      // console.log("BGM started");
+      hasPlayedBGM.current = true;
+    };
+    const events = ["mousedown", "keydown", "touchstart", "scroll"];
+    events.forEach((event) => window.addEventListener(event, handleInteraction));
+    return () => {
+      events.forEach((event) => window.removeEventListener(event, handleInteraction));
+    };
+  }, [playBGM]); // detect user interaction to start BGM, as browsers block autoplay
 
   // Offline mode logic (item required)
   // Add money

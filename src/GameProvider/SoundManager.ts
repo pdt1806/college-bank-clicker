@@ -3,7 +3,8 @@ import { SettingsDataStore } from "./Stores/SettingsDataStore";
 
 export const audio: Record<string, string> = {
   upgrade: "/assets/audio/upgrade.mp3",
-  bgm: "/assets/audio/bgm.mp3",
+  // bgm: "/assets/audio/bgm/persona4/heartbeat_heartbreak.mp3",
+  bgm: "/assets/audio/bgm/pekora.mp3",
   achievement: "/assets/audio/achievement.mp3",
   isReached: "/assets/audio/is_reached.mp3",
   pop: "/assets/audio/pop.mp3",
@@ -17,7 +18,7 @@ type SoundName = keyof typeof audio;
 type SoundMapType = Record<SoundName, () => void>;
 
 const soundMap: SoundMapType = Object.fromEntries(
-  Object.entries(audio).map(([key, _]) => [key, () => {}])
+  Object.entries(audio).map(([key, _]) => [key, () => {}]),
 ) as SoundMapType;
 
 export default function GlobalSounds() {
@@ -31,7 +32,7 @@ export default function GlobalSounds() {
         volume: sfxVolume / 100,
         soundEnabled: !sfxMutedIOS,
       })[0],
-    ])
+    ]),
   ) as SoundMapType;
 
   Object.keys(soundMap).forEach((key) => {
