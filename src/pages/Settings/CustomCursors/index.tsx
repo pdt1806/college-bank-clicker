@@ -39,7 +39,9 @@ export const CustomCursorsSettings = () => {
       <Title order={2} fw={500}>
         Cursors settings
       </Title>
-      <Text c="dimmed">You can customize the cursors used in the game with your own images.</Text>
+      <Text c="dimmed">
+        You can customize the cursors used in the game with your own images. All cursors are downscaled to 32x32.
+      </Text>
       <Table verticalSpacing="sm" withRowBorders={false}>
         <Table.Tbody>
           {data.map((item) => (
